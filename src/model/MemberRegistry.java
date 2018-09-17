@@ -33,7 +33,7 @@ public class MemberRegistry {
 			if (m.getId() == id) {
 				m.editName(newName);
 			}
-			else if ((members.indexOf(m) == members.size() - 1) && m.getId() != id) {
+			else if ((members.indexOf(m) == members.size() - 1) && (m.getId() != id)) {
 				throw new NoSuchElementException();
 			}
 		}		
@@ -44,7 +44,7 @@ public class MemberRegistry {
 			if (m.getId() == id) {
 				m.editName(newPnr);
 			}
-			else if ((members.indexOf(m) == members.size() - 1) && m.getId() != id) {
+			else if ((members.indexOf(m) == members.size() - 1) && (m.getId() != id)) {
 				throw new NoSuchElementException();
 			}
 		}		
