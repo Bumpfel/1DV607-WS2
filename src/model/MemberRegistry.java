@@ -15,8 +15,15 @@ public class MemberRegistry {
 		members.add(m);
 	}
 	
-	void deleteMember(int position) {
-		members.remove(position);
+	void deleteMember(int id) {
+		for (Member m : members) {
+			if (m.getId() == id) {
+				 members.remove(m);
+			}
+			else if ((members.indexOf(m) == members.size() - 1) && (m.getId() != id)) {
+				throw new NoSuchElementException();
+			}
+		}
 	}
 	
 	Member getMember(int id) {		
