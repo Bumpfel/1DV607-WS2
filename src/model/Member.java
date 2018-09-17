@@ -18,12 +18,18 @@ public class Member {
 		personalNumber = newPNr;
 	}
 	
-	protected void editName(String newName) {
-		name = newName;
+	protected void editName(String newName) throws IllegalArgumentException {
+		if(newName.length() >= 2)
+			name = newName;
+		else
+			throw new IllegalArgumentException("The name must be at least 2 characters long");
 	}
 	
-	protected void editPNr(String newPNr) {
-		personalNumber = newPNr;
+	protected void editPNr(String newPNr) throws IllegalArgumentException {
+		if(newPNr.length() >= 10) // simplest possible check
+			personalNumber = newPNr;
+		else
+			throw new IllegalArgumentException("The personal number you entered is invalid");
 	}
 	
 	public String getName() {
@@ -39,7 +45,7 @@ public class Member {
 	}
 	
 	public ArrayList<Boat> getBoats() {
-		return boats;
+		return new ArrayList<Boat>(boats);
 	}
 
 //	public String toString() {
