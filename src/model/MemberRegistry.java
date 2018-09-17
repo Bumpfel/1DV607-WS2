@@ -50,8 +50,7 @@ public class MemberRegistry {
 		}		
 	}
 	
-	ArrayList<Member> getAllMembers() {
-		ArrayList<Member> m = new ArrayList<Member>(members);
-		return m;
+	ArrayList<Member> getAllMembers() {		
+		return new ArrayList<Member>(members);
 	}
 }
