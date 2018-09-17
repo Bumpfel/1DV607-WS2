@@ -2,15 +2,16 @@ package model;
 
 import java.util.ArrayList;
 
-//import Boat;
-
 public class Member {
-	private static int nextId = 0;
+	private static int nextId = 0; // should be set to last id found in the text file
 
 	private String name;
 	private String personalNumber;
 	private ArrayList<Boat> boats = new ArrayList<>();
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'Eric' of https://github.com/Bumpfel/1DV607-Workshop2.git
 	private int id;
 	
 	public Member(String newName, String newPNr) {
@@ -21,13 +22,18 @@ public class Member {
 		personalNumber = newPNr;
 	}
 	
-	protected void editName(String newName) {
-		name = newName;
+	protected void editName(String newName) throws IllegalArgumentException {
+		if(newName.length() >= 2)
+			name = newName;
+		else
+			throw new IllegalArgumentException("The name must be at least 2 characters long");
 	}
 	
-	protected void editPNr(String newPNr) {
-		personalNumber = newPNr;
-		
+	protected void editPNr(String newPNr) throws IllegalArgumentException {
+		if(newPNr.length() >= 10) // simplest possible check
+			personalNumber = newPNr;
+		else
+			throw new IllegalArgumentException("The personal number you entered is invalid");
 	}
 	
 	public String getName() {
@@ -43,11 +49,11 @@ public class Member {
 	}
 	
 	public ArrayList<Boat> getBoats() {
-		return boats;
+		return new ArrayList<Boat>(boats);
 	}
 
-	public String toString() {
-		return id + ": " + name + ". Has " + boats.size() + " boats registered to the club";
-	}
+//	public String toString() {
+//		return id + ": " + name + ". Has " + boats.size() + " boats registered to the club";
+//	}
 	
 }
