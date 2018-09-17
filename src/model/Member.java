@@ -10,7 +10,7 @@ public class Member {
 	private String name;
 	private String personalNumber;
 	private ArrayList<Boat> boats = new ArrayList<>();
-;
+
 	private int id;
 	
 	public Member(String newName, String newPNr) {

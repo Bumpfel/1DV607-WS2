@@ -1,26 +1,34 @@
 package model;
 
 public class Boat {
-	private Types type;
-	private double length;
+	private BoatType type;
+	private double size;
 
-	public enum Types { Sailboat, Motorsailer, KayakCanoe, Other };
+	public enum BoatType { Sailboat, Motorsailer, KayakCanoe, Other };
 	
-	public Boat(Types newType, double newLength) {
+	public Boat(BoatType newType, double newSize) {
 		type = newType;
-		length = newLength;
+		size = newSize;
 	}
 	
-	public Types getType() {
+	public BoatType getType() {
 		return type;
 	}
 	
-	public double getLength() {
-		return length;
+	public double getSize() {
+		return size;
 	}
 	
-	public String toString() {
-		return type + ", " + length + "m";
+	public void editType(BoatType newType) {
+		type = newType;
 	}
+	
+	public void editSize(double newSize) throws IllegalArgumentException {
+		if (newSize <= 0) {
+			throw new IllegalArgumentException("Size cannot be 0 or negative.");
+		}
+		
+		size = newSize;
+	}
+	
 }
-
