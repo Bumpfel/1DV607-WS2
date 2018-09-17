@@ -6,16 +6,19 @@ public class Member {
 	private static int nextId = 0; // should be set to last id found in the text file
 
 	private String name;
-	private String personalNumber;
+	private String pnr;
 	private ArrayList<Boat> boats = new ArrayList<>();
 	private int id;
+	
+	public Member() { // Needed for json object mapper
+	}
 	
 	public Member(String newName, String newPNr) {
 		nextId ++;
 		
 		id = nextId;
 		name = newName;
-		personalNumber = newPNr;
+		pnr = newPNr;
 	}
 	
 	protected void editName(String newName) throws IllegalArgumentException {
@@ -27,7 +30,7 @@ public class Member {
 	
 	protected void editPNr(String newPNr) throws IllegalArgumentException {
 		if(newPNr.length() >= 10) // simplest possible check
-			personalNumber = newPNr;
+			pnr = newPNr;
 		else
 			throw new IllegalArgumentException("The personal number you entered is invalid");
 	}
@@ -41,7 +44,7 @@ public class Member {
 	}
 	
 	public String getPNr() {
-		return personalNumber;
+		return pnr;
 	}
 	
 	public ArrayList<Boat> getBoats() {
