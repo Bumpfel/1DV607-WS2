@@ -53,14 +53,14 @@ public class Console implements ViewInterface {
 	}
 
 	public int getInputInt() {
-		Scanner in = new Scanner(System.in);
+		Scanner readKB = new Scanner(System.in);
 		int input = -1;
 
 		boolean receivedValidInput = false;
 		while(!receivedValidInput) {
 			System.out.println("Waiting for input....");
-			if(in.hasNextInt()) {
-				input = in.nextInt();
+			if(readKB.hasNextInt()) {
+				input = readKB.nextInt();
 				if(input > 0) {
 					receivedValidInput = true;
 				}
@@ -70,11 +70,11 @@ public class Console implements ViewInterface {
 			}
 			else {
 				displayError("Input must be a number");
-				in.nextLine();
+				readKB.nextLine();
 			}
 		}
 
-		in.close();
+		readKB.close();
 		return input;
 	}
 	
