@@ -4,8 +4,11 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 
-public class console implements ViewInterface {
+public class Console implements ViewInterface {
 	
+	public Console() {
+		
+	}
 
 	public void displayWelcomeMsg() {
 		System.out.println("Whalecum to \"The Jolly Pirate\" boatclub's member registry!");
@@ -15,7 +18,7 @@ public class console implements ViewInterface {
 		int numOfOptions = options.size();
 		
 		for (int i = 0; i < numOfOptions; i++) {
-			System.out.println(i+1); //Displays the number of the option
+			System.out.print(i+1+": "); //Displays the number of the option
 			System.out.println(options.get(i)); //Displays the option
 		}
 		

@@ -16,7 +16,6 @@ public class User {
 	
 	private void mainMenu() {
 		ArrayList<String> options = new ArrayList<String>();
-		String StringInput = "";
 		int numberInput = -1;
 		
 		options.add("Add member");
@@ -33,9 +32,11 @@ public class User {
 		view.displayMenu(options);
 		
 		while (numberInput <= 0) {
+			System.out.println("Waiting for input...");
 				numberInput = view.getInputInt();
 				if (numberInput <= 0) {
 					view.displayError("Input cannot be 0 or below!");
+					numberInput = -1;
 				}
 		}
 		
@@ -46,8 +47,9 @@ public class User {
 		
 	}
 	
+	//Not yet implemented
 	private void addMember() {
-		
+		this.mainMenu();
 	}
 	
 	private void exit() {
