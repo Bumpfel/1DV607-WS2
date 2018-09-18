@@ -8,10 +8,6 @@ public class Member {
 	private String name;
 	private String personalNumber;
 	private ArrayList<Boat> boats = new ArrayList<>();
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'Eric' of https://github.com/Bumpfel/1DV607-Workshop2.git
 	private int id;
 	
 	public Member(String newName, String newPNr) {

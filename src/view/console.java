@@ -2,6 +2,7 @@ package view;
 
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 public class console implements ViewInterface {
 	
@@ -10,34 +11,39 @@ public class console implements ViewInterface {
 		System.out.println("Whalecum to \"The Jolly Pirate\" boatclub's member registry!");
 	}
 	
-	public void displayMenu() {
-		int numOfOptions;
-		ArrayList<String> options = new ArrayList<String>();
-		
-		numOfOptions = 9;
-		
-		options.add("Add member");
-		options.add("Edit member");
-		options.add("View member");
-		options.add("Delete member");
-		options.add("List members (Verbose");
-		options.add("List members (Compact)");
-		options.add("Register boat");
-		options.add("Edit boat");
-		options.add("Remove boat");
+	public void displayMenu(ArrayList<String> options) {
+		int numOfOptions = options.size();
 		
 		for (int i = 0; i < numOfOptions; i++) {
 			System.out.println(i+1); //Displays the number of the option
 			System.out.println(options.get(i)); //Displays the option
 		}
 		
+		System.out.println("What would you like to do?");
 	}
 	
-	public String getInput() {
+	public String getInputString() {
 		String input = "";
 		Scanner readKGB = new Scanner(System.in);
 
 		input = readKGB.nextLine();
+		readKGB.close();
+		
+		return input;
+	}
+	
+	public int getInputInt() {
+		int input = -1;
+		Scanner readKGB = new Scanner(System.in);
+
+		try {
+			input = readKGB.nextInt();
+		}
+		
+		catch (InputMismatchException e) {
+			this.displayError("Input was not a number!");
+		}
+		
 		readKGB.close();
 		
 		return input;

@@ -25,7 +25,7 @@ public class Boat {
 	
 	public void editSize(double newSize) throws IllegalArgumentException {
 		if (newSize <= 0) {
-			throw new IllegalArgumentException("Size cannot be 0 or negative.");
+			throw new IllegalArgumentException("Size cannot be 0 or negative!");
 		}
 		
 		size = newSize;
