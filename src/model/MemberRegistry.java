@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class MemberRegistry {
 	ArrayList<Member> members = new ArrayList<>();
 	
-	MemberRegistry() {
+	public MemberRegistry() {
 		//TODO ta bort detta senare
 		members.add(new Member("Preben", "18585555585"));
 		members.add(new Member("Karsten", "28585155585"));

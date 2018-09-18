@@ -4,8 +4,11 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 
-public class console implements ViewInterface {
+public class Console implements ViewInterface {
 	
+	public Console() {
+		
+	}
 
 	public void displayWelcomeMsg() {
 		System.out.println("Whalecum to \"The Jolly Pirate\" boatclub's member registry!");
@@ -15,7 +18,7 @@ public class console implements ViewInterface {
 		int numOfOptions = options.size();
 		
 		for (int i = 0; i < numOfOptions; i++) {
-			System.out.println(i+1); //Displays the number of the option
+			System.out.print(i+1+": "); //Displays the number of the option
 			System.out.println(options.get(i)); //Displays the option
 		}
 		
@@ -32,7 +35,7 @@ public class console implements ViewInterface {
 		return input;
 	}
 	
-	public int getInputInt() {
+	public int getInputInt_old() {
 		int input = -1;
 		Scanner readKGB = new Scanner(System.in);
 
@@ -49,6 +52,32 @@ public class console implements ViewInterface {
 		return input;
 	}
 
+	public int getInputInt() {
+		Scanner in = new Scanner(System.in);
+		int input = -1;
+
+		boolean receivedValidInput = false;
+		while(!receivedValidInput) {
+			System.out.println("Waiting for input....");
+			if(in.hasNextInt()) {
+				input = in.nextInt();
+				if(input > 0) {
+					receivedValidInput = true;
+				}
+				else {
+					displayError("Input must be larger than 0");
+				}
+			}
+			else {
+				displayError("Input must be a number");
+				in.nextLine();
+			}
+		}
+
+		in.close();
+		return input;
+	}
+	
 	public void displayMembersVerbose() {
 		// TODO Auto-generated method stub
 	}
