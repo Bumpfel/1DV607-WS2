@@ -77,13 +77,13 @@ public class Console implements ViewInterface {
 				displayError("Input have to be a number");
 			}
 		}
-
+		
 		return input;
 	}
-	
+
 	public String[] displayAddMember() {
 		String[] nameAndPnr = new String[2];
-		
+
 		System.out.println("Enter new member's name: ");
 		nameAndPnr[0] = this.getInputString();
 		System.out.println("Enter new member's social security number: ");
