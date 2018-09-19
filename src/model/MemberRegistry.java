@@ -50,7 +50,7 @@ public class MemberRegistry {
 		}		
 	}
 	
-	void editMemberPnr(int id, String newPnr) {		
+	void editMemberPnr(int id, String newPnr) {
 		for (Member m : members) {
 			if (m.getId() == id) {
 				m.editName(newPnr);

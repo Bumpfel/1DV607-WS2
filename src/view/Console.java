@@ -1,8 +1,9 @@
 package view;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 
 public class Console implements ViewInterface {
 	
@@ -26,56 +27,69 @@ public class Console implements ViewInterface {
 	}
 	
 	public String getInputString() {
+	    InputStreamReader reader = new InputStreamReader(System.in);
+	    BufferedReader in = new BufferedReader(reader);
 		String input = "";
-		Scanner readKGB = new Scanner(System.in);
-
-		input = readKGB.nextLine();
-		readKGB.close();
 		
+		boolean validInput = false;
+		while (!validInput) {
+			try {
+				input = in.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			if (input.isEmpty() || input.charAt(0) == '\n') {
+				System.err.println("Input cannot be empty! Try again:");
+			}
+			
+			else {
+				validInput = true;
+			}
+		}
+
+		return input;
+	}
+
+	public int getInputInt(int minimum, int maximum) {
+	    InputStreamReader reader = new InputStreamReader(System.in);
+	    BufferedReader in = new BufferedReader(reader);
+	    String stringInput = "";
+	    int input = -1;
+		
+		boolean validInput = false;
+		while (!validInput) {
+			try {
+				stringInput = in.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				input = Integer.parseInt(stringInput);
+				
+				if (input >= minimum && input <= maximum) {
+					validInput = true;
+				} else {
+					displayError("Input out of bound");
+				}
+			} catch (NumberFormatException e) {
+				displayError("Input have to be a number");
+			}
+		}
+
 		return input;
 	}
 	
-	public int getInputInt_old() {
-		int input = -1;
-		Scanner readKGB = new Scanner(System.in);
-
-		try {
-			input = readKGB.nextInt();
-		}
+	public String[] displayAddMember() {
+		String[] nameAndPnr = new String[2];
 		
-		catch (InputMismatchException e) {
-			this.displayError("Input was not a number!");
-		}
+		System.out.println("Enter new member's name: ");
+		nameAndPnr[0] = this.getInputString();
+		System.out.println("Enter new member's social security number: ");
+		nameAndPnr[1] = this.getInputString();
 		
-		readKGB.close();
-		
-		return input;
-	}
-
-	public int getInputInt() {
-		Scanner readKB = new Scanner(System.in);
-		int input = -1;
-
-		boolean receivedValidInput = false;
-		while(!receivedValidInput) {
-			System.out.println("Waiting for input....");
-			if(readKB.hasNextInt()) {
-				input = readKB.nextInt();
-				if(input > 0) {
-					receivedValidInput = true;
-				}
-				else {
-					displayError("Input must be larger than 0");
-				}
-			}
-			else {
-				displayError("Input must be a number");
-				readKB.nextLine();
-			}
-		}
-
-		readKB.close();
-		return input;
+		return nameAndPnr;
 	}
 	
 	public void displayMembersVerbose() {

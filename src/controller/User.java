@@ -1,12 +1,16 @@
 package controller;
 
 import java.util.ArrayList;
+import view.ViewInterface;
+import model.MemberRegistry;
 
 public class User {
-	public view.ViewInterface view;
+	private ViewInterface view;
+	private MemberRegistry memberRegistry;
 
-	public User(view.ViewInterface inView) {
+	public User(MemberRegistry memberReg,ViewInterface inView) {
 		view = inView;
+		memberRegistry = memberReg;
 	}
 
 	public void startApplication() {
@@ -16,7 +20,7 @@ public class User {
 
 	private void mainMenu() {
 		ArrayList<String> options = new ArrayList<String>();
-		int numberInput = -1;
+		int currentOption = -1;
 
 		options.add("Add member");
 		options.add("Edit member");
@@ -31,20 +35,34 @@ public class User {
 
 		view.displayMenu(options);
 
-
-		int input = view.getInputInt();
+		currentOption = view.getInputInt(1,options.size());
 		
-		System.out.println("input was: " + input);
-
-		//If exit
-		if (numberInput == options.size()-1) {
-			this.exit();
+		switch(currentOption) {
+			case 1:
+				this.addMember();
+				break;
+				
+			case 2:
+				this.editMember();
+				break;
+		
+			case 10:
+				this.exit();
+				break;
 		}
-
 	}
 
 	//Not yet implemented
 	private void addMember() {
+		String[] nameAndPnr = new String[2];
+		
+		nameAndPnr = view.displayAddMember();
+		memberRegistry.addMember(nameAndPnr[0],nameAndPnr[1]);
+		this.mainMenu();
+	}
+	
+	//Not yet implemented
+	private void editMember() {
 		this.mainMenu();
 	}
 
