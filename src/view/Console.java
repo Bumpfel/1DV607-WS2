@@ -2,10 +2,9 @@ package view;
 
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 
 public class Console implements ViewInterface {
-	
+	Scanner readKGB = new Scanner(System.in);
 	public Console() {
 		
 	}
@@ -27,54 +26,33 @@ public class Console implements ViewInterface {
 	
 	public String getInputString() {
 		String input = "";
-		Scanner readKGB = new Scanner(System.in);
-
+		
 		input = readKGB.nextLine();
-		readKGB.close();
-		
+				
 		return input;
 	}
-	
-	public int getInputInt_old() {
-		int input = -1;
-		Scanner readKGB = new Scanner(System.in);
-
-		try {
-			input = readKGB.nextInt();
-		}
 		
-		catch (InputMismatchException e) {
-			this.displayError("Input was not a number!");
-		}
-		
-		readKGB.close();
-		
-		return input;
-	}
-
-	public int getInputInt() {
-		Scanner readKB = new Scanner(System.in);
+	public int getInputInt() {		
 		int input = -1;
 
-		boolean receivedValidInput = false;
-		while(!receivedValidInput) {
+		
+		while(true) {
 			System.out.println("Waiting for input....");
-			if(readKB.hasNextInt()) {
-				input = readKB.nextInt();
+			if(readKGB.hasNextInt()) {
+				input = readKGB.nextInt();
 				if(input > 0) {
-					receivedValidInput = true;
+					break;
 				}
 				else {
 					displayError("Input must be larger than 0");
 				}
 			}
 			else {
-				displayError("Input must be a number");
-				readKB.nextLine();
+				displayError("Input must be a number");				
 			}
 		}
 
-		readKB.close();
+		readKGB.nextLine();
 		return input;
 	}
 	
