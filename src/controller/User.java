@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class User {
 	public view.ViewInterface view;
@@ -31,14 +32,14 @@ public class User {
 		
 		view.displayMenu(options);
 		
-		while (numberInput <= 0) {
-			System.out.println("Waiting for input...");
-				numberInput = view.getInputInt();
-				if (numberInput <= 0) {
-					view.displayError("Input cannot be 0 or below!");
-					numberInput = -1;
+				try {
+					numberInput = view.getInputInt();
 				}
-		}
+				
+				catch (NumberFormatException e) {
+					view.displayError(e.getMessage());
+					numberInput = -9001;
+				}
 		
 		//If exit
 		if (numberInput == options.size()-1) {

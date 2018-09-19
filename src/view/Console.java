@@ -3,6 +3,7 @@ package view;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 
 public class Console implements ViewInterface {
 	
@@ -32,22 +33,32 @@ public class Console implements ViewInterface {
 		input = readKGB.nextLine();
 		readKGB.close();
 		
+		System.out.println("Returning..."+input);
 		return input;
 	}
 	
 	public int getInputInt() {
 		int input = -1;
-		Scanner readKGB = new Scanner(System.in);
-
-		try {
-			input = readKGB.nextInt();
+		
+		while (input <= 0) {
+			try {
+				input = this.stringToInt(this.waitForInput());
+			}
+			
+			catch (NumberFormatException | NoSuchElementException e) {
+				this.displayError("Input is not a number!");
+			}
 		}
 		
-		catch (InputMismatchException e) {
-			this.displayError("Input was not a number!");
-		}
+		return input;
+	}
 		
-		readKGB.close();
+	private String waitForInput() throws NumberFormatException {
+		String input;
+		Scanner readKB = new Scanner(System.in);
+		
+		input = readKB.nextLine();
+		readKB.close();
 		
 		return input;
 	}
@@ -66,6 +77,14 @@ public class Console implements ViewInterface {
 	}
 	
 	public void displayError(String e) {
-		System.out.println(e);
+		System.err.println(e);
+	}
+	
+	private int stringToInt(String s) throws NumberFormatException {
+		int intToReturn = -1;
+		
+		intToReturn = Integer.parseInt(s);
+		
+		return intToReturn;
 	}
 }
