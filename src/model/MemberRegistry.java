@@ -29,7 +29,7 @@ public class MemberRegistry {
 		}				
 	}
 	
-	void addMember(String name, String pNr) {
+	public void addMember(String name, String pNr) {
 		Member m = new Member(name, pNr);
 		members.add(m);
 		try {
@@ -46,7 +46,7 @@ public class MemberRegistry {
 		}
 	}
 	
-	void deleteMember(int id) {
+	public void deleteMember(int id) {
 		for (Member m : members) {
 			if (m.getId() == id) {
 				 members.remove(m);
@@ -69,7 +69,7 @@ public class MemberRegistry {
 		}
 	}
 	
-	Member getMember(int id) {		
+	public Member getMember(int id) {		
 		for (Member m : members) {
 			if (m.getId() == id) {
 				 return m;
@@ -78,7 +78,7 @@ public class MemberRegistry {
 		throw new NoSuchElementException();		
 	}
 	
-	void editMemberName(int id, String newName) {		
+	public void editMemberName(int id, String newName) {		
 		for (Member m : members) {
 			if (m.getId() == id) {
 				m.editName(newName);
@@ -101,7 +101,7 @@ public class MemberRegistry {
 		}
 	}
 	
-	void editMemberPnr(int id, String newPnr) {		
+	public void editMemberPnr(int id, String newPnr) {		
 		for (Member m : members) {
 			if (m.getId() == id) {
 				m.editName(newPnr);
