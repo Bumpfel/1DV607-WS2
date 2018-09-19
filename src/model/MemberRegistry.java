@@ -1,12 +1,32 @@
 package model;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.NoSuchElementException;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MemberRegistry {
 	ArrayList<Member> members = new ArrayList<>();
 	
 	public MemberRegistry() {
+		try {
+			members = readMemberDB();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//TODO ta bort detta senare
 		members.add(new Member("Preben", "18585555585"));
 		members.add(new Member("Karsten", "28585155585"));
@@ -17,6 +37,18 @@ public class MemberRegistry {
 	void addMember(String name, String pNr) {
 		Member m = new Member(name, pNr);
 		members.add(m);
+		try {
+			writeToFile("res/db.txt", members);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	void deleteMember(int id) {
@@ -27,6 +59,18 @@ public class MemberRegistry {
 			else if ((members.indexOf(m) == members.size() - 1) && (m.getId() != id)) {
 				throw new NoSuchElementException();
 			}
+		}
+		try {
+			writeToFile("res/db.txt", members);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -47,7 +91,19 @@ public class MemberRegistry {
 			else if ((members.indexOf(m) == members.size() - 1) && (m.getId() != id)) {
 				throw new NoSuchElementException();
 			}
-		}		
+		}
+		try {
+			writeToFile("res/db.txt", members);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	void editMemberPnr(int id, String newPnr) {		
@@ -58,10 +114,36 @@ public class MemberRegistry {
 			else if ((members.indexOf(m) == members.size() - 1) && (m.getId() != id)) {
 				throw new NoSuchElementException();
 			}
-		}		
+		}
+		try {
+			writeToFile("res/db.txt", members);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	ArrayList<Member> getAllMembers() {		
 		return new ArrayList<Member>(members);
+	}
+	
+	public static ArrayList<Member> readMemberDB() throws IOException, JsonMappingException, JsonParseException {
+		ObjectMapper oMapper = new ObjectMapper();
+		File inputFile = new File("res/db.txt");
+		
+		return oMapper.readValue(inputFile, new TypeReference<ArrayList<Member>>(){});
+	}
+	
+	static void writeToFile(String filePath, Collection<?> col) throws IOException, JsonMappingException, JsonGenerationException {
+		ObjectMapper oMapper = new ObjectMapper();
+		File outputFile = new File(filePath);
+		
+		oMapper.writeValue(outputFile, col);
 	}
 }
