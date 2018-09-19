@@ -3,7 +3,6 @@ package view;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 
 public class Console implements ViewInterface {
 	
@@ -33,36 +32,52 @@ public class Console implements ViewInterface {
 		input = readKGB.nextLine();
 		readKGB.close();
 		
-		System.out.println("Returning..."+input);
 		return input;
 	}
 	
-	public int getInputInt() {
+	public int getInputInt_old() {
 		int input = -1;
-		
-		while (input <= 0) {
-			try {
-				input = this.stringToInt(this.waitForInput());
-			}
-			
-			catch (NumberFormatException | NoSuchElementException e) {
-				this.displayError("Input is not a number!");
-			}
+		Scanner readKGB = new Scanner(System.in);
+
+		try {
+			input = readKGB.nextInt();
 		}
 		
-		return input;
-	}
+		catch (InputMismatchException e) {
+			this.displayError("Input was not a number!");
+		}
 		
-	private String waitForInput() throws NumberFormatException {
-		String input;
-		Scanner readKB = new Scanner(System.in);
-		
-		input = readKB.nextLine();
-		readKB.close();
+		readKGB.close();
 		
 		return input;
 	}
 
+	public int getInputInt() {
+		Scanner readKB = new Scanner(System.in);
+		int input = -1;
+
+		boolean receivedValidInput = false;
+		while(!receivedValidInput) {
+			System.out.println("Waiting for input....");
+			if(readKB.hasNextInt()) {
+				input = readKB.nextInt();
+				if(input > 0) {
+					receivedValidInput = true;
+				}
+				else {
+					displayError("Input must be larger than 0");
+				}
+			}
+			else {
+				displayError("Input must be a number");
+				readKB.nextLine();
+			}
+		}
+
+		readKB.close();
+		return input;
+	}
+	
 	public void displayMembersVerbose() {
 		// TODO Auto-generated method stub
 	}
@@ -77,14 +92,6 @@ public class Console implements ViewInterface {
 	}
 	
 	public void displayError(String e) {
-		System.err.println(e);
-	}
-	
-	private int stringToInt(String s) throws NumberFormatException {
-		int intToReturn = -1;
-		
-		intToReturn = Integer.parseInt(s);
-		
-		return intToReturn;
+		System.out.println(e);
 	}
 }
