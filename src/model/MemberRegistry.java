@@ -14,9 +14,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class MemberRegistry {
 	ArrayList<Member> members = new ArrayList<>();
 	
-	public MemberRegistry() {
+	public MemberRegistry() {		
 		try {
-			members = readMemberDB();
+			for (Member m : readMemberDB()) {
+				members.add(m);
+			}			
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
