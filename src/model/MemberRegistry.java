@@ -26,12 +26,7 @@ public class MemberRegistry {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		//TODO ta bort detta senare
-		members.add(new Member("Preben", "18585555585"));
-		members.add(new Member("Karsten", "28585155585"));
-		members.add(new Member("Mads", "3853555585"));
-		members.add(new Member("Peder", "48545555585"));		
+		}				
 	}
 	
 	void addMember(String name, String pNr) {
