@@ -32,28 +32,27 @@ public class Console implements ViewInterface {
 		return input;
 	}
 		
-	public int getInputInt() {		
-		int input = -1;
-
+	public int getInputInt() {
+		String input;
+		int n;
 		
-		while(true) {
-			System.out.println("Waiting for input....");
-			if(readKGB.hasNextInt()) {
-				input = readKGB.nextInt();
-				if(input > 0) {
-					break;
+		while (true) {
+			System.out.println("Enter choice: ");
+			input = readKGB.nextLine();
+			try {
+				n = Integer.parseInt(input);
+				if (n <= 0) {
+					System.out.println("Number must be large than 0");
 				}
 				else {
-					displayError("Input must be larger than 0");
+					break;
 				}
 			}
-			else {
-				displayError("Input must be a number");				
+			catch (Exception e) {
+				System.out.println("You must enter a numerical value");
 			}
 		}
-
-		readKGB.nextLine();
-		return input;
+		return n;
 	}
 	
 	public void displayMembersVerbose() {
