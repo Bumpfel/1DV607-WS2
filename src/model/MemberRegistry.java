@@ -16,7 +16,7 @@ public class MemberRegistry {
 	
 	public MemberRegistry() {		
 		try {
-			for (Member m : readMemberDB()) {
+			for (Member m : readMemberDB()) {				
 				members.add(m);
 			}			
 		} catch (JsonMappingException e) {
@@ -29,8 +29,8 @@ public class MemberRegistry {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}				
-	}
-	
+	}	
+		
 	public void addMember(String name, String pNr) {
 		Member m = new Member(name, pNr);
 		members.add(m);
@@ -126,11 +126,11 @@ public class MemberRegistry {
 		}
 	}
 	
-	ArrayList<Member> getAllMembers() {		
+	public ArrayList<Member> getAllMembers() {		
 		return new ArrayList<Member>(members);
 	}
 	
-	public static ArrayList<Member> readMemberDB() throws IOException, JsonMappingException, JsonParseException {
+	static ArrayList<Member> readMemberDB() throws IOException, JsonMappingException, JsonParseException {
 		ObjectMapper oMapper = new ObjectMapper();
 		File inputFile = new File("res/db.txt");
 		
