@@ -11,6 +11,7 @@ public class Member {
 	private int id;
 	
 	public Member() { // Needed for json object mapper
+		nextId++;
 	}
 	
 	public Member(String newName, String newPNr) {
