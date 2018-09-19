@@ -16,9 +16,7 @@ public class MemberRegistry {
 	
 	public MemberRegistry() {		
 		try {
-			for (Member m : readMemberDB()) {				
-				members.add(m);
-			}			
+			members = readMemberDB();						
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
