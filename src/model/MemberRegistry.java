@@ -50,23 +50,15 @@ public class MemberRegistry {
 		for (Member m : members) {
 			if (m.getId() == id) {
 				 members.remove(m);
-			}
-			else if ((members.indexOf(m) == members.size() - 1) && (m.getId() != id)) {
-				throw new NoSuchElementException();
-			}
-		}
-		try {
-			writeToFile("res/db.txt", members);
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+				 try {
+						writeToFile("res/db.txt", members);
+					 } catch (Exception e) {
+						System.out.println("Something went horribly wrong while saving the changes.");					
+					 }
+				 return;
+			}		
+		}		
+		throw new NoSuchElementException();
 	}
 	
 	public Member getMember(int id) {		
