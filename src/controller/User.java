@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+
 import view.ViewInterface;
 import model.MemberRegistry;
 
@@ -37,6 +39,8 @@ public class User {
 
 		currentOption = view.getInputInt(1,options.size());
 		
+		//System.out.println(memberRegistry.getMember(2).getName());
+		
 		switch(currentOption) {
 			case 1:
 				this.addMember();
@@ -52,17 +56,45 @@ public class User {
 		}
 	}
 
-	//Not yet implemented
 	private void addMember() {
 		String[] nameAndPnr = new String[2];
 		
 		nameAndPnr = view.displayAddMember();
 		memberRegistry.addMember(nameAndPnr[0],nameAndPnr[1]);
+		
 		this.mainMenu();
 	}
 	
 	//Not yet implemented
 	private void editMember() {
+		int option = view.displayEditMemberMenu();
+		
+		switch (option) {
+			case 1:
+				this.editName();
+				break;
+			case 2:
+				this.editPnr();
+				break;
+		}
+	}
+	
+	private void editName() {
+		String newName = "";
+		int memberId = view.displayEnterMemberId();
+		
+		if (memberExists(memberId)) {
+			newName = view.displayEditName();
+			memberRegistry.editMemberName(memberId, newName);
+			view.displayMessage("Name has been changed!");
+		} else {
+			
+		}
+		
+		this.mainMenu();
+	}
+	
+	private void editPnr() {
 		this.mainMenu();
 	}
 
@@ -70,5 +102,17 @@ public class User {
 
 	}
 
+	private boolean memberExists(int member) {
+		//Find member, is persistent
+		boolean validMember = false;		
+		try {
+			memberRegistry.getMember(member);
+			validMember = true;
+		} catch (NoSuchElementException e) {
+			view.displayError("Member does not exist!");
+		}
+			
+		return validMember;
+	}
 
 }

@@ -14,11 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class MemberRegistry {
 	ArrayList<Member> members = new ArrayList<>();
 	
-	public MemberRegistry() {		
+	public MemberRegistry() {
 		try {
-			for (Member m : readMemberDB()) {
-				members.add(m);
-			}			
+			members = readMemberDB();
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,7 +78,7 @@ public class MemberRegistry {
 		throw new NoSuchElementException();		
 	}
 	
-	public void editMemberName(int id, String newName) {		
+	public void editMemberName(int id, String newName) {	
 		for (Member m : members) {
 			if (m.getId() == id) {
 				m.editName(newName);
@@ -126,7 +124,7 @@ public class MemberRegistry {
 		}
 	}
 	
-	ArrayList<Member> getAllMembers() {		
+	public ArrayList<Member> getAllMembers() {		
 		return new ArrayList<Member>(members);
 	}
 	

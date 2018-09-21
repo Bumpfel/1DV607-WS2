@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import model.MemberRegistry;
 
 public class Console implements ViewInterface {
+	private MemberRegistry memberRegistry;
 	
-	public Console() {
-		
+	public Console(MemberRegistry memberReg) {
+		memberRegistry = memberReg;
 	}
 
 	public void displayWelcomeMsg() {
@@ -18,10 +21,7 @@ public class Console implements ViewInterface {
 	public void displayMenu(ArrayList<String> options) {
 		int numOfOptions = options.size();
 		
-		for (int i = 0; i < numOfOptions; i++) {
-			System.out.print(i+1+": "); //Displays the number of the option
-			System.out.println(options.get(i)); //Displays the option
-		}
+		this.displayMenuOptions(options);
 		
 		System.out.println("What would you like to do?");
 	}
@@ -48,6 +48,33 @@ public class Console implements ViewInterface {
 			}
 		}
 
+		return input;
+	}
+	
+	public int getInputInt() {
+	    InputStreamReader reader = new InputStreamReader(System.in);
+	    BufferedReader in = new BufferedReader(reader);
+	    String stringInput = "";
+	    int input = -1;
+		
+		boolean validInput = false;
+		while (!validInput) {
+			try {
+				stringInput = in.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				input = Integer.parseInt(stringInput);
+				
+				validInput = true;
+					
+			} catch (NumberFormatException e) {
+				displayError("Input have to be a number");
+			}
+		}
+		
 		return input;
 	}
 
@@ -92,11 +119,42 @@ public class Console implements ViewInterface {
 		return nameAndPnr;
 	}
 	
+	public int displayEditMemberMenu() {
+		ArrayList<String> options = new ArrayList<String>();
+		int currentOption = -1;
+		int numOfOptions = -1;
+		
+		options.add("Edit name");
+		options.add("Edit social security number");
+		numOfOptions = options.size();
+		
+		this.displayMenuOptions(options);
+		
+		currentOption = this.getInputInt(1, numOfOptions);
+		
+		return currentOption;
+	}
+	
+	public String displayEditName() {		
+		System.out.println("Enter new name:");
+		return this.getInputString();
+	}
+	
+	public String displayEditPnr() {
+		
+		return "asd";
+	}
+	
+	public int displayEnterMemberId() {
+		System.out.println("Enter member ID:");
+		return this.getInputInt();
+	}
+	
 	public void displayMembersVerbose() {
 		// TODO Auto-generated method stub
 	}
 
-	public void DisplayMembersCompact() {
+	public void displayMembersCompact() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -105,7 +163,21 @@ public class Console implements ViewInterface {
 		// TODO Auto-generated method stub
 	}
 	
-	public void displayError(String e) {
-		System.out.println(e);
+	public void displayMessage(String m) {
+		System.out.println(m);
 	}
+	
+	public void displayError(String e) {
+		System.err.println(e+"\n");
+	}
+	
+	private void displayMenuOptions(ArrayList<String> options) {
+		int numOfOptions = options.size();
+		
+		for (int i = 0; i < numOfOptions; i++) {
+			System.out.print(i+1+": "); //Displays the number of the option
+			System.out.println(options.get(i)); //Displays the option
+		}
+	}
+
 }
