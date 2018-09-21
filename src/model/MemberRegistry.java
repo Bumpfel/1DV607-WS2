@@ -16,9 +16,7 @@ public class MemberRegistry {
 	
 	public MemberRegistry() {		
 		try {
-			for (Member m : readMemberDB()) {				
-				members.add(m);
-			}			
+			members = readMemberDB();						
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,23 +50,15 @@ public class MemberRegistry {
 		for (Member m : members) {
 			if (m.getId() == id) {
 				 members.remove(m);
-			}
-			else if ((members.indexOf(m) == members.size() - 1) && (m.getId() != id)) {
-				throw new NoSuchElementException();
-			}
-		}
-		try {
-			writeToFile("res/db.txt", members);
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+				 try {
+						writeToFile("res/db.txt", members);
+					 } catch (Exception e) {
+						System.out.println("Something went horribly wrong while saving the changes.");					
+					 }
+				 return;
+			}		
+		}		
+		throw new NoSuchElementException();
 	}
 	
 	public Member getMember(int id) {		
@@ -83,47 +73,31 @@ public class MemberRegistry {
 	public void editMemberName(int id, String newName) {		
 		for (Member m : members) {
 			if (m.getId() == id) {
-				m.editName(newName);
-			}
-			else if ((members.indexOf(m) == members.size() - 1) && (m.getId() != id)) {
-				throw new NoSuchElementException();
-			}
+				m.editName(newName);				
+				try {
+					writeToFile("res/db.txt", members);
+				} catch (Exception e) {
+					System.out.println("Something went horribly wrong while saving the changes.");
+				}
+				return;
+			}									
 		}
-		try {
-			writeToFile("res/db.txt", members);
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		throw new NoSuchElementException();
 	}
 	
 	public void editMemberPnr(int id, String newPnr) {		
 		for (Member m : members) {
 			if (m.getId() == id) {
-				m.editName(newPnr);
-			}
-			else if ((members.indexOf(m) == members.size() - 1) && (m.getId() != id)) {
-				throw new NoSuchElementException();
-			}
+				m.editPNr(newPnr);				
+				try {
+					writeToFile("res/db.txt", members);
+				} catch (Exception e) {
+					System.out.println("Something went horribly wrong while saving the changes.");
+				}
+				return;
+			}									
 		}
-		try {
-			writeToFile("res/db.txt", members);
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		throw new NoSuchElementException();
 	}
 	
 	public ArrayList<Member> getAllMembers() {		
