@@ -9,13 +9,15 @@ public class Member {
 	private String pnr;
 	private ArrayList<Boat> boats = new ArrayList<>();
 	private int id;
+
+	private DBHandler db = new DBHandler();
 	
 	public Member() { // Needed for json object mapper
-		nextId++;
+		nextId = this.id++;		
 	}
 	
 	public Member(String newName, String newPNr) {
-		nextId ++;
+		nextId++;
 		
 		id = nextId;
 		name = newName;
@@ -23,7 +25,7 @@ public class Member {
 	}
 	
 	public void editName(String newName) throws IllegalArgumentException {
-		if(newName.length() >= 2)
+		if(newName.length() >= 2) 
 			name = newName;
 		else
 			throw new IllegalArgumentException("The name must be at least 2 characters long");
@@ -49,11 +51,13 @@ public class Member {
 	}
 	
 	public void registerBoat(Boat.BoatType type, double size) {
-		boats.add(new Boat(type, size));
+		boats.add(new Boat(type, size));		
+		db.saveDB();		
 	}
 	
 	public void removeBoat(int index) {
 		boats.remove(index);
+		db.saveDB();
 	}
 	
 	public ArrayList<Boat> getBoats() {
