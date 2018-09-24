@@ -48,6 +48,14 @@ public class Member {
 		return pnr;
 	}
 	
+	public void registerBoat(Boat.BoatType type, double size) {
+		boats.add(new Boat(type, size));
+	}
+	
+	public void removeBoat(int index) {
+		boats.remove(index);
+	}
+	
 	public ArrayList<Boat> getBoats() {
 		return new ArrayList<Boat>(boats);
 	}
