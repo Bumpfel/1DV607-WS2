@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import model.Boat;
 import model.Member;
 import model.MemberRegistry;
 
@@ -76,32 +77,36 @@ public class Console implements ViewInterface {
 		
 		return input;
 	}
-
-	public int getInputInt(int minimum, int maximum) {
-	    InputStreamReader reader = new InputStreamReader(System.in);
-	    BufferedReader in = new BufferedReader(reader);
-	    String stringInput = "";
+	
+	public int getInputInt(int minimum) {
 	    int input = -1;
 		
 		boolean validInput = false;
 		while (!validInput) {
-			try {
-				stringInput = in.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				input = Integer.parseInt(stringInput);
+				input = this.getInputInt();
+				
+				if (input >= minimum) {
+					validInput = true;
+				} else {
+					displayError("Input out of bound");
+				}
+		}
+		
+		return input;
+	}
+
+	public int getInputInt(int minimum, int maximum) {
+	    int input = -1;
+		
+		boolean validInput = false;
+		while (!validInput) {
+				input = this.getInputInt();
 				
 				if (input >= minimum && input <= maximum) {
 					validInput = true;
 				} else {
 					displayError("Input out of bound");
 				}
-			} catch (NumberFormatException e) {
-				displayError("Input have to be a number");
-			}
 		}
 		
 		return input;
@@ -189,6 +194,40 @@ public class Console implements ViewInterface {
 		for (Member member : list) {
 			System.out.println(String.format("%-12s %-26s %-16s ",member.getId(),member.getName(),member.getBoats().size()));
 		}
+	}
+	
+	public Boat.BoatType displayRegisterBoat() {
+		String stringType = "";
+		Boat.BoatType boatType = Boat.BoatType.Other;
+		
+		System.out.println("Enter boat type:");
+		System.out.println("Available boatypes: ");
+		
+		for (Boat.BoatType type : Boat.BoatType.values()) {
+			System.out.println(type);
+		}
+		
+		boolean validType = false;
+		while (!validType) {
+			stringType = this.getInputString();
+				
+				try {
+					boatType = Enum.valueOf(Boat.BoatType.class,stringType);
+					validType = true;
+				} catch (IllegalArgumentException e) {
+					System.out.println("Not a correct boat type. Try again:");
+				}
+		}
+		
+		return boatType;
+	}
+	
+	public void displayBoatEnterSize() {
+		System.out.println("Enter boat size (in meters):");
+	}
+	
+	public void displayBoatConfirm() {
+		System.out.println("Boat was added!");
 	}
 
 	public void displayMemberReg() {

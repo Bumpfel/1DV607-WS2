@@ -1,10 +1,12 @@
 package controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import view.ViewInterface;
 import model.MemberRegistry;
+import model.Boat;
 import model.Member;
 
 public class User {
@@ -205,16 +207,30 @@ public class User {
 	}
 	
 	private void registerBoat() {
+		int size;
+		Boat.BoatType boatType = Boat.BoatType.Other;
+		Member currentMember;
+		
 		int memberId = view.displayEnterMemberId();
 		
 		//Makes sure member actually exists, also prints error if it does not
 		try {
-			memberRegistry.deleteMember(memberId);
-		} 
+			currentMember = memberRegistry.getMember(memberId);
+			boatType = view.displayRegisterBoat();
+			
+			view.displayBoatEnterSize();
+			size = view.getInputInt(1);
+			
+			currentMember.registerBoat(boatType, size);
+			
+			view.displayBoatConfirm();
+		}
 		
 		catch (NoSuchElementException e) {
 			view.displayError("Member does not exist!");
 		}
+		
+		this.mainMenu();
 		
 	}
 

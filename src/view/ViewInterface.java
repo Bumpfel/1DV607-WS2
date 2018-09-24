@@ -2,12 +2,14 @@ package view;
 
 import java.util.ArrayList;
 
+import model.Boat;
 import model.Member;
 
 public interface ViewInterface {
 	
 	public String getInputString();
 	public int getInputInt();
+	public int getInputInt(int minimum);
 	public int getInputInt(int minimum, int maximum);
 	public int displayEnterMemberId();
 	public void displayMessage(String m);
@@ -29,6 +31,10 @@ public interface ViewInterface {
 	public int displayViewMemberListMenu();
 	public void displayMembersVerbose(ArrayList<Member> list);
 	public void displayMembersCompact(ArrayList<Member> list);
+	
+	public Boat.BoatType displayRegisterBoat();
+	public void displayBoatEnterSize();
+	public void displayBoatConfirm();
 	
 	public void displayMemberReg();
 }
