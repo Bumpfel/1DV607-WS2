@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 public class MemberRegistry {
-	private static ArrayList<Member> members = new ArrayList<>();
+	private ArrayList<Member> members = new ArrayList<>();
 	private DBHandler db = new DBHandler();
 
 	public MemberRegistry() {
