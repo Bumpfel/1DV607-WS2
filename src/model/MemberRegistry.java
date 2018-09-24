@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class MemberRegistry {
 	ArrayList<Member> members = new ArrayList<>();
 	
-	public MemberRegistry() {
+	public MemberRegistry() {		
 		try {
 			members = readMemberDB();						
 		} catch (JsonMappingException e) {

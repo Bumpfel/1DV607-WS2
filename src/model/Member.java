@@ -22,14 +22,14 @@ public class Member {
 		pnr = newPNr;
 	}
 	
-	protected void editName(String newName) throws IllegalArgumentException {
+	public void editName(String newName) throws IllegalArgumentException {
 		if(newName.length() >= 2)
 			name = newName;
 		else
 			throw new IllegalArgumentException("The name must be at least 2 characters long");
 	}
 	
-	protected void editPNr(String newPNr) throws IllegalArgumentException {
+	public void editPNr(String newPNr) throws IllegalArgumentException {
 		if(newPNr.length() >= 10) // simplest possible check
 			pnr = newPNr;
 		else
