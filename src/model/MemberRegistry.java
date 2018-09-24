@@ -70,7 +70,7 @@ public class MemberRegistry {
 		throw new NoSuchElementException();		
 	}
 	
-	public void editMemberName(int id, String newName) {		
+	public void editMemberName(int id, String newName) {	
 		for (Member m : members) {
 			if (m.getId() == id) {
 				m.editName(newName);				

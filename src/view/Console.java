@@ -4,21 +4,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
+
+import model.Member;
 import model.MemberRegistry;
 
 public class Console implements ViewInterface {
-	private MemberRegistry memberRegistry;
 	
 	public Console(MemberRegistry memberReg) {
-		memberRegistry = memberReg;
 	}
 
 	public void displayWelcomeMsg() {
 		System.out.println("Whalecum to \"The Jolly Pirate\" boatclub's member registry!");
 	}
 	
-	public void displayMenu(ArrayList<String> options) {
+	public void displayMainMenu(ArrayList<String> options) {
 		int numOfOptions = options.size();
 		
 		this.displayMenuOptions(options);
@@ -135,14 +134,30 @@ public class Console implements ViewInterface {
 		return currentOption;
 	}
 	
+	public int displayViewMemberListMenu() {
+		ArrayList<String> options = new ArrayList<String>();
+		int currentOption = -1;
+		int numOfOptions = -1;
+		
+		options.add("View compact list");
+		options.add("View verbose list");
+		numOfOptions = options.size();
+		
+		this.displayMenuOptions(options);
+		
+		currentOption = this.getInputInt(1, numOfOptions);
+		
+		return currentOption;
+	}
+	
 	public String displayEditName() {		
 		System.out.println("Enter new name:");
 		return this.getInputString();
 	}
 	
 	public String displayEditPnr() {
-		
-		return "asd";
+		System.out.println("Enter new social security number:");
+		return this.getInputString();
 	}
 	
 	public int displayEnterMemberId() {
@@ -150,13 +165,30 @@ public class Console implements ViewInterface {
 		return this.getInputInt();
 	}
 	
-	public void displayMembersVerbose() {
-		// TODO Auto-generated method stub
+	public void displayViewMember(Member member) {
+		System.out.format("%-12s %-26s %-16s \n","MemberID","Name","Number of boats");
+		
+		this.displayMemberFullInformation(member);
+	}
+	
+	public void displayDeleteMember() {
+		System.out.println("Member was baleted!");
+	}
+	
+	public void displayMembersVerbose(ArrayList<Member> list) {
+		System.out.format("%-12s %-26s %-16s \n","MemberID","Name","Number of boats");
+		
+		for (Member member : list) {
+			this.displayMemberFullInformation(member);
+		}
 	}
 
-	public void displayMembersCompact() {
-		// TODO Auto-generated method stub
+	public void displayMembersCompact(ArrayList<Member> list) {
+		System.out.format("%-12s %-26s %-16s \n","MemberID","Name","Number of boats");
 		
+		for (Member member : list) {
+			System.out.println(String.format("%-12s %-26s %-16s ",member.getId(),member.getName(),member.getBoats().size()));
+		}
 	}
 
 	public void displayMemberReg() {
@@ -178,6 +210,11 @@ public class Console implements ViewInterface {
 			System.out.print(i+1+": "); //Displays the number of the option
 			System.out.println(options.get(i)); //Displays the option
 		}
+	}
+	
+	//Displays a member's full information
+	private void displayMemberFullInformation(Member member) {
+		System.out.println(String.format("%-12s %-26s %-16s ",member.getId(),member.getName(),member.getBoats().size()));
 	}
 
 }
