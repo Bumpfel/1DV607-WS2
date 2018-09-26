@@ -111,7 +111,7 @@ public class MemberRegistry {
 		return oMapper.readValue(inputFile, new TypeReference<ArrayList<Member>>(){});
 	}
 	
-	static void writeToFile(String filePath, Collection<?> col) throws IOException, JsonMappingException, JsonGenerationException {
+	public static void writeToFile(String filePath, Collection<?> col) throws IOException, JsonMappingException, JsonGenerationException {
 		ObjectMapper oMapper = new ObjectMapper();
 		File outputFile = new File(filePath);
 		
