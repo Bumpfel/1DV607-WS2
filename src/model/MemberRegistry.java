@@ -10,13 +10,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MemberRegistry {
-<<<<<<< Updated upstream
 	private ArrayList<Member> members = new ArrayList<>();
-	private DBHandler db = new DBHandler();
-=======
-	private static ArrayList<Member> members = new ArrayList<>();
->>>>>>> Stashed changes
-
+	
 	public MemberRegistry() {
 		try {
 			members = readMemberDB();
