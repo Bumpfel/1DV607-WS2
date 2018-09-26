@@ -1,15 +1,25 @@
 package model;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MemberRegistry {
+<<<<<<< Updated upstream
 	private ArrayList<Member> members = new ArrayList<>();
 	private DBHandler db = new DBHandler();
+=======
+	private static ArrayList<Member> members = new ArrayList<>();
+>>>>>>> Stashed changes
 
 	public MemberRegistry() {
 		try {
-			members = db.readMemberDB();
+			members = readMemberDB();
 		} catch (Exception e) {
 			System.out.println("Error reading member database from file.");
 		}
@@ -18,25 +28,25 @@ public class MemberRegistry {
 	public void addMember(String name, String pNr) {
 		Member m = new Member(name, pNr);
 		members.add(m);
-		db.saveDB();
+		saveDB(); //TODO ta bort
 	}
 
 	public void deleteMember(int id) {
 		Member m = getMember(id);
 		members.remove(m);
-		db.saveDB();
+		saveDB(); //TODO ta bort
 	}
 
 	public void editMemberName(int id, String newName) {
 		Member m = getMember(id);
 		m.editName(newName);
-		db.saveDB();
+		saveDB(); //TODO ta bort
 	}
 
 	public void editMemberPnr(int id, String newPnr) {
 		Member m = getMember(id);
 		m.editPNr(newPnr);
-		db.saveDB();
+		saveDB(); //TODO ta bort
 	}
 
 	public Member getMember(int id) {
@@ -49,5 +59,23 @@ public class MemberRegistry {
 
 	public ArrayList<Member> getAllMembers() {
 		return new ArrayList<Member>(members);
+	}
+
+	private ArrayList<Member> readMemberDB() throws IOException, JsonMappingException, JsonParseException {
+		ObjectMapper oMapper = new ObjectMapper();
+		File inputFile = new File("res/db.txt");
+
+		return oMapper.readValue(inputFile, new TypeReference<ArrayList<Member>>() {
+		});
+	}
+
+	public void saveDB() {
+		ObjectMapper oMapper = new ObjectMapper();
+		File outputFile = new File("res/db.txt");		
+		try {
+			oMapper.writeValue(outputFile, members);
+		} catch (Exception e) {
+			System.out.println("Error saving to database.");
+		}
 	}
 }
