@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 import model.Boat;
 import model.Member;
-import model.MemberRegistry;
 
 public class Console implements ViewInterface {
 	
-	public Console(MemberRegistry memberReg) {
+	public Console() {
+		
 	}
 
 	public void displayWelcomeMsg() {
@@ -203,8 +203,11 @@ public class Console implements ViewInterface {
 		System.out.println("Enter boat type:");
 		System.out.println("Available boatypes: ");
 		
+		//Saves ordinals (for type checking) and prints the types
+		ArrayList<Integer> boatOrdinals = new ArrayList<Integer>();
 		for (Boat.BoatType type : Boat.BoatType.values()) {
-			System.out.println(type);
+			boatOrdinals.add(type.ordinal());
+			System.out.println(boatOrdinals.get(boatOrdinals.size()-1)+1+". "+type);
 		}
 		
 		boolean validType = false;
