@@ -9,8 +9,6 @@ public class Member {
 	private String pnr;
 	private ArrayList<Boat> boats = new ArrayList<>();
 	private int id;
-
-	private DBHandler db = new DBHandler();
 	
 	public Member() { // Needed for json object mapper
 		nextId = this.id++;		
