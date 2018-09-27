@@ -4,7 +4,18 @@ public class Boat {
 	private BoatType type;
 	private double size;
 
-	public enum BoatType { Sailboat, Motorsailer, KayakCanoe, Other };
+	public enum BoatType { Sailboat(1), Motorsailer(2), KayakCanoe(3), Other(4);
+		
+        private int value;
+
+        private BoatType(int val) {
+                this.value = val;
+        }
+    };
+    
+    public Boat() {
+    	
+    }
 	
 	public Boat(BoatType newType, double newSize) {
 		type = newType;

@@ -7,15 +7,15 @@ import java.util.ArrayList;
 
 import model.Boat;
 import model.Member;
-import model.MemberRegistry;
 
 public class Console implements ViewInterface {
 	
-	public Console(MemberRegistry memberReg) {
+	public Console() {
+		
 	}
 
 	public void displayWelcomeMsg() {
-		System.out.println("Whalecum to \"The Jolly Pirate\" boatclub's member registry!");
+		System.out.println("Welcome to \"The Jolly Pirate\" boat club's member registry!");
 	}
 	
 	public void displayMainMenu(ArrayList<String> options) {
@@ -177,14 +177,23 @@ public class Console implements ViewInterface {
 	}
 	
 	public void displayDeleteMember() {
-		System.out.println("Member was baleted!");
+		System.out.println("Member was deleted!");
 	}
-	
+		
 	public void displayMembersVerbose(ArrayList<Member> list) {
-		System.out.format("%-12s %-26s %-16s \n","MemberID","Name","Number of boats");
+		System.out.format("%-12s %-26s %-16s \n","MEMBER ID","NAME","PERSONAL NUMBER");
 		
 		for (Member member : list) {
-			this.displayMemberFullInformation(member);
+			System.out.println("----------------------------------------------------------");
+			System.out.format("%-12s %-26s %-16s \n", member.getId(), member.getName(), member.getPNr());
+			ArrayList<Boat> memberBoats = member.getBoats();
+			if(memberBoats.size() > 0) {
+				System.out.format("\n%-12s %-26s %-16s \n","> Boats", "Type", "Size (m)");
+				for(Boat boat : memberBoats) {
+					System.out.format("%-12s %-26s %.16s \n", "", boat.getType(), boat.getSize());
+				}
+				System.out.println(" Has " + memberBoats.size() + " boat(s) registered in total");
+			}
 		}
 	}
 
@@ -192,7 +201,7 @@ public class Console implements ViewInterface {
 		System.out.format("%-12s %-26s %-16s \n","MemberID","Name","Number of boats");
 		
 		for (Member member : list) {
-			System.out.println(String.format("%-12s %-26s %-16s ",member.getId(),member.getName(),member.getBoats().size()));
+			System.out.format("%-12s %-26s %-16s \n",member.getId(),member.getName(),member.getBoats().size());
 		}
 	}
 	
@@ -203,8 +212,11 @@ public class Console implements ViewInterface {
 		System.out.println("Enter boat type:");
 		System.out.println("Available boatypes: ");
 		
+		//Saves ordinals (for type checking) and prints the types
+		ArrayList<Integer> boatOrdinals = new ArrayList<Integer>();
 		for (Boat.BoatType type : Boat.BoatType.values()) {
-			System.out.println(type);
+			boatOrdinals.add(type.ordinal());
+			System.out.println(boatOrdinals.get(boatOrdinals.size()-1)+1+". "+type);
 		}
 		
 		boolean validType = false;

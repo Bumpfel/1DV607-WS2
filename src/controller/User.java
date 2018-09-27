@@ -1,5 +1,14 @@
 package controller;
 
+<<<<<<< HEAD
+=======
+/*
+ * Implement edit boat
+ * Implement remove boat
+ * Implement/fix ListMemberVerbose
+ */
+
+>>>>>>> Eric
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -63,6 +72,10 @@ public class User {
 				
 			case 6:
 				this.registerBoat();
+				break;
+				
+			case 7:
+				this.editBoat();
 				break;
 		
 			case 9:
@@ -230,6 +243,9 @@ public class User {
 		}
 		
 		this.mainMenu();
+	}
+	
+	private void editBoat() {
 		
 	}
 

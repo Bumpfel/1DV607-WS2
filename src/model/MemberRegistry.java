@@ -63,8 +63,13 @@ public class MemberRegistry {
 		return oMapper.readValue(inputFile, new TypeReference<ArrayList<Member>>() {
 		});
 	}
+<<<<<<< HEAD
 
 	public void saveDB() {
+=======
+	
+	public static void writeToFile(String filePath, Collection<?> col) throws IOException, JsonMappingException, JsonGenerationException {
+>>>>>>> Eric
 		ObjectMapper oMapper = new ObjectMapper();
 		File outputFile = new File("res/db.txt");		
 		try {
