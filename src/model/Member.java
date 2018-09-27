@@ -21,7 +21,7 @@ public class Member {
 	}
 
 	public void editName(String newName) throws IllegalArgumentException {
-		if (newName.length() >= 2)
+		if (newName.length() >= 2) // Simple check - name must be at least 2 characters long
 			name = newName;
 		else
 			throw new IllegalArgumentException("The name must be at least 2 characters long");

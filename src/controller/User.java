@@ -6,12 +6,12 @@ import java.util.NoSuchElementException;
 import model.Boat;
 import model.Member;
 import model.MemberRegistry;
-import view.Console;
+import view.EngConsole;
 import view.ViewInterface;
 
 public class User {
 	private ViewInterface view;
-	private Console tempConsole = new Console(); // temp
+	private EngConsole tempConsole = new EngConsole(); // Temp ----------------------------------------
 	private MemberRegistry memberRegistry;
 
 	public User(MemberRegistry memberReg, ViewInterface inView) {
@@ -21,63 +21,24 @@ public class User {
 
 	public void startApplication() {
 		view.displayWelcomeMsg();
-		this.mainMenu();
+		mainMenu();
 	}
 
 	private void mainMenu() {
-		ArrayList<String> options = new ArrayList<String>();
-		int currentOption = -1;
-
-		options.add("Add member");
-		options.add("Edit member");
-		options.add("View member");
-		options.add("Delete member");
-		options.add("List members");
-		options.add("Register boat");
-		options.add("Edit boat");
-		options.add("Remove boat");
-		options.add("Exit");
-
-		view.displayMainMenu(options);
-
-		currentOption = view.getInputInt(1,options.size());
+		view.displayMainMenu();
+		
+		int currentOption = view.getInputInt(1, 9);
 		
 		switch(currentOption) {
-			case 1:
-				this.addMember();
-				break;
-				
-			case 2:
-				this.editMember();
-				break;
-				
-			case 3:
-				this.viewMember();
-				break;
-				
-			case 4:
-				this.deleteMember();
-				break;
-				
-			case 5:
-				this.viewMemberList();
-				break;
-				
-			case 6:
-				this.registerBoat();
-				break;
-				
-			case 7:
-				this.editBoat();
-				break;
-				
-			case 8:
-				this.removeBoat();
-				break;
-		
-			case 9:
-				this.exit();
-				break;
+			case 1: addMember();
+			case 2: editMember();
+			case 3:	viewMember();
+			case 4:	deleteMember();
+			case 5: viewMemberList();
+			case 6: registerBoat();
+			case 7: editBoat();
+			case 8: removeBoat();
+			case 9: exit();
 		}
 	}
 
@@ -85,28 +46,30 @@ public class User {
 		String[] nameAndPnr = new String[2];
 		
 		nameAndPnr = view.displayAddMember();
-		memberRegistry.addMember(nameAndPnr[0],nameAndPnr[1]);
+		memberRegistry.addMember(nameAndPnr[0], nameAndPnr[1]);
 		
 		memberRegistry.saveDB();
-		this.mainMenu();
+		mainMenu();
 	}
 	
 	private void editMember() {
-//		int option = view.displayEditMemberMenu();
-		int option = tempConsole.displaySubMenu(tempConsole.getEditMemberArray());
+//		String option1 = EngConsole.MenuOptions.EditName.getOption(); // Should not call EngConsole ---------------------------------------
+//		String option2 = EngConsole.MenuOptions.EditPNr.getOption(); // Should not call from EngConsole ---------------------------------------
+
+//		int chosenOption = tempConsole.displaySubMenu(option1, option2); // Temp ----------------------------------------
+
+		String[] options = view.getEditMemberOptions();
 		
-		switch (option) {
-			case 1:
-				this.editName();
-				break;
-			case 2:
-				this.editPnr();
-				break;
+		int chosenOption = view.displaySubMenu(options);
+		
+		switch (chosenOption) {
+			case 1: editName();
+			case 2: editPnr();
 		}
 	}
 	
 	private void editName() {
-		String newName = "";
+		String newName = new String();
 		int memberId = view.displayEnterMemberId();
 		
 		//Makes sure member actually exists, also prints error if it does not
@@ -117,14 +80,15 @@ public class User {
 			//Throws error if newName.length < 2
 			try {
 				currentMember.editName(newName);
-				view.displayMessage("Name has been changed!");
+				view.displayNameChangedConfirm();
+//				view.displayMessage(EngConsole.Msg.NameChanged.getMsg()); // Should not call EngConsole ---------------------------------------
 			} catch (IllegalArgumentException e) {
 				view.displayError(e.getMessage());
 			}
 		} 
 		
 		catch (NoSuchElementException e) {
-			view.displayError("Member does not exist!");
+			view.displayMemberDoesNotExistMsg();
 		}
 		
 		memberRegistry.saveDB();
@@ -132,7 +96,7 @@ public class User {
 	}
 	
 	private void editPnr() {
-		String newPnr = "";
+		String newPnr = new String();
 		int memberId = view.displayEnterMemberId();
 		
 		//Makes sure member actually exists, also prints error if it does not
