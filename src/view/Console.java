@@ -18,6 +18,19 @@ public class Console implements ViewInterface {
 		System.out.println("Welcome to \"The Jolly Pirate\" boat club's member registry!");
 	}
 	
+	public void displayWait() {
+		System.out.println("Press enter to continue...");
+
+		InputStreamReader reader = new InputStreamReader(System.in);
+	    BufferedReader in = new BufferedReader(reader);
+
+		try {
+			in.read();
+		}
+		catch(Exception e) {
+		}
+	}
+
 	public void displayMainMenu(ArrayList<String> options) {
 		int numOfOptions = options.size();
 		
@@ -195,6 +208,7 @@ public class Console implements ViewInterface {
 				System.out.println(" Has " + memberBoats.size() + " boat(s) registered in total");
 			}
 		}
+		displayWait();
 	}
 
 	public void displayMembersCompact(ArrayList<Member> list) {
