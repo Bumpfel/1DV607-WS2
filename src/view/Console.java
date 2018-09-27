@@ -19,8 +19,6 @@ public class Console implements ViewInterface {
 	}
 	
 	public void displayMainMenu(ArrayList<String> options) {
-		int numOfOptions = options.size();
-		
 		this.displayMenuOptions(options);
 		
 		System.out.println("What would you like to do?");
@@ -205,27 +203,62 @@ public class Console implements ViewInterface {
 		}
 	}
 	
-	public Boat.BoatType displayRegisterBoat() {
-		String stringType = "";
+	public double displayBoatEnterSize() {
+		double doubleInput = -1;
+		System.out.println("Enter boat size (in meters):");
+		
+		boolean validInput = false;
+		while (!validInput) {
+			String input = this.getInputString();
+			
+			try {
+				doubleInput = Double.valueOf(input);
+				if (doubleInput <= 0)
+					throw new IllegalArgumentException();
+				validInput = true;
+			} catch (IllegalArgumentException e) {
+				System.out.println("Invalid input");
+			}
+			
+		}	
+		
+		return doubleInput;
+	}
+	
+	public Boat.BoatType displayEnterBoatType() {
 		Boat.BoatType boatType = Boat.BoatType.Other;
 		
-		System.out.println("Enter boat type:");
-		System.out.println("Available boatypes: ");
+		System.out.println("Available boat-types: ");
 		
-		//Saves ordinals (for type checking) and prints the types
-		ArrayList<Integer> boatOrdinals = new ArrayList<Integer>();
+		//Saves types for ordinal check and prints the types
+		ArrayList<Boat.BoatType> boatTypes = new ArrayList<Boat.BoatType>();
 		for (Boat.BoatType type : Boat.BoatType.values()) {
-			boatOrdinals.add(type.ordinal());
-			System.out.println(boatOrdinals.get(boatOrdinals.size()-1)+1+". "+type);
+			boatTypes.add(type);
+			System.out.println(type.ordinal()+1+". "+type);
 		}
 		
+		System.out.println("Enter boat type:");
 		boolean validType = false;
 		while (!validType) {
-			stringType = this.getInputString();
+			int choiceAsInt = -1;
+			String stringType = this.getInputString();
 				
 				try {
-					boatType = Enum.valueOf(Boat.BoatType.class,stringType);
-					validType = true;
+					try {
+						choiceAsInt = Integer.valueOf(stringType);
+					} catch (NumberFormatException e) {
+						
+					}
+					
+					if (choiceAsInt >= 1 && choiceAsInt <= boatTypes.size()) {
+						boatType = boatTypes.get(choiceAsInt-1);
+						validType = true;
+					}
+					
+					else {
+						boatType = Enum.valueOf(Boat.BoatType.class,stringType);
+						validType = true;
+					}
 				} catch (IllegalArgumentException e) {
 					System.out.println("Not a correct boat type. Try again:");
 				}
@@ -234,12 +267,52 @@ public class Console implements ViewInterface {
 		return boatType;
 	}
 	
-	public void displayBoatEnterSize() {
-		System.out.println("Enter boat size (in meters):");
-	}
-	
 	public void displayBoatConfirm() {
 		System.out.println("Boat was added!");
+	}
+	
+	public void displayEditBoatTypeConfirm() {
+		System.out.println("Boat type was changed!");
+	}
+	
+	public void displayEditBoatSizeConfirm() {
+		System.out.println("Boat size was changed!");
+	}
+	
+	public void displayBoatListCompact(Member currentMember) {
+			ArrayList<Boat> boats = currentMember.getBoats();
+			
+			if (boats.size() == 0) {
+				System.out.println("Member has no boats!");
+			} else {
+				System.out.println();
+				for (int i = 0; i < boats.size(); i++) {
+					Boat boat = boats.get(i);
+					System.out.println(i+1+". "+boat.getType());
+				}
+			}
+	}
+	
+	public Boat displayEnterBoat(ArrayList<Boat> boats) {
+		System.out.println("Enter boat ID:");
+		Boat currentBoat;
+		
+		int choiceAsInt = this.getInputInt(1,boats.size());
+		
+		currentBoat = boats.get(choiceAsInt-1);
+		
+		return currentBoat;
+	}
+	
+	public int displayEditBoatMenu() {
+		System.out.println("1: Edit boat type"+"\n"
+				+ "2: Edit boat size");
+		int menuChoice = this.getInputInt(1,2);
+		return menuChoice;
+	}
+	
+	public void displayDeleteBoatConfirm() {
+		System.out.println("Boat has been baleted!");
 	}
 
 	public void displayMemberReg() {
