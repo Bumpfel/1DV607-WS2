@@ -90,6 +90,7 @@ public class User {
 		nameAndPnr = view.displayAddMember();
 		memberRegistry.addMember(nameAndPnr[0],nameAndPnr[1]);
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -128,6 +129,7 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -153,6 +155,7 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -185,6 +188,7 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -240,10 +244,12 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
 	private void editBoat() {
+<<<<<<< HEAD
 		int memberId = view.displayEnterMemberId();
 		Member currentMember = null;
 		Boat currentBoat;
@@ -321,6 +327,10 @@ public class User {
 		currentMember.removeBoat(0);
 	
 		view.displayDeleteBoatConfirm();
+=======
+		memberRegistry.saveDB();
+		this.mainMenu();
+>>>>>>> branch 'Jucke' of https://github.com/Bumpfel/1DV607-Workshop2.git
 	}
 
 	//This method does nothing
