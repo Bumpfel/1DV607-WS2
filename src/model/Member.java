@@ -78,8 +78,8 @@ public class Member {
 
 	// TODO implementera i senare skede?
 	private boolean pnrIsCorrect(String nr) {
-		int firstPart = Integer.parseInt(nr.substring(6, 10));
-		int secondPart = Integer.parseInt(nr.substring(0, 6));
+		int firstPart = Integer.parseInt(nr.substring(0, 6));
+		int secondPart = Integer.parseInt(nr.substring(6, 10));
 
 		int month = firstPart % 10000 / 100;
 		int day = secondPart % 100;
