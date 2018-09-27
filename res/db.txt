@@ -1,1 +1,1 @@
-[{"name":"Karin","pnr":"18585555585","boats":[{"type":"Motorsailer","size":5.0},{"type":"Sailboat","size":4.0}],"id":1},{"name":"Karsten","pnr":"28585155585","boats":[{"type":"Other","size":2.0}],"id":2},{"name":"Peder","pnr":"48545555585","boats":[],"id":4}]
+[{"name":"Preben Karstensen","pnr":"1234567890","boats":[{"type":"Sailboat","size":45.0}],"id":1}]

@@ -17,6 +17,10 @@ public class Boat {
 		type = newType;
 		size = newSize;
 	}
+
+	public Boat() {
+		
+	}
 	
 	public BoatType getType() {
 		return type;
