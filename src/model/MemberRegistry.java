@@ -24,26 +24,22 @@ public class MemberRegistry {
 
 	public void addMember(String name, String pNr) {
 		Member m = new Member(name, pNr);
-		members.add(m);
-		saveDB(); //TODO ta bort
+		members.add(m);		
 	}
 
 	public void deleteMember(int id) {
 		Member m = getMember(id);
-		members.remove(m);
-		saveDB(); //TODO ta bort
+		members.remove(m);		
 	}
 
 	public void editMemberName(int id, String newName) {
 		Member m = getMember(id);
-		m.editName(newName);
-		saveDB(); //TODO ta bort
+		m.editName(newName);		
 	}
 
 	public void editMemberPnr(int id, String newPnr) {
 		Member m = getMember(id);
-		m.editPNr(newPnr);
-		saveDB(); //TODO ta bort
+		m.editPNr(newPnr);		
 	}
 
 	public Member getMember(int id) {
