@@ -1,7 +1,6 @@
 package controller;
 
 /*
- * Implement remove boat
  * Implement/fix ListMemberVerbose
  */
 
@@ -249,7 +248,6 @@ public class User {
 	}
 	
 	private void editBoat() {
-<<<<<<< HEAD
 		int memberId = view.displayEnterMemberId();
 		Member currentMember = null;
 		Boat currentBoat;
@@ -289,6 +287,7 @@ public class User {
 		
 		view.displayEditBoatSizeConfirm();
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -299,6 +298,7 @@ public class User {
 		
 		view.displayEditBoatTypeConfirm();
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -324,13 +324,12 @@ public class User {
 		
 		currentBoat = view.displayEnterBoat(boats);
 		
-		currentMember.removeBoat(0);
+		currentMember.removeBoat(currentBoat);
 	
 		view.displayDeleteBoatConfirm();
-=======
+
 		memberRegistry.saveDB();
 		this.mainMenu();
->>>>>>> branch 'Jucke' of https://github.com/Bumpfel/1DV607-Workshop2.git
 	}
 
 	//This method does nothing
