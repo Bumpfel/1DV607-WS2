@@ -133,6 +133,9 @@ public class Console implements ViewInterface {
 		System.out.println("Enter new member's social security number: ");
 		nameAndPnr[1] = this.getInputString();
 		
+		System.out.println("Member created");
+		displayWait();
+		
 		return nameAndPnr;
 	}
 	
@@ -148,7 +151,7 @@ public class Console implements ViewInterface {
 		this.displayMenuOptions(options);
 		
 		currentOption = this.getInputInt(1, numOfOptions);
-		
+				
 		return currentOption;
 	}
 	
@@ -182,31 +185,38 @@ public class Console implements ViewInterface {
 		System.out.println("Enter member ID:");
 		return this.getInputInt();
 	}
-	
-	public void displayViewMember(Member member) {
-		System.out.format("%-12s %-26s %-16s \n","MemberID","Name","Number of boats");
-		
-		this.displayMemberFullInformation(member);
-	}
-	
+
 	public void displayDeleteMember() {
 		System.out.println("Member was deleted!");
+		displayWait();
 	}
+
+	//Displays a member's full information
+	private void displayMemberFullInformation(Member member) {
+		System.out.format("%-12s %-26s %-16s \n", member.getId(), member.getName(), member.getPNr());
+		ArrayList<Boat> memberBoats = member.getBoats();
+		if(memberBoats.size() > 0) {
+			System.out.format("\n%-11s %-26s %-16s \n"," > Boats", "Type", "Size (m)");
+			for(Boat boat : memberBoats) {
+				System.out.format("%-12s %-26s %.16s \n", "", boat.getType(), boat.getSize());
+			}
+			System.out.println(" Has " + memberBoats.size() + " boat(s) registered in total");
+		}
+	}
+
+	public void displayViewMember(Member member) {
+		System.out.format("%-12s %-26s %-16s \n","MemberID","Name","Number of boats");
+		this.displayMemberFullInformation(member);
 		
+		displayWait();
+	}	
+	
 	public void displayMembersVerbose(ArrayList<Member> list) {
 		System.out.format("%-12s %-26s %-16s \n","MEMBER ID","NAME","PERSONAL NUMBER");
 		
 		for (Member member : list) {
 			System.out.println("----------------------------------------------------------");
-			System.out.format("%-12s %-26s %-16s \n", member.getId(), member.getName(), member.getPNr());
-			ArrayList<Boat> memberBoats = member.getBoats();
-			if(memberBoats.size() > 0) {
-				System.out.format("\n%-12s %-26s %-16s \n","> Boats", "Type", "Size (m)");
-				for(Boat boat : memberBoats) {
-					System.out.format("%-12s %-26s %.16s \n", "", boat.getType(), boat.getSize());
-				}
-				System.out.println(" Has " + memberBoats.size() + " boat(s) registered in total");
-			}
+			displayMemberFullInformation(member);
 		}
 		displayWait();
 	}
@@ -217,6 +227,7 @@ public class Console implements ViewInterface {
 		for (Member member : list) {
 			System.out.format("%-12s %-26s %-16s \n",member.getId(),member.getName(),member.getBoats().size());
 		}
+		displayWait();
 	}
 	
 	public Boat.BoatType displayRegisterBoat() {
@@ -254,6 +265,7 @@ public class Console implements ViewInterface {
 	
 	public void displayBoatConfirm() {
 		System.out.println("Boat was added!");
+		displayWait();
 	}
 
 	public void displayMemberReg() {
@@ -262,6 +274,7 @@ public class Console implements ViewInterface {
 	
 	public void displayMessage(String m) {
 		System.out.println(m);
+		displayWait();
 	}
 	
 	public void displayError(String e) {
@@ -277,9 +290,4 @@ public class Console implements ViewInterface {
 		}
 	}
 	
-	//Displays a member's full information
-	private void displayMemberFullInformation(Member member) {
-		System.out.println(String.format("%-12s %-26s %-16s ",member.getId(),member.getName(),member.getBoats().size()));
-	}
-
 }
