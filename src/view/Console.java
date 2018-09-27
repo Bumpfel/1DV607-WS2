@@ -138,6 +138,42 @@ public class Console implements ViewInterface {
 
 	public int displayEditMemberMenu() {
 		ArrayList<String> options = new ArrayList<String>();
+		options.add("Edit name");
+		options.add("Edit social security number");
+
+		displayMenuOptions(options);
+
+		String chosenOption = getInput();
+		
+		if(!isValidMenuChoice(chosenOption, 1, options.size())) {
+			displayEditMemberMenu();
+		}
+		return Integer.parseInt(chosenOption);
+	}
+	
+	public int displaySubMenu(String[] options) {
+		System.out.println("using sub menu");
+//		String[] editMemberOptions = { "Edit name", "Edit social security number" };
+				
+		displayMenuOptions_NEW(options);
+		
+		String chosenOption = getInput();
+		
+		if(!isValidMenuChoice(chosenOption, 1, options.length)) {
+			displaySubMenu(options);
+		}
+		return Integer.parseInt(chosenOption);
+	}	//
+	
+	
+	public String[] getEditMemberArray() {
+		return new String[] { "Edit name", "Edit social security number" };
+//		return arr;
+	}
+	
+
+	public int displayEditMemberMenu_original() {
+		ArrayList<String> options = new ArrayList<String>();
 		int currentOption = -1;
 		int numOfOptions = -1;
 
@@ -240,7 +276,8 @@ public class Console implements ViewInterface {
 				if (doubleInput <= 0)
 					throw new IllegalArgumentException();
 				validInput = true;
-			} catch (IllegalArgumentException e) {
+			}
+			catch (IllegalArgumentException e) {
 				System.out.println("Invalid input");
 			}
 

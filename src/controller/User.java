@@ -3,16 +3,18 @@ package controller;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-import view.ViewInterface;
-import model.MemberRegistry;
 import model.Boat;
 import model.Member;
+import model.MemberRegistry;
+import view.Console;
+import view.ViewInterface;
 
 public class User {
 	private ViewInterface view;
+	private Console tempConsole = new Console(); // temp
 	private MemberRegistry memberRegistry;
 
-	public User(MemberRegistry memberReg,ViewInterface inView) {
+	public User(MemberRegistry memberReg, ViewInterface inView) {
 		view = inView;
 		memberRegistry = memberReg;
 	}
@@ -90,7 +92,8 @@ public class User {
 	}
 	
 	private void editMember() {
-		int option = view.displayEditMemberMenu();
+//		int option = view.displayEditMemberMenu();
+		int option = tempConsole.displaySubMenu(tempConsole.getEditMemberArray());
 		
 		switch (option) {
 			case 1:
