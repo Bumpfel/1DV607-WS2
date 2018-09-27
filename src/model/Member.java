@@ -75,7 +75,7 @@ public class Member {
 	}
 
 	// TODO implementera i senare skede?
-	private boolean pnrIsCorrect(String nr) {
+	/*private boolean pnrIsCorrect(String nr) {
 		int firstPart = Integer.parseInt(nr.substring(0, 6));
 		int secondPart = Integer.parseInt(nr.substring(6, 10));
 
@@ -128,5 +128,5 @@ public class Member {
 		if (control != secondPart % 10) // Jämför kontrollsiffra med angivet personnummer
 			return false;
 		return true;
-	}
+	}*/
 }

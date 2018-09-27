@@ -322,7 +322,7 @@ public class Console implements ViewInterface {
 		System.out.println("Boat has been deleted!");
 		displayWait();
 	}
-	
+
 	public void displayEditBoatTypeConfirm() {
 		System.out.println("Boat type was changed!");
 		displayWait();
