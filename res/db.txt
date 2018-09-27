@@ -1,1 +1,1 @@
-[{"name":"Preben Karstensen","pnr":"1234567890","boats":[{"type":"Sailboat","size":45.0}],"id":1}]
+[{"name":"Preben Karstensen","pnr":"1234567890","boats":[{"type":"Sailboat","size":45.0}],"id":1},{"name":"Jimmothy Timmothy","pnr":"0987654321","boats":[{"type":"KayakCanoe","size":700.0}],"id":3}]
