@@ -11,15 +11,19 @@ public class Boat {
         private BoatType(int val) {
                 this.value = val;
         }
+        
+        public int getValue() {
+        	return value;
+        }
     };
-    
-    public Boat() {
-    	
-    }
 	
 	public Boat(BoatType newType, double newSize) {
 		type = newType;
 		size = newSize;
+	}
+
+	public Boat() {
+		
 	}
 	
 	public BoatType getType() {

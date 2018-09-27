@@ -3,118 +3,64 @@ package model;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.NoSuchElementException;
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MemberRegistry {
-	ArrayList<Member> members = new ArrayList<>();
-	
-	public MemberRegistry() {		
+	private ArrayList<Member> members = new ArrayList<>();
+
+	public MemberRegistry() {
 		try {
-			members = readMemberDB();						
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}				
-	}	
-		
+			members = readMemberDB();
+			if (members.size() > 0) {
+				Member lastMember = members.get(members.size() - 1);
+				lastMember.setNextId(lastMember.getId() + 1);
+			}
+		} catch (Exception e) {
+			System.out.println("Error reading member database from file." + e);
+		}
+	}
+
 	public void addMember(String name, String pNr) {
 		Member m = new Member(name, pNr);
 		members.add(m);
-		try {
-			writeToFile("res/db.txt", members);
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
-	
+
 	public void deleteMember(int id) {
-		for (Member m : members) {
-			if (m.getId() == id) {
-				 members.remove(m);
-				 try {
-						writeToFile("res/db.txt", members);
-					 } catch (Exception e) {
-						System.out.println("Something went horribly wrong while saving the changes.");					
-					 }
-				 return;
-			}		
-		}		
-		throw new NoSuchElementException();
+		Member m = getMember(id);
+		members.remove(m);
 	}
-	
-	public Member getMember(int id) {		
+
+	public Member getMember(int id) {
 		for (Member m : members) {
-			if (m.getId() == id) {
-				 return m;
-			}
-		}
-		throw new NoSuchElementException();		
-	}
-	
-	public void editMemberName(int id, String newName) {	
-		for (Member m : members) {
-			if (m.getId() == id) {
-				m.editName(newName);				
-				try {
-					writeToFile("res/db.txt", members);
-				} catch (Exception e) {
-					System.out.println("Something went horribly wrong while saving the changes.");
-				}
-				return;
-			}									
+			if (m.getId() == id)
+				return m;
 		}
 		throw new NoSuchElementException();
 	}
-	
-	public void editMemberPnr(int id, String newPnr) {		
-		for (Member m : members) {
-			if (m.getId() == id) {
-				m.editPNr(newPnr);				
-				try {
-					writeToFile("res/db.txt", members);
-				} catch (Exception e) {
-					System.out.println("Something went horribly wrong while saving the changes.");
-				}
-				return;
-			}									
-		}
-		throw new NoSuchElementException();
-	}
-	
-	public ArrayList<Member> getAllMembers() {		
+
+	public ArrayList<Member> getAllMembers() {
 		return new ArrayList<Member>(members);
 	}
-	
-	static ArrayList<Member> readMemberDB() throws IOException, JsonMappingException, JsonParseException {
+
+	private ArrayList<Member> readMemberDB() throws IOException, JsonMappingException, JsonParseException {
 		ObjectMapper oMapper = new ObjectMapper();
 		File inputFile = new File("res/db.txt");
-		
-		return oMapper.readValue(inputFile, new TypeReference<ArrayList<Member>>(){});
+
+		return oMapper.readValue(inputFile, new TypeReference<ArrayList<Member>>() {
+		});
 	}
-	
-	public static void writeToFile(String filePath, Collection<?> col) throws IOException, JsonMappingException, JsonGenerationException {
+
+	public void saveDB() {
 		ObjectMapper oMapper = new ObjectMapper();
-		File outputFile = new File(filePath);
-		
-		oMapper.writeValue(outputFile, col);
+		File outputFile = new File("res/db.txt");
+		try {
+			oMapper.writeValue(outputFile, members);
+		} catch (Exception e) {
+			System.out.println("Error saving to database.");
+		}
 	}
 }

@@ -1,7 +1,6 @@
 package controller;
 
 /*
- * Implement edit boat
  * Implement remove boat
  * Implement/fix ListMemberVerbose
  */
@@ -74,6 +73,10 @@ public class User {
 			case 7:
 				this.editBoat();
 				break;
+				
+			case 8:
+				this.removeBoat();
+				break;
 		
 			case 9:
 				this.exit();
@@ -87,6 +90,7 @@ public class User {
 		nameAndPnr = view.displayAddMember();
 		memberRegistry.addMember(nameAndPnr[0],nameAndPnr[1]);
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -125,6 +129,7 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -150,6 +155,7 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -182,10 +188,10 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
-	//Not yet implemented
 	private void viewMemberList() {
 		int option = view.displayViewMemberListMenu();
 		
@@ -216,7 +222,7 @@ public class User {
 	}
 	
 	private void registerBoat() {
-		int size;
+		double size;
 		Boat.BoatType boatType = Boat.BoatType.Other;
 		Member currentMember;
 		
@@ -225,10 +231,9 @@ public class User {
 		//Makes sure member actually exists, also prints error if it does not
 		try {
 			currentMember = memberRegistry.getMember(memberId);
-			boatType = view.displayRegisterBoat();
+			boatType = view.displayEnterBoatType();
 			
-			view.displayBoatEnterSize();
-			size = view.getInputInt(1);
+			size = view.displayBoatEnterSize();
 			
 			currentMember.registerBoat(boatType, size);
 			
@@ -239,13 +244,96 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
 	private void editBoat() {
+<<<<<<< HEAD
+		int memberId = view.displayEnterMemberId();
+		Member currentMember = null;
+		Boat currentBoat;
+		ArrayList<Boat> boats;
 		
+		try {
+			currentMember = memberRegistry.getMember(memberId);
+		}
+		
+		catch (NoSuchElementException e) {
+			view.displayError("Member does not exist!");
+			this.mainMenu();
+		}
+
+		boats = currentMember.getBoats();
+		
+		view.displayBoatListCompact(currentMember);
+		
+		currentBoat = view.displayEnterBoat(boats);
+		
+		int editSizeOrType = view.displayEditBoatMenu();
+		
+		switch (editSizeOrType) {
+			case 1: 
+				editBoatType(currentBoat);
+				break;
+			case 2:
+				editBoatSize(currentBoat);
+				break;
+		}
+	}
+	
+	private void editBoatType(Boat currentBoat) {
+		Boat.BoatType newType = view.displayEnterBoatType();
+		
+		currentBoat.editType(newType);
+		
+		view.displayEditBoatSizeConfirm();
+		
+		this.mainMenu();
+	}
+	
+	private void editBoatSize(Boat currentBoat) {
+		double newSize = view.displayBoatEnterSize();
+		
+		currentBoat.editSize(newSize);
+		
+		view.displayEditBoatTypeConfirm();
+		
+		this.mainMenu();
+	}
+	
+	private void removeBoat() {
+		Member currentMember = null;
+		int memberId = view.displayEnterMemberId();
+		
+		Boat currentBoat;
+		ArrayList<Boat> boats;
+		
+		try {
+			currentMember = memberRegistry.getMember(memberId);
+		}
+		
+		catch (NoSuchElementException e) {
+			view.displayError("Member does not exist!");
+			this.mainMenu();
+		}
+		
+		boats = currentMember.getBoats();
+		
+		view.displayBoatListCompact(currentMember);
+		
+		currentBoat = view.displayEnterBoat(boats);
+		
+		currentMember.removeBoat(0);
+	
+		view.displayDeleteBoatConfirm();
+=======
+		memberRegistry.saveDB();
+		this.mainMenu();
+>>>>>>> branch 'Jucke' of https://github.com/Bumpfel/1DV607-Workshop2.git
 	}
 
+	//This method does nothing
 	private void exit() {
 
 	}
