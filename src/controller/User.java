@@ -87,6 +87,7 @@ public class User {
 		nameAndPnr = view.displayAddMember();
 		memberRegistry.addMember(nameAndPnr[0],nameAndPnr[1]);
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -125,6 +126,7 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -150,6 +152,7 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -182,6 +185,7 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -239,11 +243,13 @@ public class User {
 			view.displayError("Member does not exist!");
 		}
 		
+		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
 	private void editBoat() {
-		
+		memberRegistry.saveDB();
+		this.mainMenu();
 	}
 
 	private void exit() {
