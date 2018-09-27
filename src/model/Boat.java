@@ -12,10 +12,6 @@ public class Boat {
                 this.value = val;
         }
     };
-    
-    public Boat() {
-    	
-    }
 	
 	public Boat(BoatType newType, double newSize) {
 		type = newType;

@@ -1,14 +1,11 @@
 package controller;
 
-<<<<<<< HEAD
-=======
 /*
  * Implement edit boat
  * Implement remove boat
  * Implement/fix ListMemberVerbose
  */
 
->>>>>>> Eric
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
