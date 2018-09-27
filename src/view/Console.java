@@ -340,10 +340,6 @@ public class Console implements ViewInterface {
 	public void displayDeleteBoatConfirm() {
 		System.out.println("Boat has been baleted!");
 	}
-
-	public void displayMemberReg() {
-		// TODO Auto-generated method stub
-	}
 	
 	public void displayMessage(String m) {
 		System.out.println(m);
