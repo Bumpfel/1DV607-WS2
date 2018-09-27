@@ -32,16 +32,6 @@ public class MemberRegistry {
 		members.remove(m);		
 	}
 
-	public void editMemberName(int id, String newName) {
-		Member m = getMember(id);
-		m.editName(newName);		
-	}
-
-	public void editMemberPnr(int id, String newPnr) {
-		Member m = getMember(id);
-		m.editPNr(newPnr);		
-	}
-
 	public Member getMember(int id) {
 		for (Member m : members) {
 			if (m.getId() == id)
