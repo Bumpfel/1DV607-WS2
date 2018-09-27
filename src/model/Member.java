@@ -65,6 +65,10 @@ public class Member {
 	// club";
 	// }
 
+	void setNextId(int nextid) {
+		id = nextid;
+	}
+
 	//TODO implementera i senare skede?
 	private boolean pnrIsCorrect(String nr) {
 		int firstPart = Integer.parseInt(nr.substring(6,10));
