@@ -11,6 +11,10 @@ public class Boat {
         private BoatType(int val) {
                 this.value = val;
         }
+        
+        public int getValue() {
+        	return value;
+        }
     };
 	
 	public Boat(BoatType newType, double newSize) {

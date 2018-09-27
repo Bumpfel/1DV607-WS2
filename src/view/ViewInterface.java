@@ -32,9 +32,18 @@ public interface ViewInterface {
 	public void displayMembersVerbose(ArrayList<Member> list);
 	public void displayMembersCompact(ArrayList<Member> list);
 	
-	public Boat.BoatType displayRegisterBoat();
-	public void displayBoatEnterSize();
+	public Boat.BoatType displayEnterBoatType();
+	public double displayBoatEnterSize();
 	public void displayBoatConfirm();
+	
+	public void displayEditBoatTypeConfirm();
+	public void displayEditBoatSizeConfirm();
+	
+	public void displayBoatListCompact(Member currentMember);
+	public Boat displayEnterBoat(ArrayList<Boat> boats);
+	public int displayEditBoatMenu();
+	
+	public void displayDeleteBoatConfirm();
 	
 	public void displayMemberReg();
 }
