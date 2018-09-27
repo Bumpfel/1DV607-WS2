@@ -297,14 +297,6 @@ public class Console implements ViewInterface {
 		displayWait();
 	}
 	
-	public void displayEditBoatTypeConfirm() {
-		System.out.println("Boat type was changed!");
-	}
-	
-	public void displayEditBoatSizeConfirm() {
-		System.out.println("Boat size was changed!");
-	}
-	
 	public void displayBoatListCompact(Member currentMember) {
 			ArrayList<Boat> boats = currentMember.getBoats();
 			
@@ -319,6 +311,28 @@ public class Console implements ViewInterface {
 			}
 	}
 	
+	public int displayEditBoatMenu() {
+		System.out.println("1: Edit boat type"+"\n"
+				+ "2: Edit boat size");
+		int menuChoice = this.getInputInt(1,2);
+		return menuChoice;
+	}
+	
+	public void displayDeleteBoatConfirm() {
+		System.out.println("Boat has been deleted!");
+		displayWait();
+	}
+	
+	public void displayEditBoatTypeConfirm() {
+		System.out.println("Boat type was changed!");
+		displayWait();
+	}
+	
+	public void displayEditBoatSizeConfirm() {
+		System.out.println("Boat size was changed!");
+		displayWait();
+	}
+		
 	public Boat displayEnterBoat(ArrayList<Boat> boats) {
 		System.out.println("Enter boat ID:");
 		Boat currentBoat;
@@ -328,21 +342,6 @@ public class Console implements ViewInterface {
 		currentBoat = boats.get(choiceAsInt-1);
 		
 		return currentBoat;
-	}
-	
-	public int displayEditBoatMenu() {
-		System.out.println("1: Edit boat type"+"\n"
-				+ "2: Edit boat size");
-		int menuChoice = this.getInputInt(1,2);
-		return menuChoice;
-	}
-	
-	public void displayDeleteBoatConfirm() {
-		System.out.println("Boat has been baleted!");
-	}
-
-	public void displayMemberReg() {
-		// TODO Auto-generated method stub
 	}
 	
 	public void displayMessage(String m) {

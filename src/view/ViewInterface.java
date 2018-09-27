@@ -45,5 +45,4 @@ public interface ViewInterface {
 	
 	public void displayDeleteBoatConfirm();
 	
-	public void displayMemberReg();
 }

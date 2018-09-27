@@ -16,9 +16,7 @@ public class Member {
 	}
 
 	public Member(String newName, String newPNr) {
-		nextId++;
-
-		id = nextId;
+		id = nextId++;
 		name = newName;
 		pnr = newPNr;
 	}
@@ -72,8 +70,8 @@ public class Member {
 	// club";
 	// }
 
-	void setNextId(int nextid) {
-		id = nextid;
+	void setNextId(int newId) {
+		nextId = newId;
 	}
 
 	// TODO implementera i senare skede?

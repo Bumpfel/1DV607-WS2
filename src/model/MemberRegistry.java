@@ -11,27 +11,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MemberRegistry {
 	private ArrayList<Member> members = new ArrayList<>();
-
 	public MemberRegistry() {
 		try {
 			members = readMemberDB();
-			if (members.size() > 0) {
-				Member lastMember = members.get(members.size() - 1);
-				lastMember.setNextId(lastMember.getId() + 1);
-			}
+			Member lastMember = members.get(members.size() - 1);
+			lastMember.setNextId(lastMember.getId() + 1);
 		} catch (Exception e) {
-			System.out.println("Error reading member database from file." + e);
+			System.out.println("Error reading member database from file.");
 		}
 	}
 
 	public void addMember(String name, String pNr) {
 		Member m = new Member(name, pNr);
-		members.add(m);
+		members.add(m);		
 	}
 
 	public void deleteMember(int id) {
 		Member m = getMember(id);
-		members.remove(m);
+		members.remove(m);		
 	}
 
 	public Member getMember(int id) {

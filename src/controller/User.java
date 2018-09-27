@@ -1,10 +1,5 @@
 package controller;
 
-/*
- * Implement remove boat
- * Implement/fix ListMemberVerbose
- */
-
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -249,7 +244,6 @@ public class User {
 	}
 	
 	private void editBoat() {
-<<<<<<< HEAD
 		int memberId = view.displayEnterMemberId();
 		Member currentMember = null;
 		Boat currentBoat;
@@ -267,7 +261,6 @@ public class User {
 		boats = currentMember.getBoats();
 		
 		view.displayBoatListCompact(currentMember);
-		
 		currentBoat = view.displayEnterBoat(boats);
 		
 		int editSizeOrType = view.displayEditBoatMenu();
@@ -323,14 +316,12 @@ public class User {
 		view.displayBoatListCompact(currentMember);
 		
 		currentBoat = view.displayEnterBoat(boats);
-		
-		currentMember.removeBoat(0);
+		currentMember.removeBoat(currentBoat);
 	
 		view.displayDeleteBoatConfirm();
-=======
+
 		memberRegistry.saveDB();
 		this.mainMenu();
->>>>>>> branch 'Jucke' of https://github.com/Bumpfel/1DV607-Workshop2.git
 	}
 
 	//This method does nothing
