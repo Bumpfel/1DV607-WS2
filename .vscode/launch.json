@@ -2,14 +2,14 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - TestReg",
+            "name": "CodeLens (Launch) - Program",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
+            "console": "integratedTerminal",
             "stopOnEntry": false,
-            "mainClass": "model.TestReg",
+            "mainClass": "Program",
             "args": "",
             "projectName": "1DV607-Workshop2"
-        }
+        },
     ]
 }

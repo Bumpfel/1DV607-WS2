@@ -27,11 +27,13 @@ public class MemberRegistry {
 	public void addMember(String name, String pNr) {
 		Member m = new Member(name, pNr);
 		members.add(m);
+		saveDB();
 	}
 
 	public void deleteMember(int id) {
 		Member m = getMember(id);
 		members.remove(m);
+		saveDB(); // new ----------------------------------
 	}
 
 	public Member getMember(int id) {
@@ -48,15 +50,15 @@ public class MemberRegistry {
 
 	private ArrayList<Member> readMemberDB() throws IOException, JsonMappingException, JsonParseException {
 		ObjectMapper oMapper = new ObjectMapper();
-		File inputFile = new File("res/db.txt");
+		File inputFile = new File("db.txt");
 
 		return oMapper.readValue(inputFile, new TypeReference<ArrayList<Member>>() {
 		});
 	}
 
-	public void saveDB() {
+	public void saveDB() { // should this be public?? ------------------------------
 		ObjectMapper oMapper = new ObjectMapper();
-		File outputFile = new File("res/db.txt");
+		File outputFile = new File("db.txt");
 		try {
 			oMapper.writeValue(outputFile, members);
 		} catch (Exception e) {
