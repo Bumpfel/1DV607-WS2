@@ -1,13 +1,9 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
+public abstract class User {
 
-import model.Boat;
-import model.Member;
-import model.MemberRegistry;
-import view.EngConsole;
-import view.ViewInterface;
+    public User() {
+    }
 
 public class User {
 	private ViewInterface view;

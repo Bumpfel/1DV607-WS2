@@ -25,25 +25,29 @@ public interface ViewInterface {
 //		}
 //		
 //	};
-	
-	public void displayMainMenu();
-	public int  displaySubMenu(String...options);
+
+public void displayMainMenu();
+	public int displaySubMenu(String...options);
 	public int displayEditMemberMenu();
 	
 	public String[] getEditMemberOptions();
+	public String[] getMainMenuOptions();
+	public String[] getListMemberOptions();
 	
-	public String getInputString();
+	public String getInput(); // new
 	public int getInputInt();
-	public int getInputInt(int minimum);
-	public int getInputInt(int minimum, int maximum);
+	// public String getInputString();
+	// public int getInputInt(int minimum);
+	// public int getInputInt(int minimum, int maximum);
 
 	public String[] displayAddMember();
-	public int displayEnterMemberId();
-	public String displayEditName();
-	public String displayEditPnr();
-	public Boat displayEnterBoat(ArrayList<Boat> boats);
+	// public String displayEditName();
+	// public String displayEditPnr();
+	public String displayNewNameInput();
+	public String displayNewPNrInput();
+	public String displayEnterMemberIdInput();
+	public Boat displayEnterBoatInput(ArrayList<Boat> boats);
 	
-	public void displayDeleteMember();
 	public int displayViewMemberListMenu();
 	public void displayMembersVerbose(ArrayList<Member> list);
 	public void displayMembersCompact(ArrayList<Member> list);
@@ -52,12 +56,21 @@ public interface ViewInterface {
 	public double displayBoatEnterSize();
 	
 	public void displayWelcomeMsg();
-	public void displayBoatConfirm();
-	public void displayEditBoatTypeConfirm();
-	public void displayEditBoatSizeConfirm();
-	public void displayDeleteBoatConfirm();
+	public void displayMemberCreatedConfirm();
 	public void displayNameChangedConfirm();
-	public void displayMemberDoesNotExistMsg();
+	public void displayPNrChangedConfirm();
+	public void displayDeleteMemberConfirmation();
+	public void displayEditBoatSizeConfirm();
+	
+	public void displayEditBoatTypeConfirm();
+	public void displayBoatConfirm();
+	public void displayDeleteBoatConfirm();
+
+	public void displayInvalidMenuChoiceError();
+	public void displayInvalidInputError();
+	public void displayMemberDoesNotExistError();
+	public void displayInvalidNameError();
+	public void displayInvalidPNrError();
 	
 	public void displayBoatListCompact(ArrayList<Boat> boats);
 	public Boat displayEnterBoat(ArrayList<Boat> boats);

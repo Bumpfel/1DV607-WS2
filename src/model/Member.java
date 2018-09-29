@@ -21,17 +21,11 @@ public class Member {
 	}
 
 	public void editName(String newName) throws IllegalArgumentException {
-		if (newName.length() >= 2) // Simple check - name must be at least 2 characters long
-			name = newName;
-		else
-			throw new IllegalArgumentException("The name must be at least 2 characters long");
+		name = newName;
 	}
 
 	public void editPNr(String newPNr) throws IllegalArgumentException {
-		if (newPNr.length() >= 10) // simplest possible check
-			pnr = newPNr;
-		else
-			throw new IllegalArgumentException("The personal number you entered is invalid");
+		pnr = newPNr;
 	}
 
 	public String getName() {
@@ -71,6 +65,31 @@ public class Member {
 
 	void setNextId(int newId) {
 		nextId = newId;
+	}
+
+	public static boolean isValidName(String input) {
+		String str = input.replaceAll("[0-9]", "");
+
+		return (input.trim().length() >= 2 && input.equals(str)); // input has >= 2 characters and contains no digits
+	}
+
+	public static boolean isValidPNr(String input) { // Add more PNr checks here ------------------------------------------
+		if(input.length() != 11) {
+			System.out.println("not 11");
+			return false;
+		}
+		try {
+			Integer.parseInt(input.substring(0, 6));
+			
+			if(input.charAt(6) != '-') 
+				return false;
+
+			Integer.parseInt(input.substring(7));
+			return true;
+		}
+		catch(NumberFormatException e) {
+			return false;
+		}
 	}
 
 	// TODO implementera i senare skede?
