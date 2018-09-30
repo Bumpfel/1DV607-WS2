@@ -44,6 +44,16 @@ public class MemberRegistry {
 		throw new NoSuchElementException();
 	}
 
+	public boolean memberExists(int id) {
+		try {
+			getMember(id);
+			return true;
+		}
+		catch(NoSuchElementException e) {
+			return false;
+		}
+	}
+
 	public ArrayList<Member> getAllMembers() {
 		return new ArrayList<Member>(members);
 	}
