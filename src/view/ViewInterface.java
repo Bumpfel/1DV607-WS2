@@ -6,64 +6,52 @@ import model.Boat;
 import model.Member;
 
 public interface ViewInterface {
-	
-//	public enum Msg {};
-//	public enum MenuOptions {
-//		EditName(""),
-//		EditPNr(""),
-//		CompactList(""),
-//		VerboseList(""),
-//		;
-//		
-//		private String option;
-//		
-//		private MenuOptions(String str) {
-//		}
-//		
-//		public String getOption() {
-//			return option;
-//		}
-//		
-//	};
 
-public void displayMainMenu();
+	public int displayMainMenu();
 	public int displaySubMenu(String...options);
-	public int displayEditMemberMenu();
+	// public int displayEditMemberMenu();
 	
-	public String[] getEditMemberOptions();
-	public String[] getMainMenuOptions();
-	public String[] getListMemberOptions();
+	// public String[] getEditMemberOptions();
+	// public String[] getMainMenuOptions();
+	// public String[] getListMemberOptions();
 	
-	public String getInput(); // new
+	public String getInput();
+	public int getMenuInput();
 	public int getInputInt();
 	// public String getInputString();
 	// public int getInputInt(int minimum);
 	// public int getInputInt(int minimum, int maximum);
 
 	public String[] displayAddMember();
+	public String[] displayEditMember();
+	// public String[] displayEditMemberMenu(String name, String pNr);
 	// public String displayEditName();
 	// public String displayEditPnr();
-	public String displayNewNameInput();
-	public String displayNewPNrInput();
-	public String displayEnterMemberIdInput();
+	// public String displayNewNameInput();
+	// public String displayNewPNrInput();
+	public int displayEnterMemberIdInput();
 	public Boat displayEnterBoatInput(ArrayList<Boat> boats);
 	
-	public int displayViewMemberListMenu();
+	// public int displayViewMemberListMenu();
+	public void displayViewMembersList(ArrayList<Member> list);
 	public void displayMembersVerbose(ArrayList<Member> list);
 	public void displayMembersCompact(ArrayList<Member> list);
 	
-	public Boat.BoatType displayEnterBoatType();
-	public double displayBoatEnterSize();
+	public Object[] displayRegisterBoat(Object[] availableBoatTypes);
+	// public Boat.BoatType displayEnterBoatType();
+	// public double displayEnterBoatSize();
 	
 	public void displayWelcomeMsg();
+	public void displayExitMsg();
 	public void displayMemberCreatedConfirm();
 	public void displayNameChangedConfirm();
+	public void displayMemberEditedConfirm();
 	public void displayPNrChangedConfirm();
 	public void displayDeleteMemberConfirmation();
 	public void displayEditBoatSizeConfirm();
 	
 	public void displayEditBoatTypeConfirm();
-	public void displayBoatConfirm();
+	public void displayBoatRegisteredConfirmation();
 	public void displayDeleteBoatConfirm();
 
 	public void displayInvalidMenuChoiceError();
@@ -76,7 +64,9 @@ public void displayMainMenu();
 	public void displayError(String e);
 	
 	public void displayViewMember(Member member);
-	public void displayBoatListCompact(Member currentMember);
-	public int displayEditBoatMenu();
+	// public void displayBoatList(Member currentMember);
+	public void displayBoatList(ArrayList<Boat> boats);
+	public Object[] displayEditBoat(ArrayList<Boat> boats);
+	// public int displayEditBoatMenu();
 	
 }

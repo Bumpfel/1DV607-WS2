@@ -20,11 +20,16 @@ public class Member {
 		pnr = newPNr;
 	}
 
-	public void editName(String newName) throws IllegalArgumentException {
+	public void editName(String newName) {
 		name = newName;
 	}
 
-	public void editPNr(String newPNr) throws IllegalArgumentException {
+	public void editPNr(String newPNr) {
+		pnr = newPNr;
+	}
+
+	public void editMember(String newName, String newPNr) {
+		name = newName;
 		pnr = newPNr;
 	}
 
@@ -67,6 +72,8 @@ public class Member {
 		nextId = newId;
 	}
 
+
+	// These validity check methods could be placed somewhere else to avoid dependencies, though it makes the most sense for them to be here
 	public static boolean isValidName(String input) {
 		String str = input.replaceAll("[0-9]", "");
 
@@ -75,7 +82,6 @@ public class Member {
 
 	public static boolean isValidPNr(String input) { // Add more PNr checks here ------------------------------------------
 		if(input.length() != 11) {
-			System.out.println("not 11");
 			return false;
 		}
 		try {
