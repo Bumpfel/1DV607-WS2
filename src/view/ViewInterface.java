@@ -39,7 +39,7 @@ public interface ViewInterface {
 	public void displayEditBoatTypeConfirm();
 	public void displayEditBoatSizeConfirm();
 	
-	public void displayBoatListCompact(Member currentMember);
+	public void displayBoatListCompact(ArrayList<Boat> boats);
 	public Boat displayEnterBoat(ArrayList<Boat> boats);
 	public int displayEditBoatMenu();
 	

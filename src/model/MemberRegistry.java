@@ -48,7 +48,7 @@ public class MemberRegistry {
 
 	private ArrayList<Member> readMemberDB() throws IOException, JsonMappingException, JsonParseException {
 		ObjectMapper oMapper = new ObjectMapper();
-		File inputFile = new File("res/db.txt");
+		File inputFile = new File("db.txt");
 
 		return oMapper.readValue(inputFile, new TypeReference<ArrayList<Member>>() {
 		});
@@ -56,7 +56,7 @@ public class MemberRegistry {
 
 	public void saveDB() {
 		ObjectMapper oMapper = new ObjectMapper();
-		File outputFile = new File("res/db.txt");
+		File outputFile = new File("db.txt");
 		try {
 			oMapper.writeValue(outputFile, members);
 		} catch (Exception e) {

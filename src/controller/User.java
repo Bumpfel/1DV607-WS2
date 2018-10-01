@@ -263,8 +263,12 @@ public class User {
 		}
 
 		boats = currentMember.getBoats();
+		if (boats.size() == 0) {
+			view.displayError("Member has no boats!");
+			this.mainMenu();
+		}
 		
-		view.displayBoatListCompact(currentMember);
+		view.displayBoatListCompact(boats);
 		
 		currentBoat = view.displayEnterBoat(boats);
 		
@@ -314,13 +318,16 @@ public class User {
 		}
 		
 		catch (NoSuchElementException e) {
-			view.displayError("Member does not exist!");
+			view.displayError("Member does not exist!");			
 			this.mainMenu();
 		}
 		
 		boats = currentMember.getBoats();
-		
-		view.displayBoatListCompact(currentMember);
+		if (boats.size() == 0) {
+			view.displayError("Member has no boats!");			
+			this.mainMenu();
+		}
+		view.displayBoatListCompact(boats);
 		
 		currentBoat = view.displayEnterBoat(boats);
 		
