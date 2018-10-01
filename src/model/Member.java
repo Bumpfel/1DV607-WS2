@@ -12,7 +12,6 @@ public class Member {
 	private int id;
 
 	public Member() { // Needed for json object mapper
-		nextId = this.id++;
 	}
 
 	public Member(String newName, String newPNr) {
@@ -70,8 +69,8 @@ public class Member {
 	// club";
 	// }
 
-	void setNextId(int newid) {
-		nextId = newid;
+	void setNextId(int newId) {
+		nextId = newId;
 	}
 
 	// TODO implementera i senare skede?

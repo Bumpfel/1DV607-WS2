@@ -44,5 +44,4 @@ public interface ViewInterface {
 	public int displayEditBoatMenu();
 	
 	public void displayDeleteBoatConfirm();
-		
 }

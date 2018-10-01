@@ -1,9 +1,5 @@
 package controller;
 
-/*
- * Implement/fix ListMemberVerbose
- */
-
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -291,7 +287,6 @@ public class User {
 		
 		view.displayEditBoatSizeConfirm();
 		
-		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -302,7 +297,6 @@ public class User {
 		
 		view.displayEditBoatTypeConfirm();
 		
-		memberRegistry.saveDB();
 		this.mainMenu();
 	}
 	
@@ -330,7 +324,6 @@ public class User {
 		view.displayBoatListCompact(boats);
 		
 		currentBoat = view.displayEnterBoat(boats);
-		
 		currentMember.removeBoat(currentBoat);
 	
 		view.displayDeleteBoatConfirm();
