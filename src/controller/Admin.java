@@ -1,21 +1,17 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 
 import model.Boat;
 import model.Member;
 import model.MemberRegistry;
 import model.Boat.BoatType;
-// import view.EngConsole;
 import view.ViewInterface;
+import view.ViewInterface.Title;
 
 public class Admin extends User {
 
-	private enum Action { ADD_MEMBER, EDIT_NAME, EDIT_PNR, VIEW_MEMBER, DELETE_MEMBER, REGISTER_BOAT, EDIT_BOAT_TYPE, EDIT_BOAT_SIZE, DELETE_BOAT }
-
 	private ViewInterface view;
-	// private EngConsole tempConsole = new EngConsole(); // Temp ----------------------------------------
 	private MemberRegistry memberRegistry;
 
 	public Admin(MemberRegistry memberReg, ViewInterface inView) {
@@ -31,53 +27,53 @@ public class Admin extends User {
 	private void mainMenu() {
 		int chosenOption = view.displayMainMenu();
 		
-		// int currentOption = view.getInputInt(1, 9);
-		// int chosenOption = view.getMenuInput();
-		// if(isValidMenuChoice(chosenOption, 1, view.getMainMenuOptions().length)) {
-			switch(chosenOption) {
-				case 1: addMember();
-				case 2: editMember();
-				case 3: viewMember(); // doAction(Action.VIEW_MEMBER);
-				case 4: deleteMember();  // doAction(Action.DELETE_MEMBER);
-				case 5: viewMemberList();
-				case 6: registerBoat(); // doAction(Action.REGISTER_BOAT);
-				case 7: editBoat();
-				case 8: removeBoat(); // doAction(Action.DELETE_BOAT);
-				case 9: exit();
-				default: view.displayInvalidMenuChoiceError();
-						 mainMenu();
-			}
-			
-		// }
+		switch(chosenOption) {
+			case 1: view.displayTitle(Title.ADD_MEMBER);
+					addMember();
+			case 2: view.displayTitle(Title.EDIT_MEMBER);
+					editMember();
+			case 3: view.displayTitle(Title.VIEW_MEMBER);
+					viewMember();
+			case 4: view.displayTitle(Title.DELETE_MEMBER);
+					deleteMember();
+			case 5: view.displayTitle(Title.LIST_MEMBERS);
+					listMembers();
+			case 6: view.displayTitle(Title.REGISTER_BOAT);
+					registerBoat();
+			case 7: view.displayTitle(Title.EDIT_BOAT);
+					editBoat();
+			case 8: view.displayTitle(Title.REMOVE_BOAT);
+					removeBoat();
+			case 9: exit();
+			default: view.displayInvalidMenuChoiceError();
+						mainMenu();
+		}
 	}
 
-	// while it would make more sense to call a method in the view that handles both inputs, it would make less sense to put the isValidX methods in the view
-	// an alt. would be to call those methods from the controller, but then we would have one more dependency
+	
 	private void addMember() {
 		String[] nameAndPNr = view.displayAddMember();
 		String newName = nameAndPNr[0];
 		String newPNr = nameAndPNr[1];
 
-		memberRegistry.addMember(newName.trim(), newPNr.trim());
-		view.displayMemberCreatedConfirm();
+		memberRegistry.addMember(newName.trim(), newPNr);
+		view.displayMemberCreatedConfirmation();
 		mainMenu();
 	}
-	
-	/**
-	 * Asks for memberId, details
-	 */
+
+
 	private void editMember() {
-		int memberId = view.displayEnterMemberIdInput();
+		int memberId = view.displayMemberIdPrompt();
 
 		if(memberRegistry.memberExists(memberId)) {
 			Member currentMember = memberRegistry.getMember(memberId);
 			String[] nameAndPNr = view.displayEditMember();
-			String name = nameAndPNr[0];
-			String pNr = nameAndPNr[1];
+			String newName = nameAndPNr[0];
+			String newPNr = nameAndPNr[1];
 			// currentMember.editName(name);
 			// currentMember.editPNr(pNr);
-			currentMember.editMember(name, pNr);
-			view.displayMemberEditedConfirm();
+			currentMember.editMember(newName.trim(), newPNr);
+			view.displayMemberEditedConfirmation();
 			mainMenu();
 		}
 		else {
@@ -86,12 +82,13 @@ public class Admin extends User {
 		}
 	}
 	
+
 	private void viewMember() {
-		int memberId = view.displayEnterMemberIdInput();
+		int memberId = view.displayMemberIdPrompt();
 		
 		if(memberRegistry.memberExists(memberId)) {
 			Member currentMember = memberRegistry.getMember(memberId);
-			view.displayViewMember(currentMember);
+			view.displayMemberInfo(currentMember);
 			mainMenu();
 		}
 		else {
@@ -100,12 +97,13 @@ public class Admin extends User {
 		}
 	}
 	
+
 	private void deleteMember() {
-		int memberId = view.displayEnterMemberIdInput();
+		int memberId = view.displayMemberIdPrompt();
 		
 		if(memberRegistry.memberExists(memberId)) {
 			memberRegistry.deleteMember(memberId);
-			view.displayDeleteMemberConfirmation();
+			view.displayMemberDeletedConfirmation();
 			mainMenu();
 		}
 		else {
@@ -114,27 +112,26 @@ public class Admin extends User {
 		}
 	}
 
-	private void viewMemberList() {
+
+	private void listMembers() {
 		ArrayList<Member> membersList = memberRegistry.getAllMembers();
-		view.displayViewMembersList(membersList);
+		view.displayMembersList(membersList);
 		mainMenu();
 	}
 
 	
 	private void registerBoat() {
-		int memberId = view.displayEnterMemberIdInput();
+		int memberId = view.displayMemberIdPrompt();
 		
 		if(memberRegistry.memberExists(memberId)) {
 			Member currentMember = memberRegistry.getMember(memberId);
 
-			// String[] availableBoatTypes = Boat.BoatType.value;
-			Boat.BoatType.values().toString();
-
-			Object[] boatDetails = view.displayRegisterBoat(Boat.BoatType.values());
-			Boat.BoatType boatType = (Boat.BoatType) boatDetails[0];
+			Object[] boatDetails = view.displayRegisterBoat(BoatType.values());
+			BoatType boatType = (BoatType) boatDetails[0];
 			double size = (double) boatDetails[1];
 			currentMember.registerBoat(boatType, size);
 			
+			memberRegistry.saveDB();
 			view.displayBoatRegisteredConfirmation();
 			mainMenu();
 		}
@@ -144,161 +141,70 @@ public class Admin extends User {
 		}
 	}
 
+
 	private void editBoat() {
-		// int memberId = view.displayEnterMemberIdInput();
+		int memberId = view.displayMemberIdPrompt();
 		
-		// if(memberRegistry.memberExists(memberId)) {
-		// 	Member currentMember = memberRegistry.getMember(memberId);
-		// 	ArrayList<Boat> boats = currentMember.getBoats();
-
-		// 	Boat currentBoat = view.displayEnterBoatInput(boats);
-			
-		// 	int chosenOption = view.getMenuInput();
-
-			
-		// 	// view.displayBoatList(currentMember);
-			
-		// }		
-		// else {
-		// 	view.displayMemberDoesNotExistError();
-		// 	editBoat();
-		// }
-	}
-	
-	// private void editBoatType(Boat currentBoat) {
-	// 	Boat.BoatType newType = view.displayEnterBoatType();
-		
-	// 	currentBoat.editType(newType);
-		
-	// 	view.displayEditBoatSizeConfirm();
-		
-	// 	this.mainMenu();
-	// }
-	
-	// private void editBoatSize(Boat currentBoat) {
-	// 	double newSize = view.displayBoatEnterSize();
-		
-	// 	currentBoat.editSize(newSize);
-		
-	// 	view.displayEditBoatTypeConfirm();
-		
-	// 	this.mainMenu();
-	// }
-	
-	private void removeBoat() {
-		int memberId = view.displayEnterMemberIdInput();
-		
-		// Boat currentBoat;
 		if(memberRegistry.memberExists(memberId)) {
 			Member currentMember = memberRegistry.getMember(memberId);
-			ArrayList<Boat> boats = currentMember.getBoats();
-			view.displayBoatList(boats);
+			ArrayList<Boat> memberBoats = currentMember.getBoats();
+
+			if (memberBoats.size() == 0) {
+				view.displayMemberHasNoBoatsMsg();
+				editBoat();
+			}
+			else {
+				int boatIndex = view.displayBoatSelection(memberBoats.toArray());
+				Boat selectedBoat = memberBoats.get(boatIndex - 1);
+				
+				Object[] boatDetails = view.displayEditBoat(BoatType.values());
+				BoatType newBoatType = (BoatType) boatDetails[0];
+				double newSize = (double) boatDetails[1];
+			
+				selectedBoat.editType(newBoatType);
+				selectedBoat.editSize(newSize);
+				memberRegistry.saveDB();
+
+				view.displayBoatEditedConfirmation();
+				mainMenu();
+			}
 		}
 		else {
 			view.displayMemberDoesNotExistError();
-			this.mainMenu();
+			editBoat();
 		}
-		
-		
-		
-		// currentBoat = view.displayEnterBoatInput(boats);
-		// currentMember.removeBoat(currentBoat);
-	
-		view.displayDeleteBoatConfirm();
-
-		memberRegistry.saveDB();
-		this.mainMenu();
 	}
 
-	// private void subMenu(String[] options, Action...actions) { // new ----------------------------------------------
-	// 	int chosenOption = view.displaySubMenu(options);
 
-	// 	for(int i = 0; i < options.length; i ++) {
-	// 		if(chosenOption == i) {
-	// 			doAction(Action.values()[i]);
-	// 		}	
-	// 	}
-	// }
-
-
-	// private void doAction(Action action) { // new ----------------------------------------------
-	// 	// most actions that doesnt't have a submenu follow a pattern like this
-	
-	// 	//Makes sure member actually exists, also prints error if it does not
-	// 	String memberIdStr = view.displayEnterMemberIdInput();
-	// 	try {
-	// 		int memberId = Integer.parseInt(memberIdStr);
-	// 		Member currentMember = memberRegistry.getMember(memberId);
-
-	// 		if(action == Action.EDIT_NAME) {
-	// 			String newName = new String(); //view.displayNewNameInput();
-	// 			while(!isValidName(newName)) {
-	// 				view.displayInvalidInputError();
-	// 				newName = view.displayNewNameInput();
-	// 				memberRegistry.saveDB();
-	// 			}
-	// 			currentMember.editName(newName);
-	// 			view.displayNameChangedConfirm();
-	// 		}
-	// 		else if(action == Action.EDIT_PNR) {
-	// 			String newPNr = new String(); //view.displayNewPNrInput();
-	// 			while(!isValidPNr(newPNr)) {
-	// 				view.displayInvalidPNrError();
-	// 				newPNr = view.displayNewPNrInput();
-	// 			}
-	// 		}
-	// 		else if(action == Action.VIEW_MEMBER) {
-	// 			view.displayViewMember(currentMember);
-	// 		}
-	// 		else if(action == Action.DELETE_MEMBER) {
-	// 			memberRegistry.deleteMember(memberId);
-
-	// 			view.displayDeleteMemberConfirmation();
-	// 			memberRegistry.saveDB();
-	// 		}
-	// 		else if(action == Action.REGISTER_BOAT) {
-	// 			Boat.BoatType boatType = view.displayEnterBoatType(); // ------- check out
-	// 			double size = view.displayBoatEnterSize(); // ------ check out
-	// 			currentMember.registerBoat(boatType, size);
-
-	// 			view.displayBoatConfirm();
-	// 			memberRegistry.saveDB();
-	// 		}
-	// 		else if(action == Action.EDIT_BOAT_TYPE) {
-	// 			Boat.BoatType newType = view.displayEnterBoatType();
-				
-	// 			// currentBoat.editType(newType);
-				
-	// 			view.displayEditBoatSizeConfirm();
-	// 		}
-	// 		else if(action == Action.EDIT_BOAT_SIZE) {
-	// 		}
-	// 		else if(action == Action.DELETE_BOAT) {
-	// 			ArrayList<Boat> boats = currentMember.getBoats();
+	private void removeBoat() {
+		int memberId = view.displayMemberIdPrompt();
 		
-	// 			view.displayBoatListCompact(currentMember);
+		if(memberRegistry.memberExists(memberId)) {
+			Member currentMember = memberRegistry.getMember(memberId);
+			ArrayList<Boat> memberBoats = currentMember.getBoats();
 
-	// 			Boat currentBoat = null;
-	// 			while(currentBoat == null) {
-	// 				currentBoat = view.displayEnterBoatInput(boats);
-	// 			}
-	// 			currentMember.removeBoat(currentBoat);
-				
-	// 			view.displayDeleteBoatConfirm();
-	// 			memberRegistry.saveDB();
-	// 		}
+			if (memberBoats.size() == 0) {
+				view.displayMemberHasNoBoatsMsg();
+				removeBoat();
+			}
+			else {
+				int boatIndex = view.displayBoatSelection(memberBoats.toArray());
+				Boat selectedBoat = memberBoats.get(boatIndex - 1);
 
-	// 		this.mainMenu();
-	// 	}
-	// 	catch (NoSuchElementException e) {
-	// 		view.displayMemberDoesNotExistError();
-	// 	}
-	// 	catch(NumberFormatException e){
-	// 		view.displayInvalidInputError();
-	// 	}
-	// }
+				currentMember.removeBoat(selectedBoat);
+				memberRegistry.saveDB();
+
+				view.displayBoatDeletedConfirmation();
+				mainMenu();
+			}
+		}
+		else {
+			view.displayMemberDoesNotExistError();
+			removeBoat();
+		}
+	}
 	
-	
+
 	private void exit() {
 		view.displayExitMsg();
 		System.exit(-1);
