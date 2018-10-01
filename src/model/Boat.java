@@ -43,6 +43,11 @@ public class Boat {
 		}
 
 		size = newSize;
+
 	}
 
+	public String toString() {
+		return type.name() + ", " + size + " m";
+	}
+	
 }

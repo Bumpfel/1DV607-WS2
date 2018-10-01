@@ -2,71 +2,74 @@ package view;
 
 import java.util.ArrayList;
 
-import model.Boat;
 import model.Member;
 
 public interface ViewInterface {
+	public int displayMemberIdPrompt();
 
 	public int displayMainMenu();
-	public int displaySubMenu(String...options);
-	// public int displayEditMemberMenu();
-	
-	// public String[] getEditMemberOptions();
-	// public String[] getMainMenuOptions();
-	// public String[] getListMemberOptions();
-	
-	public String getInput();
-	public int getMenuInput();
-	public int getInputInt();
-	// public String getInputString();
-	// public int getInputInt(int minimum);
-	// public int getInputInt(int minimum, int maximum);
 
+	public void displayWelcomeMsg();
+	public void displayExitMsg();
+	
 	public String[] displayAddMember();
 	public String[] displayEditMember();
-	// public String[] displayEditMemberMenu(String name, String pNr);
-	// public String displayEditName();
-	// public String displayEditPnr();
-	// public String displayNewNameInput();
-	// public String displayNewPNrInput();
-	public int displayEnterMemberIdInput();
-	public Boat displayEnterBoatInput(ArrayList<Boat> boats);
 	
-	// public int displayViewMemberListMenu();
-	public void displayViewMembersList(ArrayList<Member> list);
-	public void displayMembersVerbose(ArrayList<Member> list);
-	public void displayMembersCompact(ArrayList<Member> list);
+	public void displayMemberInfo(Member member);
+	public void displayMembersList(ArrayList<Member> list);
 	
+	public int displayBoatSelection(Object[] availableBoats);
 	public Object[] displayRegisterBoat(Object[] availableBoatTypes);
+	public Object[] displayEditBoat(Object[] availableBoatTypes);
 	// public Boat.BoatType displayEnterBoatType();
 	// public double displayEnterBoatSize();
 	
-	public void displayWelcomeMsg();
-	public void displayExitMsg();
-	public void displayMemberCreatedConfirm();
-	public void displayNameChangedConfirm();
-	public void displayMemberEditedConfirm();
-	public void displayPNrChangedConfirm();
-	public void displayDeleteMemberConfirmation();
-	public void displayEditBoatSizeConfirm();
-	
-	public void displayEditBoatTypeConfirm();
+	public void displayMemberCreatedConfirmation();
+	public void displayMemberEditedConfirmation();
+	// public void displayNameChangedConfirm();
+	// public void displayPNrChangedConfirm();
+	public void displayMemberDeletedConfirmation();
+
+	public void displayMemberHasNoBoatsMsg();
 	public void displayBoatRegisteredConfirmation();
-	public void displayDeleteBoatConfirm();
+	public void displayBoatEditedConfirmation();
+	// public void displayEditBoatSizeConfirm();
+	// public void displayEditBoatTypeConfirm();
+	public void displayBoatDeletedConfirmation();
 
 	public void displayInvalidMenuChoiceError();
 	public void displayInvalidInputError();
 	public void displayMemberDoesNotExistError();
 	public void displayInvalidNameError();
 	public void displayInvalidPNrError();
+
+	// public void displayError(String e);
 	
-	public void displayMessage(String m);
-	public void displayError(String e);
-	
-	public void displayViewMember(Member member);
-	// public void displayBoatList(Member currentMember);
-	public void displayBoatList(ArrayList<Boat> boats);
-	public Object[] displayEditBoat(ArrayList<Boat> boats);
-	// public int displayEditBoatMenu();
-	
+	public void displayTitle(Title action);
+
+	public enum Title { ADD_MEMBER("Add Member"),
+						EDIT_MEMBER("Edit Member"),
+						VIEW_MEMBER("View Member"), 
+						DELETE_MEMBER("Delete Member"), 
+						LIST_MEMBERS("List Members"), 
+						REGISTER_BOAT("Register Boat"),
+						EDIT_BOAT("Edit Boat"),
+						REMOVE_BOAT("Remove Boat")
+						;
+		String titleMsg;
+
+		private Title(String action) {
+			titleMsg = action;
+		}
+
+		public String getMsg() {
+			int cols = titleMsg.length() + 8;
+			StringBuffer line = new StringBuffer();
+			for(int i = 0; i < cols; i ++) {
+				line.append("-");
+			}
+			return line + "\n" + " -- " + titleMsg + " -- \n" + line;
+		}
+	}
+
 }
