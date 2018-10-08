@@ -370,7 +370,7 @@ public class EngConsole implements ViewInterface {
 	}
 
 	public void displayBoatRegisteredConfirmation() {
-		System.out.println("Boat has been registed!\n");
+		System.out.println("Boat has been registered!\n");
 		pause();
 	}
 	

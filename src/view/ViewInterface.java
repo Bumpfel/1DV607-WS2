@@ -64,11 +64,13 @@ public interface ViewInterface {
 
 		public String getMsg() {
 			int cols = titleMsg.length() + 8;
-			StringBuffer line = new StringBuffer();
+			StringBuffer lines = new StringBuffer();
 			for(int i = 0; i < cols; i ++) {
-				line.append("-");
+				lines.append("-");
 			}
-			return line + "\n" + " -- " + titleMsg + " -- \n" + line;
+			return lines + "\n" 
+				   + " -- " + titleMsg + " -- \n"
+				   + lines;
 		}
 	}
 
