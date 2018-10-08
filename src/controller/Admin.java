@@ -9,7 +9,7 @@ import model.Boat.BoatType;
 import view.ViewInterface;
 import view.ViewInterface.Title;
 
-public class Admin extends User {
+public class Admin {
 
 	private ViewInterface view;
 	private MemberRegistry memberRegistry;
@@ -30,23 +30,34 @@ public class Admin extends User {
 		switch(chosenOption) {
 			case 1: view.displayTitle(Title.ADD_MEMBER);
 					addMember();
+					break;
 			case 2: view.displayTitle(Title.EDIT_MEMBER);
 					editMember();
+					break;
 			case 3: view.displayTitle(Title.VIEW_MEMBER);
 					viewMember();
+					break;
 			case 4: view.displayTitle(Title.DELETE_MEMBER);
 					deleteMember();
+					break;
 			case 5: view.displayTitle(Title.LIST_MEMBERS);
 					listMembers();
+					break;
 			case 6: view.displayTitle(Title.REGISTER_BOAT);
 					registerBoat();
+					break;
 			case 7: view.displayTitle(Title.EDIT_BOAT);
 					editBoat();
+					break;
 			case 8: view.displayTitle(Title.REMOVE_BOAT);
 					removeBoat();
+					break;
 			case 9: exit();
-			default: view.displayInvalidMenuChoiceError();
-						mainMenu();
+					break;
+			default: {
+				view.displayInvalidMenuChoiceError();
+				mainMenu();
+			}
 		}
 	}
 
@@ -207,7 +218,6 @@ public class Admin extends User {
 
 	private void exit() {
 		view.displayExitMsg();
-		System.exit(-1);
 	}
 
 }
