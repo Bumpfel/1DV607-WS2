@@ -45,8 +45,33 @@ public interface ViewInterface {
 
 	// public void displayError(String e);
 	
-	public void displayBoatListCompact(ArrayList<Boat> boats);
-	public Boat displayEnterBoat(ArrayList<Boat> boats);
-	public int displayEditBoatMenu();
-	
+	public void displayTitle(Title action);
+
+	public enum Title { ADD_MEMBER("Add Member"),
+						EDIT_MEMBER("Edit Member"),
+						VIEW_MEMBER("View Member"), 
+						DELETE_MEMBER("Delete Member"), 
+						LIST_MEMBERS("List Members"), 
+						REGISTER_BOAT("Register Boat"),
+						EDIT_BOAT("Edit Boat"),
+						REMOVE_BOAT("Remove Boat")
+						;
+		String titleMsg;
+
+		private Title(String action) {
+			titleMsg = action;
+		}
+
+		public String getMsg() {
+			int cols = titleMsg.length() + 8;
+			StringBuffer lines = new StringBuffer();
+			for(int i = 0; i < cols; i ++) {
+				lines.append("-");
+			}
+			return lines + "\n" 
+				   + " -- " + titleMsg + " -- \n"
+				   + lines;
+		}
+	}
+
 }
