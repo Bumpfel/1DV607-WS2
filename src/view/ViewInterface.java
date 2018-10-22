@@ -6,8 +6,10 @@ import model.Member;
 
 public interface ViewInterface {
 	public int displayMemberIdPrompt();
+	public String displayPasswordPrompt();
 
-	public int displayMainMenu();
+	public int displayGuestMainMenu();
+	public int displayAdminMainMenu();
 
 	public void displayWelcomeMsg();
 	public void displayExitMsg();
@@ -42,6 +44,7 @@ public interface ViewInterface {
 	public void displayMemberDoesNotExistError();
 	public void displayInvalidNameError();
 	public void displayInvalidPNrError();
+	public void displayInvalidPasswordError();
 
 	// public void displayError(String e);
 	
@@ -54,7 +57,8 @@ public interface ViewInterface {
 						LIST_MEMBERS("List Members"), 
 						REGISTER_BOAT("Register Boat"),
 						EDIT_BOAT("Edit Boat"),
-						REMOVE_BOAT("Remove Boat")
+						REMOVE_BOAT("Remove Boat"),
+						LOG_IN("Log in")
 						;
 		String titleMsg;
 

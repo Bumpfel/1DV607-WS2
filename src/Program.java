@@ -1,11 +1,11 @@
-import controller.Admin;
+import controller.*;
 
 public class Program {
 
 	public static void main(String[] args) {
 		model.MemberRegistry regM = new model.MemberRegistry();
 		view.ViewInterface view = new view.EngConsole();
-		controller.Admin controller = new Admin(regM, view);
+		User controller = new User(regM, view);
 		
 		controller.startApplication();
 

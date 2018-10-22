@@ -52,7 +52,22 @@ public class EngConsole implements ViewInterface {
 		}
 	}
 
-	public int displayMainMenu() {
+	public int displayGuestMainMenu() {
+		System.out.println("-----------------");
+		System.out.println(" -- Main Menu -- ");
+		System.out.println("-----------------"); 
+		String[] options = { "Admin log in",
+							 "View member",
+							 "List members",
+							 "Exit",
+							};
+		
+		displayMenuOptions(options);
+
+		return getMenuInput();
+	}
+	
+	public int displayAdminMainMenu() {
 		System.out.println("-----------------");
 		System.out.println(" -- Main Menu -- ");
 		System.out.println("-----------------"); 
@@ -200,6 +215,11 @@ public class EngConsole implements ViewInterface {
 	public int displayMemberIdPrompt() {
 		System.out.print("Enter member ID: ");
 		return getInputInt();
+	}
+	
+	public String displayPasswordPrompt() {
+		System.out.print("Enter password: ");
+		return getInput();
 	}
 
 
@@ -427,6 +447,16 @@ public class EngConsole implements ViewInterface {
 
 	public void displayInvalidPNrError() {
 		System.out.println("-- Personal code number must be on the form YYMMDD-XXXX --");
+		shortPause();
+	}
+	
+	public void displayInvalidPasswordError() {
+		System.out.println("-- Password is not correct --");
+		shortPause();
+	}
+	
+	public void displayCorrectPaswordPrompt() {
+		System.out.println("-- Password is correct! Logging in... --");
 		shortPause();
 	}
 

@@ -9,23 +9,15 @@ import model.Boat.BoatType;
 import view.ViewInterface;
 import view.ViewInterface.Title;
 
-public class Admin {
-
-	private ViewInterface view;
-	private MemberRegistry memberRegistry;
-
-	public Admin(MemberRegistry memberReg, ViewInterface inView) {
-		view = inView;
-		memberRegistry = memberReg;
+public class Admin extends User {
+	
+    public Admin(MemberRegistry memberReg, ViewInterface inView) {
+		super(memberReg, inView);
 	}
 
-	public void startApplication() {
-		view.displayWelcomeMsg();
-		mainMenu();
-	}
-
-	private void mainMenu() {
-		int chosenOption = view.displayMainMenu();
+	@Override
+	protected void mainMenu() {
+		int chosenOption = view.displayAdminMainMenu();
 		
 		switch(chosenOption) {
 			case 1: view.displayTitle(Title.ADD_MEMBER);
@@ -60,7 +52,6 @@ public class Admin {
 			}
 		}
 	}
-
 	
 	private void addMember() {
 		String[] nameAndPNr = view.displayAddMember();
@@ -92,22 +83,6 @@ public class Admin {
 			editMember();
 		}
 	}
-	
-
-	private void viewMember() {
-		int memberId = view.displayMemberIdPrompt();
-		
-		if(memberRegistry.memberExists(memberId)) {
-			Member currentMember = memberRegistry.getMember(memberId);
-			view.displayMemberInfo(currentMember);
-			mainMenu();
-		}
-		else {
-			view.displayMemberDoesNotExistError();
-			viewMember();
-		}
-	}
-	
 
 	private void deleteMember() {
 		int memberId = view.displayMemberIdPrompt();
@@ -122,14 +97,6 @@ public class Admin {
 			deleteMember();
 		}
 	}
-
-
-	private void listMembers() {
-		ArrayList<Member> membersList = memberRegistry.getAllMembers();
-		view.displayMembersList(membersList);
-		mainMenu();
-	}
-
 	
 	private void registerBoat() {
 		int memberId = view.displayMemberIdPrompt();
@@ -215,9 +182,9 @@ public class Admin {
 		}
 	}
 	
-
-	private void exit() {
-		view.displayExitMsg();
+	@Override
+	protected void exit() {
+		
 	}
 
 }
