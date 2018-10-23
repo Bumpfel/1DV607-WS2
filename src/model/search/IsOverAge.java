@@ -4,7 +4,7 @@ import model.Member;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-class IsOverAge implements ISearchStrategy {
+public class IsOverAge implements ISearchStrategy {
 
     public ArrayList<Member> returnFiltered(ArrayList<Member> members, String searchParameter) {
         ArrayList<Member> membersFiltered = new ArrayList<Member>();

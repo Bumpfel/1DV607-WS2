@@ -43,6 +43,10 @@ public interface ViewInterface {
 	public void displayInvalidNameError();
 	public void displayInvalidPNrError();
 
+	public void displayMembersVerbose(ArrayList<Member> list);
+	public void displayMembersCompact(ArrayList<Member> list);
+	public String[] displaySearch(String[] options);
+
 	// public void displayError(String e);
 	
 	public void displayTitle(Title action);
@@ -54,7 +58,8 @@ public interface ViewInterface {
 						LIST_MEMBERS("List Members"), 
 						REGISTER_BOAT("Register Boat"),
 						EDIT_BOAT("Edit Boat"),
-						REMOVE_BOAT("Remove Boat")
+						REMOVE_BOAT("Remove Boat"),
+						SEARCH_MEMBER("Search for Member")
 						;
 		String titleMsg;
 

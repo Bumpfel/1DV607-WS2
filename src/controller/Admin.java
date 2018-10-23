@@ -2,6 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 
+import model.search.*;
 import model.Boat;
 import model.Member;
 import model.MemberRegistry;
@@ -52,8 +53,10 @@ public class Admin {
 			case 8: view.displayTitle(Title.REMOVE_BOAT);
 					removeBoat();
 					break;
-			case 9: exit();
+			case 9: view.displayTitle(Title.SEARCH_MEMBER);
+					searchMember();
 					break;
+			case 0: exit();
 			default: {
 				view.displayInvalidMenuChoiceError();
 				mainMenu();
@@ -61,6 +64,40 @@ public class Admin {
 		}
 	}
 
+	private void searchMember() {
+		Search search = new Search();
+
+		String[] options = {
+			"Born in month",
+			"Is below age",
+			"Is over age", 
+			"Name starts with",
+			 "Owns boat of type"};
+			 
+		String[] searchArguments = view.displaySearch(options);		
+		System.out.println(searchArguments[0] + ", " + searchArguments[1]);
+		ISearchStrategy searchStrategy = null;
+		switch (Integer.parseInt(searchArguments[0])) {
+			case 1: searchStrategy = new BornInMonth();
+					break;
+			case 2: searchStrategy = new IsBelowAge();
+					break;
+			case 3: searchStrategy = new IsOverAge();
+					break;
+			case 4: searchStrategy = new NameStartsWith();
+					break;
+			case 5: searchStrategy = new OwnsBoatOfType();
+					break;
+		}
+
+		String searchParameter = searchArguments[1];
+		ArrayList<Member> members = memberRegistry.getAllMembers();
+
+		ArrayList<Member> searchResult = search.search(members, searchStrategy, searchParameter);
+		
+		view.displayMembersCompact(searchResult);
+		mainMenu();
+	}
 	
 	private void addMember() {
 		String[] nameAndPNr = view.displayAddMember();

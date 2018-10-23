@@ -9,6 +9,22 @@ import model.Boat;
 import model.Member;
 
 public class EngConsole implements ViewInterface {
+	//---------------
+	// Search
+	//---------------
+	public String[] displaySearch(String[] options) {		
+		String[] searchVariables = new String[2];
+		
+		displayMenuOptions(options);
+		int chosenOption = getMenuInput();
+		//System.out.println(chosenOption);
+		searchVariables[0] = String.valueOf(chosenOption);
+		
+		System.out.print("Enter search parameter: ");
+		searchVariables[1] = getInput();
+		
+		return searchVariables;
+	}
 
 	// ---------------
 	// Misc methods
@@ -64,6 +80,7 @@ public class EngConsole implements ViewInterface {
 							 "Register Boat",
 							 "Edit boat",
 							 "Remove boat",
+							 "Search for Member",
 							 "Exit",
 							};
 		
