@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import model.Boat;
 import model.Member;
 
-class OwnsBoatOfType implements ISearch {
+class OwnsBoatOfType implements ISearchStrategy {
     ArrayList<Member> filteredList = new ArrayList<>();
 
 	@Override

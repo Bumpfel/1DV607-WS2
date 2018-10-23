@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import model.Member;
 
-class BornInMonth implements ISearch {
+class BornInMonth implements ISearchStrategy {
     ArrayList<Member> filteredList = new ArrayList<>();
 
 	@Override

@@ -3,7 +3,7 @@ package model.search;
 import java.util.ArrayList;
 import model.Member;
 
-class NameStartsWith implements ISearch {
+class NameStartsWith implements ISearchStrategy {
     ArrayList<Member> filteredList = new ArrayList<>();
 
 	@Override

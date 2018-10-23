@@ -4,9 +4,9 @@ import model.Member;
 import java.util.ArrayList;
 import java.util.Date;
 
-class IsBelowAge {
+class IsBelowAge implements ISearchStrategy {
 
-    ArrayList<Member> returnFiltered(ArrayList<Member> members, String searchParameter) {
+    public ArrayList<Member> returnFiltered(ArrayList<Member> members, String searchParameter) {
         ArrayList<Member> membersFiltered = new ArrayList<Member>();
 
         for(Member member : members) {
@@ -17,7 +17,7 @@ class IsBelowAge {
                 membersFiltered.add(member);
             }
         }
-
+                
         return membersFiltered;
     }
 }
