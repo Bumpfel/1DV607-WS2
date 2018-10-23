@@ -9,11 +9,14 @@ public class BornInMonth implements ISearchStrategy {
 
 	@Override
 	public ArrayList<Member> returnFiltered(ArrayList<Member> members, String searchParameter) {
-        for (Member member : members) {
-            String month = member.getPNr().substring(2,4);
-            if (month == searchParameter)
+        
+        for (Member member : members) {            
+            String month = member.getPNr().substring(2,4);            
+            System.out.println(month);
+            if (month.equalsIgnoreCase(searchParameter))
                 filteredList.add(member);
         }
+        
 		return filteredList;
 	}
 }

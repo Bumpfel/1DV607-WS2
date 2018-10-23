@@ -56,7 +56,8 @@ public class Admin {
 			case 9: view.displayTitle(Title.SEARCH_MEMBER);
 					searchMember();
 					break;
-			case 0: exit();
+			case 10: exit();
+					break;
 			default: {
 				view.displayInvalidMenuChoiceError();
 				mainMenu();
@@ -75,7 +76,7 @@ public class Admin {
 			 "Owns boat of type"};
 			 
 		String[] searchArguments = view.displaySearch(options);		
-		System.out.println(searchArguments[0] + ", " + searchArguments[1]);
+		//System.out.println(searchArguments[0] + ", " + searchArguments[1]);
 		ISearchStrategy searchStrategy = null;
 		switch (Integer.parseInt(searchArguments[0])) {
 			case 1: searchStrategy = new BornInMonth();
@@ -106,6 +107,7 @@ public class Admin {
 
 		memberRegistry.addMember(newName.trim(), newPNr);
 		view.displayMemberCreatedConfirmation();
+		memberRegistry.saveDB();
 		mainMenu();
 	}
 
@@ -122,6 +124,7 @@ public class Admin {
 			// currentMember.editPNr(pNr);
 			currentMember.editMember(newName.trim(), newPNr);
 			view.displayMemberEditedConfirmation();
+			memberRegistry.saveDB();
 			mainMenu();
 		}
 		else {
@@ -152,6 +155,7 @@ public class Admin {
 		if(memberRegistry.memberExists(memberId)) {
 			memberRegistry.deleteMember(memberId);
 			view.displayMemberDeletedConfirmation();
+			memberRegistry.saveDB();
 			mainMenu();
 		}
 		else {

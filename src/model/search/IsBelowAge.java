@@ -11,8 +11,9 @@ public class IsBelowAge implements ISearchStrategy {
         Calendar cal = Calendar.getInstance();
        
         for(Member member : members) {
-            int memberBirthYear = Integer.parseInt(member.getPNr().substring(0, 4));
-            int currentYear = cal.get(Calendar.YEAR);
+            int memberBirthYear = Integer.parseInt(member.getPNr().substring(0, 2));
+            int currentYear = cal.get(Calendar.YEAR) - 2000;
+            System.out.println(currentYear); //TODO ta bort
             String memberAge = "" + (currentYear - memberBirthYear);
             if(memberAge.compareTo(searchParameter) == -1) {
                 membersFiltered.add(member);

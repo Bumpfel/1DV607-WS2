@@ -77,10 +77,10 @@ public class EngConsole implements ViewInterface {
 							 "View member",
 							 "Delete member",
 							 "List members",
-							 "Register Boat",
+							 "Register boat",
 							 "Edit boat",
 							 "Remove boat",
-							 "Search for Member",
+							 "Search for member",
 							 "Exit",
 							};
 		
