@@ -7,7 +7,6 @@ import model.Member;
 import model.MemberRegistry;
 import model.Boat.BoatType;
 import view.ViewInterface;
-import view.ViewInterface.Title;
 
 public class Admin {
 
@@ -28,45 +27,39 @@ public class Admin {
 		int chosenOption = view.displayMainMenu();
 		
 		switch(chosenOption) {
-			case 1: view.displayTitle(Title.ADD_MEMBER);
-					addMember();
+			case 1: addMember();
 					break;
-			case 2: view.displayTitle(Title.EDIT_MEMBER);
-					editMember();
+			case 2: editMember();
 					break;
-			case 3: view.displayTitle(Title.VIEW_MEMBER);
-					viewMember();
+			case 3: viewMember();
 					break;
-			case 4: view.displayTitle(Title.DELETE_MEMBER);
-					deleteMember();
+			case 4: deleteMember();
 					break;
-			case 5: view.displayTitle(Title.LIST_MEMBERS);
-					listMembers();
+			case 5: listMembers();
 					break;
-			case 6: view.displayTitle(Title.REGISTER_BOAT);
-					registerBoat();
+			case 6: registerBoat();
 					break;
-			case 7: view.displayTitle(Title.EDIT_BOAT);
-					editBoat();
+			case 7: editBoat();
 					break;
-			case 8: view.displayTitle(Title.REMOVE_BOAT);
-					removeBoat();
+			case 8: removeBoat();
 					break;
-			case 9: exit();
+			case 0: exit();
 					break;
-			default: {
-				view.displayInvalidMenuChoiceError();
-				mainMenu();
-			}
+			default: view.displayInvalidMenuChoiceError();
+					 mainMenu();
 		}
 	}
 
 	
 	private void addMember() {
 		String[] nameAndPNr = view.displayAddMember();
+
+		checkInput(nameAndPNr[0]);
+		checkInput(nameAndPNr[1]);
+
 		String newName = nameAndPNr[0];
 		String newPNr = nameAndPNr[1];
-
+		
 		memberRegistry.addMember(newName.trim(), newPNr);
 		view.displayMemberCreatedConfirmation();
 		mainMenu();
@@ -74,18 +67,28 @@ public class Admin {
 
 
 	private void editMember() {
+		view.displayEditMemberTitle();
 		int memberId = view.displayMemberIdPrompt();
+
+		checkInput(memberId);
 
 		if(memberRegistry.memberExists(memberId)) {
 			Member currentMember = memberRegistry.getMember(memberId);
-			String[] nameAndPNr = view.displayEditMember();
+			String[] nameAndPNr = view.displayEditMember(currentMember);
 			String newName = nameAndPNr[0];
+			checkInput(newName);
 			String newPNr = nameAndPNr[1];
-			// currentMember.editName(name);
-			// currentMember.editPNr(pNr);
-			currentMember.editMember(newName.trim(), newPNr);
-			view.displayMemberEditedConfirmation();
-			mainMenu();
+			checkInput(newPNr);
+			
+			if(!newName.trim().equals(currentMember.getName())) {
+				currentMember.editName(newName);
+				view.displayNameChangedConfirmation();
+			}
+			else if(!newPNr.equals(currentMember.getPNr())) {
+				currentMember.editPNr(newPNr);
+				view.displayPNrChangedConfirmation();
+			}
+			mainMenu(); // would be nice if it went back to the submenu *************************************************************************************
 		}
 		else {
 			view.displayMemberDoesNotExistError();
@@ -95,11 +98,15 @@ public class Admin {
 	
 
 	private void viewMember() {
+		view.displayViewMemberTitle();
+
 		int memberId = view.displayMemberIdPrompt();
-		
+		checkInput(memberId);
+
 		if(memberRegistry.memberExists(memberId)) {
 			Member currentMember = memberRegistry.getMember(memberId);
 			view.displayMemberInfo(currentMember);
+
 			mainMenu();
 		}
 		else {
@@ -110,8 +117,11 @@ public class Admin {
 	
 
 	private void deleteMember() {
+		view.displayDeleteMemberTitle();
+
 		int memberId = view.displayMemberIdPrompt();
-		
+		checkInput(memberId);
+
 		if(memberRegistry.memberExists(memberId)) {
 			memberRegistry.deleteMember(memberId);
 			view.displayMemberDeletedConfirmation();
@@ -132,19 +142,24 @@ public class Admin {
 
 	
 	private void registerBoat() {
+		view.displayRegisterBoatTitle();
+
 		int memberId = view.displayMemberIdPrompt();
-		
+		checkInput(memberId);
+
 		if(memberRegistry.memberExists(memberId)) {
 			Member currentMember = memberRegistry.getMember(memberId);
 
 			Object[] boatDetails = view.displayRegisterBoat(BoatType.values());
+			checkInput(boatDetails[0]);
+			checkInput(boatDetails[1]);
+			
 			BoatType boatType = (BoatType) boatDetails[0];
 			double size = (double) boatDetails[1];
 			currentMember.registerBoat(boatType, size);
 			
 			memberRegistry.saveDB();
 			view.displayBoatRegisteredConfirmation();
-			mainMenu();
 		}
 		else {
 			view.displayMemberDoesNotExistError();
@@ -154,8 +169,11 @@ public class Admin {
 
 
 	private void editBoat() {
+		view.displayEditBoatTitle();
+
 		int memberId = view.displayMemberIdPrompt();
-		
+		checkInput(memberId);
+
 		if(memberRegistry.memberExists(memberId)) {
 			Member currentMember = memberRegistry.getMember(memberId);
 			ArrayList<Boat> memberBoats = currentMember.getBoats();
@@ -164,11 +182,13 @@ public class Admin {
 				view.displayMemberHasNoBoatsMsg();
 				editBoat();
 			}
-			else {
-				int boatIndex = view.displayBoatSelection(memberBoats.toArray());
+			else { // should be separated into submenu > edit boattype or edit size ------------------------------------------------------------
+				int boatIndex = view.displayBoatSelection(memberBoats);
+				checkInput(boatIndex);
 				Boat selectedBoat = memberBoats.get(boatIndex - 1);
 				
 				Object[] boatDetails = view.displayEditBoat(BoatType.values());
+				checkInput(boatDetails[0]);
 				BoatType newBoatType = (BoatType) boatDetails[0];
 				double newSize = (double) boatDetails[1];
 			
@@ -188,8 +208,11 @@ public class Admin {
 
 
 	private void removeBoat() {
-		int memberId = view.displayMemberIdPrompt();
+		view.displayRemoveBoatTitle();
 		
+		int memberId = view.displayMemberIdPrompt();
+		checkInput(memberId);
+
 		if(memberRegistry.memberExists(memberId)) {
 			Member currentMember = memberRegistry.getMember(memberId);
 			ArrayList<Boat> memberBoats = currentMember.getBoats();
@@ -199,7 +222,8 @@ public class Admin {
 				removeBoat();
 			}
 			else {
-				int boatIndex = view.displayBoatSelection(memberBoats.toArray());
+				int boatIndex = view.displayBoatSelection(memberBoats);
+				checkInput(boatIndex);
 				Boat selectedBoat = memberBoats.get(boatIndex - 1);
 
 				currentMember.removeBoat(selectedBoat);
@@ -220,4 +244,9 @@ public class Admin {
 		view.displayExitMsg();
 	}
 
+	private void checkInput(Object arg) {
+		if(arg.equals(0) || arg.equals("0")) {
+			mainMenu();
+		}
+	}
 }

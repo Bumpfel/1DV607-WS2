@@ -4,15 +4,32 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import model.Boat;
 import model.Member;
+import model.Boat.BoatType;
 
 public class EngConsole implements ViewInterface {
+
+	private final int SHORT_PAUSE = 750;
+	private final int MEDIUM_PAUSE = 1000;
+	private final int LONG_PAUSE = 1500;
 
 	// ---------------
 	// Misc methods
 	//--------------
+	private void displayTitle(String title) {
+		int cols = title.length() + 8;
+		StringBuffer lines = new StringBuffer();
+		for(int i = 0; i < cols; i ++) {
+			lines.append("-");
+		}
+		System.out.println(lines + "\n" 
+				+ " -- " + title + " -- \n"
+				+ lines);
+	}
+
 	public void displayWait() {
 		System.out.println("Press enter to continue...");
 
@@ -26,17 +43,9 @@ public class EngConsole implements ViewInterface {
 		}
 	}
 
-	private void pause() {
+	private void pause(int time) {
 		try {
-			Thread.sleep(750);
-		}
-		catch(InterruptedException e) {
-		}
-	}
-
-	private void shortPause() {
-		try {
-			Thread.sleep(500);
+			Thread.sleep(time);
 		}
 		catch(InterruptedException e) {
 		}
@@ -46,16 +55,23 @@ public class EngConsole implements ViewInterface {
 	//----------------
 	// Menu methods
 	//--------------
-	private void displayMenuOptions(Object[] options) {
-		for (int i = 0; i < options.length; i++) {
-			System.out.println(i + 1 + ". " + options[i]);
+	private void printMenuSeparation() {
+		for(int i = 0; i < 25; i ++) {
+			System.out.println();
 		}
 	}
 
+	private void displayMenuOptions(Object[] options) {
+		for (int i = 0; i < options.length - 1; i++) {
+			System.out.println(i + 1 + ". " + options[i]);
+		}
+		System.out.println("0. " + options[options.length - 1]);
+	}
+
 	public int displayMainMenu() {
-		System.out.println("-----------------");
-		System.out.println(" -- Main Menu -- ");
-		System.out.println("-----------------"); 
+		printMenuSeparation();
+
+		displayTitle("Main menu");
 		String[] options = { "Add member",
 							 "Edit member",
 							 "View member",
@@ -73,37 +89,62 @@ public class EngConsole implements ViewInterface {
 	}
 	
 	public String[] displayAddMember() {
-		return promptForMemberDetails();
-	}
-
-	public String[] displayEditMember() {
-		return promptForMemberDetails();
-	}
-
-
-	// not used
-	// public String[] displayEditMemberMenu(String name, String pNr) { 
-	// 	String[] options = { "Edit name", "Edit social security number" };
-
-	// 	displayMenuOptions(options);
-	// 	int chosenOption = getMenuInput();
+		printMenuSeparation();
+		displayTitle("Add Member");
 		
-	// 	// if(!isValidMenuChoice(chosenOption, 1, options.length)) {
-	// 	//  	displayEditMemberMenu();
-	// 	// }
-	// 	switch(chosenOption) {
-	// 		case 1: name = displayNewNameInput();
-	// 				break;	
-	// 		case 2: pNr = displayNewPNrInput();
-	// 				break;
-	// 		default: displayInvalidMenuChoiceError();
-	// 				 displayEditMemberMenu(name, pNr);
-	// 	}
-	// 	return new String[] { name, pNr };
+		String newName = promptForMemberName();
+		if(newName.equals("0")) {
+			return new String[] { "0" };
+		}
+		String newPNr = promptForMemberPNr();
+		
+		return new String[] { newName, newPNr };
+	}
+
+	// public String[] displayEditMember() {
+	// 	printMenuSeparation();
+	// 	displayTitle("Edit Member");
+		
+	// 	String newName = promptForMemberName();
+	// 	String newPNr = promptForMemberPNr();
+
+	// 	return new String[] { newName, newPNr };
 	// }
 
+
+	public String[] displayEditMember(Member m) { 
+		String[] options = { "Edit name", "Edit personal code", "Back" };
+
+		displayMenuOptions(options);
+		int chosenOption = getMenuInput();
+		
+		// if(!isValidMenuChoice(chosenOption, options.length)) {
+		//  	displayEditMemberMenu();
+		// }
+		String name = m.getName();
+		String pNr = m.getPNr();
+		switch(chosenOption) {
+			case 1: name = promptForMemberName();
+					break;
+			case 2: pNr = promptForMemberPNr();
+					break;
+			case 0: break;
+			default: displayInvalidMenuChoiceError();
+					 displayEditMember(m);
+		}
+		return new String[] { name, pNr };
+	}
+
+	public void displayDeleteMember() {
+		printMenuSeparation();
+		displayTitle("Delete Member");
+	}
+
 	public void displayMembersList(ArrayList<Member> list) {
-		String[] options = { "View compact list", "View verbose list" };
+		printMenuSeparation();
+		displayTitle("List Members");
+		
+		String[] options = { "View compact list", "View verbose list", "Back" };
 		
 		displayMenuOptions(options);
 		int chosenOption = getMenuInput();
@@ -113,43 +154,63 @@ public class EngConsole implements ViewInterface {
 					break;
 			case 2: displayMembersVerbose(list);
 					break;
+			case 0: break;
 			default: displayInvalidMenuChoiceError();
 					 displayMembersList(list);
 		}
 	}
 	
-	public Object[] displayRegisterBoat(Object[] availableBoatTypes) {
-		displayMenuOptions(availableBoatTypes);
+	public Object[] displayRegisterBoat(BoatType[] availableBoatTypes) {
+		printMenuSeparation();
+		displayTitle("Register Boat");
+
+		int size = availableBoatTypes.length;
+		Object[] menuOptions = new Object[size + 1];
+		for(int i = 0; i < size; i ++) {
+			menuOptions[i] = availableBoatTypes[i];
+		}
+		menuOptions[size] = "Back";
+
+		displayMenuOptions(menuOptions);
 		
 		Object chosenBoatType = promptForBoatType(availableBoatTypes);
+		if(chosenBoatType.equals(0)) {
+			return new Object[] { "0" };
+		}
 		double enteredBoatSize = promptForBoatSize();
 		
 		return new Object[] { chosenBoatType, enteredBoatSize };
 	}
 
-	public int displayBoatSelection(Object[] availableBoats) {
+	public int displayBoatSelection(ArrayList<Boat> availableBoats) {
 		System.out.println(" -- Available boat(s) -- ");
 
-		displayMenuOptions(availableBoats);
+		ArrayList<Object> menuOptions = new ArrayList<>(availableBoats);
+		menuOptions.add("Cancel");
+		displayMenuOptions(menuOptions.toArray());
 		
 		int chosenOption = displayBoatChoicePrompt();
-		while(!isValidMenuChoice(chosenOption, 1, availableBoats.length)) {
+		while(!isValidMenuChoice(chosenOption, availableBoats.size())) {
 			displayInvalidMenuChoiceError();
-			displayMenuOptions(availableBoats);
+			displayMenuOptions(availableBoats.toArray());
 			chosenOption = displayBoatChoicePrompt();
 		}
 		return chosenOption;
 	}
 
-	public Object[] displayEditBoat(Object[] availableBoatTypes) {
-		displayMenuOptions(availableBoatTypes);
-				
+	public Object[] displayEditBoat(BoatType[] availableBoatTypes) {
+		printMenuSeparation();
+		displayTitle("Edit Boat");
+
+		ArrayList<Object> menuOptions = new ArrayList<>(Arrays.asList(availableBoatTypes));
+		menuOptions.add("Cancel");
+		displayMenuOptions(menuOptions.toArray());
+		
 		Object chosenBoatType = promptForBoatType(availableBoatTypes);
 		double enteredBoatSize = promptForBoatSize();
 
 		return new Object[] { chosenBoatType, enteredBoatSize };
 	}
-
 
 	//---------------------
 	// Get input methods
@@ -202,42 +263,50 @@ public class EngConsole implements ViewInterface {
 		return getInputInt();
 	}
 
-
-	private String[] promptForMemberDetails() {
+	private String promptForMemberName() {
 		String newName = displayNamePrompt();
-		while(!Member.isValidName(newName)) {
+		while(!Member.isValidName(newName) && !newName.equals("0")) {
 			displayInvalidNameError();
 			newName = displayNamePrompt();
 		}
-
+		return newName;
+	}
+	
+	private String promptForMemberPNr() {
 		String newPNr = displayPNrPrompt();
-		while(!Member.isValidPNr(newPNr)) {
+		while(!Member.isValidPNr(newPNr)  && !newPNr.equals("0")) {
 			displayInvalidPNrError();
 			newPNr = displayPNrPrompt();
 		}
-
-		return new String[] { newName, newPNr };
+		return newPNr;
 	}
 
 	private String displayNamePrompt() {
 		System.out.print("Enter new name: ");
 		return getInput();
-	
 	}
+	
 	private String displayPNrPrompt() {
 		System.out.print("Enter new personal code number (YYMMDD-XXXX): ");
 		return getInput();
 	}
 
-	private Object promptForBoatType(Object[] availableBoatTypes) {
+	private Object promptForBoatType(BoatType[] availableBoatTypes) {
 		int chosenOption = displayBoatTypePrompt();
-		while(!isValidMenuChoice(chosenOption, 1, availableBoatTypes.length)) {
+		if(!isValidMenuChoice(chosenOption, availableBoatTypes.length)) {
 			displayInvalidMenuChoiceError();
-			displayMenuOptions(availableBoatTypes);
-			chosenOption = displayBoatTypePrompt();
+			displayRegisterBoat(availableBoatTypes);
+			return 0;
+			// displayMenuOptions(menuOptions);
+			// chosenOption = displayBoatTypePrompt();
 		}
-		Object chosenBoatType = availableBoatTypes[(chosenOption - 1)];
-		return chosenBoatType;
+		else if(chosenOption == 0) {
+			return 0;
+		}
+		else {
+			Object chosenBoatType = availableBoatTypes[(chosenOption - 1)];
+			return chosenBoatType;
+		}
 	}
 
 	private double promptForBoatSize() {
@@ -268,8 +337,8 @@ public class EngConsole implements ViewInterface {
 	//---------------------------
 	// Console validity checks
 	//-------------------------
-	private boolean isValidMenuChoice(int input, int min, int max) {
-		return input >= min && input <= max;
+	private boolean isValidMenuChoice(int input, int max) {
+		return input >= 0 && input <= max;
 	}
 
 
@@ -289,10 +358,13 @@ public class EngConsole implements ViewInterface {
 		else {
 			System.out.println(" Member has no registered boats");
 		}
-		System.out.println("----------------------------------------------------------");
+		System.out.println("  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .");
 	}
 
 	public void displayMemberInfo(Member member) {
+		printMenuSeparation();
+
+		displayTitle("View Member");
 		System.out.format("%-12s %-26s %-16s \n","MEMBER ID","NAME","PERSONAL NUMBER");
 		displayMemberFullInformation(member);
 		
@@ -300,6 +372,9 @@ public class EngConsole implements ViewInterface {
 	}	
 	
 	public void displayMembersVerbose(ArrayList<Member> list) {
+		printMenuSeparation();
+
+		displayTitle("List Members - Verbose");
 		System.out.format("%-12s %-26s %-16s \n", "MEMBER ID", "NAME", "PERSONAL NUMBER");
 		System.out.println("----------------------------------------------------------");
 		for (Member member : list) {
@@ -309,6 +384,9 @@ public class EngConsole implements ViewInterface {
 	}
 	
 	public void displayMembersCompact(ArrayList<Member> list) {
+		printMenuSeparation();
+
+		displayTitle("List Members - Compact");
 		System.out.format("%-12s %-26s %-16s \n", "MemberID", "Name", "Number of boats");
 		System.out.println("----------------------------------------------------------");
 		for (Member member : list) {
@@ -317,20 +395,52 @@ public class EngConsole implements ViewInterface {
 		displayWait();
 	}
 
+	// ---------
+	// Titles
+	//--------
+	public void displayEditMemberTitle() {
+		printMenuSeparation();
+		displayTitle("Edit Member");
+	}
+
+	public void displayDeleteMemberTitle() {
+		printMenuSeparation();
+		displayTitle("Delete Member");
+	}
+
+	public void displayViewMemberTitle() {
+		printMenuSeparation();
+		displayTitle("View Member");
+	}
 	
+	public void displayRegisterBoatTitle() {
+		printMenuSeparation();
+		displayTitle("Register Boat");
+	}
+	
+	public void displayEditBoatTitle() {
+		printMenuSeparation();
+		displayTitle("Edit Boat");
+	}
+
+	public void displayRemoveBoatTitle() {
+		printMenuSeparation();
+		displayTitle("Remove Boat");
+	}
+
 	//------------
 	// Messages
 	//----------
-	public void displayTitle(Title action) {
-		System.out.println(action.getMsg());
-	}
-
 	public void displayWelcomeMsg() {
-		System.out.println("##############################################################");
+		printMenuSeparation();
+		
+		System.out.println("###############################################################");
 		System.out.println();
-		System.out.println(" Welcome to \"The Jolly Pirate\" boat club's member registry! ");
+		System.out.println(" Welcome to \"The Jolly Pirates\" boat club's member registry! ");
 		System.out.println();
-		System.out.println("##############################################################");
+		System.out.println("###############################################################");
+		System.out.println("");
+		pause(LONG_PAUSE);
 	}
 
 	public void displayExitMsg() {
@@ -340,58 +450,58 @@ public class EngConsole implements ViewInterface {
 
 	public void displayMemberCreatedConfirmation() {
 		System.out.println("Member created\n");
-		pause();
+		pause(MEDIUM_PAUSE);
 	}
 
 	public void displayMemberEditedConfirmation() {
 		System.out.println("Member details has been changed!\n");
-		pause();
+		pause(MEDIUM_PAUSE);
 	}
 
-	// public void displayNameChangedConfirm() {
-	// 	System.out.println("Name has been changed!");
-	// 	pause();
-	// }
+	public void displayNameChangedConfirmation() {
+		System.out.println("Name has been changed!");
+		pause(MEDIUM_PAUSE);
+	}
 	
-	// public void displayPNrChangedConfirm() {
-	// 	System.out.println("Personal code number has been changed!");
-	// 	pause();
-	// }
+	public void displayPNrChangedConfirmation() {
+		System.out.println("Personal code number has been changed!");
+		pause(MEDIUM_PAUSE);
+	}
 	
 	public void displayMemberDeletedConfirmation() {
 		System.out.println("Member has been deleted!\n");
-		pause();
+		pause(MEDIUM_PAUSE);
 	}
 	
 
 	public void displayMemberHasNoBoatsMsg() {
 		System.out.println("Member has no boats!");
-		pause();
+		pause(MEDIUM_PAUSE);
 	}
 
 	public void displayBoatRegisteredConfirmation() {
 		System.out.println("Boat has been registered!\n");
-		pause();
+		pause(MEDIUM_PAUSE);
 	}
 	
-	public void displayBoatEditedConfirmation() { // either this or the type, size should exist. not both
+	public void displayBoatEditedConfirmation() { // either this or the type & size should exist. not both
 		System.out.println("Boat has been edited!\n");
-		pause();
+		pause(MEDIUM_PAUSE);
 	}
 	
 	// public void displayEditBoatTypeConfirm() {
 	// 	System.out.println("Boat type has been changed!\n");
-	// 	pause();
+	// 	pause(MEDIUM_PAUSE);
 	// }
 
 	// public void displayEditBoatSizeConfirm() {
 	// 	System.out.println("Boat size has been changed!\n");
-	// 	pause();
+	// 	pause(MEDIUM_PAUSE);
 	// }
 
 	public void displayBoatDeletedConfirmation() {
 		System.out.println("Boat has been deleted!\n");
-		pause();
+		pause(MEDIUM_PAUSE);
 	}
 
 	
@@ -400,34 +510,34 @@ public class EngConsole implements ViewInterface {
 	//--------
 	public void displayMemberDoesNotExistError() {
 		System.out.println(" -- Member does not exist! --");
-		shortPause();
+		pause(SHORT_PAUSE);
 	}
 
 	public void displayBoatDoesNotExistError() {
 		System.out.println(" -- Boat does not exist --");
-		shortPause();
+		pause(SHORT_PAUSE);
 	}
 
 
 	public void displayInvalidMenuChoiceError() {
 		System.out.println("-- Invalid menu choice -- \n");
-		shortPause();
+		pause(SHORT_PAUSE);
 	}
 
 	public void displayInvalidInputError() {
 		System.out.println("-- Invalid input --");
-		shortPause();
+		pause(SHORT_PAUSE);
 	}
 
 
 	public void displayInvalidNameError() {
 		System.out.println("-- Name contains forbidden characters or has less than two characters --");
-		shortPause();
+		pause(SHORT_PAUSE);
 	}
 
 	public void displayInvalidPNrError() {
 		System.out.println("-- Personal code number must be on the form YYMMDD-XXXX --");
-		shortPause();
+		pause(SHORT_PAUSE);
 	}
 
 

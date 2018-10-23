@@ -2,7 +2,9 @@ package view;
 
 import java.util.ArrayList;
 
+import model.Boat;
 import model.Member;
+import model.Boat.BoatType;
 
 public interface ViewInterface {
 	public int displayMemberIdPrompt();
@@ -11,23 +13,30 @@ public interface ViewInterface {
 
 	public void displayWelcomeMsg();
 	public void displayExitMsg();
-	
+
+	public void displayEditMemberTitle();
+	public void displayViewMemberTitle();
+	public void displayDeleteMemberTitle();
+	public void displayRegisterBoatTitle();
+	public void displayEditBoatTitle();
+	public void displayRemoveBoatTitle();
+
 	public String[] displayAddMember();
-	public String[] displayEditMember();
+	public String[] displayEditMember(Member member);
 	
 	public void displayMemberInfo(Member member);
 	public void displayMembersList(ArrayList<Member> list);
 	
-	public int displayBoatSelection(Object[] availableBoats);
-	public Object[] displayRegisterBoat(Object[] availableBoatTypes);
-	public Object[] displayEditBoat(Object[] availableBoatTypes);
+	public int displayBoatSelection(ArrayList<Boat> availableBoats);
+	public Object[] displayRegisterBoat(BoatType[] availableBoatTypes);
+	public Object[] displayEditBoat(BoatType[] availableBoatTypes);
 	// public Boat.BoatType displayEnterBoatType();
 	// public double displayEnterBoatSize();
 	
 	public void displayMemberCreatedConfirmation();
 	public void displayMemberEditedConfirmation();
-	// public void displayNameChangedConfirm();
-	// public void displayPNrChangedConfirm();
+	public void displayNameChangedConfirmation();
+	public void displayPNrChangedConfirmation();
 	public void displayMemberDeletedConfirmation();
 
 	public void displayMemberHasNoBoatsMsg();
@@ -42,36 +51,4 @@ public interface ViewInterface {
 	public void displayMemberDoesNotExistError();
 	public void displayInvalidNameError();
 	public void displayInvalidPNrError();
-
-	// public void displayError(String e);
-	
-	public void displayTitle(Title action);
-
-	public enum Title { ADD_MEMBER("Add Member"),
-						EDIT_MEMBER("Edit Member"),
-						VIEW_MEMBER("View Member"), 
-						DELETE_MEMBER("Delete Member"), 
-						LIST_MEMBERS("List Members"), 
-						REGISTER_BOAT("Register Boat"),
-						EDIT_BOAT("Edit Boat"),
-						REMOVE_BOAT("Remove Boat")
-						;
-		String titleMsg;
-
-		private Title(String action) {
-			titleMsg = action;
-		}
-
-		public String getMsg() {
-			int cols = titleMsg.length() + 8;
-			StringBuffer lines = new StringBuffer();
-			for(int i = 0; i < cols; i ++) {
-				lines.append("-");
-			}
-			return lines + "\n" 
-				   + " -- " + titleMsg + " -- \n"
-				   + lines;
-		}
-	}
-
 }
