@@ -76,18 +76,18 @@ public class Admin {
 			 "Owns boat of type"};
 			 
 		String[] searchArguments = view.displaySearch(options);		
-		//System.out.println(searchArguments[0] + ", " + searchArguments[1]);
-		ISearchStrategy searchStrategy = null;
+		
+		ArrayList<ISearchStrategy> searchStrategy = new ArrayList<>();
 		switch (Integer.parseInt(searchArguments[0])) {
-			case 1: searchStrategy = new BornInMonth();
+			case 1: searchStrategy.add(new BornInMonth());
 					break;
-			case 2: searchStrategy = new IsBelowAge();
+			case 2: searchStrategy.add(new IsBelowAge());
 					break;
-			case 3: searchStrategy = new IsOverAge();
+			case 3: searchStrategy.add(new IsOverAge());
 					break;
-			case 4: searchStrategy = new NameStartsWith();
+			case 4: searchStrategy.add(new NameStartsWith());
 					break;
-			case 5: searchStrategy = new OwnsBoatOfType();
+			case 5: searchStrategy.add(new OwnsBoatOfType());
 					break;
 		}
 

@@ -11,15 +11,19 @@ public class IsOverAge implements ISearchStrategy {
         Calendar cal = Calendar.getInstance();
 
         for (Member member : members) {
-            int memberBirthYear = Integer.parseInt(member.getPNr().substring(0, 2)) + 2000;
-            int currentYear = cal.get(Calendar.YEAR);
-            if (memberBirthYear > currentYear) {
-                memberBirthYear -= 100;
-            }
-            int memberAge = currentYear - memberBirthYear;
+            try {
+                int memberBirthYear = Integer.parseInt(member.getPNr().substring(0, 2)) + 2000;
+                int currentYear = cal.get(Calendar.YEAR);
+                if (memberBirthYear > currentYear) {
+                    memberBirthYear -= 100;
+                }
+                int memberAge = currentYear - memberBirthYear;
 
-            if (memberAge >= Integer.parseInt(searchParameter)) {
-                membersFiltered.add(member);
+                if (memberAge >= Integer.parseInt(searchParameter)) {
+                    membersFiltered.add(member);
+                }
+            } catch (NumberFormatException exception) {
+
             }
         }
 
