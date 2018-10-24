@@ -4,51 +4,55 @@ import java.util.ArrayList;
 
 import model.Boat;
 import model.Member;
-import model.Boat.BoatType;
 
 public interface ViewInterface {
 	public int displayMemberIdPrompt();
 
-	public int displayMainMenu();
+	public MainAction displayMainMenu();
 
 	public void displayWelcomeMsg();
 	public void displayExitMsg();
 
+	// public void displayAddMemberTitle();
 	public void displayEditMemberTitle();
 	public void displayViewMemberTitle();
-	public void displayDeleteMemberTitle();
 	public void displayRegisterBoatTitle();
 	public void displayEditBoatTitle();
 	public void displayRemoveBoatTitle();
-
-	public String[] displayAddMember();
-	public String[] displayEditMember(Member member);
+	
+	public Member displayAddMember();
+	public Member displayEditMember(Member member);
+	public void displayDeleteMember(ArrayList<Member> membersList);
 	
 	public void displayMemberInfo(Member member);
-	public void displayMembersList(ArrayList<Member> list);
+	public boolean displayMembersList(ArrayList<Member> memberList);
 	
-	public int displayBoatSelection(ArrayList<Boat> availableBoats);
-	public Object[] displayRegisterBoat(BoatType[] availableBoatTypes);
-	public Object[] displayEditBoat(BoatType[] availableBoatTypes);
-	// public Boat.BoatType displayEnterBoatType();
-	// public double displayEnterBoatSize();
+	public int displayBoatSelectionPrompt(ArrayList<Boat> availableBoats);
+	public Boat displayRegisterBoat();
+	public Boat displayEditBoat(Boat boat);
 	
 	public void displayMemberCreatedConfirmation();
-	public void displayMemberEditedConfirmation();
 	public void displayNameChangedConfirmation();
 	public void displayPNrChangedConfirmation();
 	public void displayMemberDeletedConfirmation();
 
 	public void displayMemberHasNoBoatsMsg();
 	public void displayBoatRegisteredConfirmation();
-	public void displayBoatEditedConfirmation();
-	// public void displayEditBoatSizeConfirm();
-	// public void displayEditBoatTypeConfirm();
+	public void displayBoatTypeEditedConfirmation();
+	public void displayBoatSizeEditedConfirmation();
 	public void displayBoatDeletedConfirmation();
 
-	public void displayInvalidMenuChoiceError();
-	public void displayInvalidInputError();
 	public void displayMemberDoesNotExistError();
-	public void displayInvalidNameError();
-	public void displayInvalidPNrError();
+
+	public enum MainAction { EXIT,
+							ADD_MEMBER, 
+							EDIT_MEMBER, 
+							VIEW_MEMBER, 
+							DELETE_MEMBER, 
+							LIST_MEMBERS, 
+							REGISTER_BOAT, 
+							EDIT_BOAT, 
+							REMOVE_BOAT,
+							INVALID_CHOICE, 
+	};
 }

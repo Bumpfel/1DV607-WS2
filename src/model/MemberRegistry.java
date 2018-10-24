@@ -20,20 +20,17 @@ public class MemberRegistry {
 				lastMember.setNextId(lastMember.getId() + 1);
 			}
 		} catch (Exception e) {
-			System.out.println("Error reading member database from file." + e);
 		}
 	}
 
-	public void addMember(String name, String pNr) {
-		Member m = new Member(name, pNr);
+	public void addMember(Member m) {
 		members.add(m);
 		saveDB();
 	}
 
-	public void deleteMember(int id) {
-		Member m = getMember(id);
+	public void deleteMember(Member m) {
 		members.remove(m);
-		saveDB(); // new ----------------------------------
+		saveDB();
 	}
 
 	public Member getMember(int id) {
@@ -66,13 +63,13 @@ public class MemberRegistry {
 		});
 	}
 
-	public void saveDB() { // should this be public?? ------------------------------
+	public void saveDB() {
 		ObjectMapper oMapper = new ObjectMapper();
 		File outputFile = new File("db.txt");
 		try {
 			oMapper.writeValue(outputFile, members);
-		} catch (Exception e) {
-			System.out.println("Error saving to database.");
+		}
+		catch (Exception e) {
 		}
 	}
 }

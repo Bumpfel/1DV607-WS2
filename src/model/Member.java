@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 public class Member {
-	private static int nextId = 1; // should be set to last id found in the text file
+	private static int nextId = 1; // will be set to last id found in the text file
 
 	private String name;
 	private String pnr;
@@ -45,8 +45,8 @@ public class Member {
 		return pnr;
 	}
 
-	public void registerBoat(Boat.BoatType type, double size) {
-		boats.add(new Boat(type, size));
+	public void addBoat(Boat b) {
+		boats.add(b);
 	}
 
 	public void removeBoat(Boat boat) {
@@ -63,10 +63,9 @@ public class Member {
 		return new ArrayList<Boat>(boats);
 	}
 
-	// public String toString() {
-	// return id + ": " + name + ". Has " + boats.size() + " boats registered to the
-	// club";
-	// }
+	public String toString() {
+		return id + ". " + name + " - " + pnr;
+	}
 
 	void setNextId(int newId) {
 		nextId = newId;
