@@ -10,15 +10,19 @@ public class IsOverAge implements ISearchStrategy {
         ArrayList<Member> membersFiltered = new ArrayList<Member>();
         Calendar cal = Calendar.getInstance();
 
-        for(Member member : members) {
-            int memberBirthYear = Integer.parseInt(member.getPNr().substring(0, 4));
+        for (Member member : members) {
+            int memberBirthYear = Integer.parseInt(member.getPNr().substring(0, 2)) + 2000;
             int currentYear = cal.get(Calendar.YEAR);
-            String memberAge = "" + (currentYear - memberBirthYear);
-            if(memberAge.compareTo(searchParameter) == 1) {
+            if (memberBirthYear > currentYear) {
+                memberBirthYear -= 100;
+            }
+            int memberAge = currentYear - memberBirthYear;
+
+            if (memberAge >= Integer.parseInt(searchParameter)) {
                 membersFiltered.add(member);
             }
         }
-                
+
         return membersFiltered;
     }
 }
