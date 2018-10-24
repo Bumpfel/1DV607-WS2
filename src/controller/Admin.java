@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import model.search.*;
 import model.Boat;
@@ -91,12 +92,21 @@ public class Admin {
 					break;
 		}
 
-		String searchParameter = searchArguments[1];
+		List<String> searchParameters = java.util.Arrays.asList(searchArguments[1]);
 		ArrayList<Member> members = memberRegistry.getAllMembers();
 
-		ArrayList<Member> searchResult = search.search(members, searchStrategy, searchParameter);
+		ArrayList<Member> searchResult = search.search(members, searchStrategy, searchParameters);
 		
 		view.displayMembersCompact(searchResult);
+		//TODO ta bort detta!
+		System.out.println("SOME HARDCODED SHIT FOR TESTING!");
+		ArrayList<ISearchStrategy> blehe = new ArrayList<>();
+		blehe.add(new IsBelowAge());
+		blehe.add(new OwnsBoatOfType());
+		ArrayList<String> blaha = new ArrayList<>();
+		blaha.add("60");
+		blaha.add("Sailboat");
+		view.displayMembersCompact(searchResult = search.search(members, blehe, blaha));
 		mainMenu();
 	}
 	
