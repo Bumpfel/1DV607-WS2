@@ -14,7 +14,6 @@ public class EngConsole implements ViewInterface {
 
 	private final int SHORT_PAUSE = 750;
 	private final int MEDIUM_PAUSE = 1250;
-	private final int LONG_PAUSE = 1500;
 
 	// ---------------
 	// Misc methods
@@ -51,16 +50,15 @@ public class EngConsole implements ViewInterface {
 		}
 	}
 	
-
-	//----------------
-	// Menu methods
-	//--------------
 	private void printSeparation() {
 		for(int i = 0; i < 25; i ++) {
 			System.out.println();
 		}
 	}
 
+	//----------------
+	// Menu methods
+	//--------------
 	private void displayMenuOptions(Object[] options) {
 		for (int i = 0; i < options.length - 1; i++) {
 			System.out.println(i + 1 + ". " + options[i]);
@@ -115,14 +113,12 @@ public class EngConsole implements ViewInterface {
 
 		displayTitle("Edit \'" + m + "\'");
 
-		// System.out.println(m.getId() + ". " + m.getName() + " - " + m.getPNr());
-
 		Member tempMember = new Member(m.getName(), m.getPNr());
 		String[] options = { "Edit name", "Edit personal code", "Back" };
 
 		displayMenuOptions(options);
 		
-		int chosenOption = promptForValidMenuInput(options.length - 1);
+		int chosenOption = promptForValidMenuInput("", options.length - 1);
 
 		switch(chosenOption) {
 			case 1: 
@@ -144,8 +140,6 @@ public class EngConsole implements ViewInterface {
 	public void displayDeleteMember(ArrayList<Member> membersList) {
 		printSeparation();
 		displayTitle("Delete Member");
-
-		// displayMembersCompact(membersList);
 	}
 
 	public boolean displayMembersList(ArrayList<Member> membersList) {
@@ -172,8 +166,6 @@ public class EngConsole implements ViewInterface {
 				break;
 			case 0:
 				return false;
-				// controller.unsetAction(); // only used here. new dependency ============================================================================
-				// break;
 			default:
 				displayInvalidMenuChoiceError();
 		}
@@ -186,11 +178,10 @@ public class EngConsole implements ViewInterface {
 
 		BoatType[] availableBoatTypes = BoatType.values();
 		ArrayList<Object> menuOptions = new ArrayList<>(Arrays.asList(availableBoatTypes));
-		menuOptions.add("Back");
+		menuOptions.add("Cancel");
 		displayMenuOptions(menuOptions.toArray());
 		
-		// BoatType chosenBoatType = promptForBoatType(); // remove if all ok-------------------------------------------------------------------------------
-		int chosenOption = promptForValidMenuInput(menuOptions.size() - 1);
+		int chosenOption = promptForValidMenuInput("Choose boat type", menuOptions.size() - 1);
 		if(chosenOption == 0) {
 			return null;
 		}
@@ -211,7 +202,7 @@ public class EngConsole implements ViewInterface {
 		String[] menuOptions = { "Edit Type", "Edit Size", "Back" };
 		displayMenuOptions(menuOptions);
 
-		int chosenOption = promptForValidMenuInput(menuOptions.length - 1);
+		int chosenOption = promptForValidMenuInput("Chosen boat type", menuOptions.length - 1);
 		Boat tempBoat = new Boat(currentBoat.getType(), currentBoat.getSize());
 
 		if(chosenOption == 1) {
@@ -222,7 +213,7 @@ public class EngConsole implements ViewInterface {
 			menuOptions2.add("Cancel");
 			displayMenuOptions(menuOptions2.toArray());
 
-			int chosenOption2 = promptForValidMenuInput(menuOptions2.size() - 1);
+			int chosenOption2 = promptForValidMenuInput("", menuOptions2.size() - 1);
 			if(chosenOption2 == 0) {
 				return null;
 			}
@@ -244,22 +235,17 @@ public class EngConsole implements ViewInterface {
 		return tempBoat;
 	}
 
-	
 	//------------------
-	// Input Prompts. Most of them are private methods made to avoid a small bit of code duplication
+	// Prompt loops. These loop until they get a valid input
 	//----------------
-	private int promptForValidMenuInput(int maxOption) {
+	private int promptForValidMenuInput(String txt, int maxOption) {
+		System.out.print(txt);
 		int chosenOption = getMenuInput();
 		while(!isValidMenuChoice(chosenOption, maxOption)) {
 			displayInvalidMenuChoiceError();
 			chosenOption = getMenuInput();
 		}
 		return chosenOption;
-	}
-
-	public int displayMemberIdPrompt() {
-		System.out.print("Enter member ID: ");
-		return getInputInt();
 	}
 
 	public String promptForValidMemberName() {
@@ -284,6 +270,23 @@ public class EngConsole implements ViewInterface {
 		return newPNr;
 	}
 
+	private double promptForValidBoatSize() {
+		double enteredBoatSize = displayBoatSizePrompt();
+		while (enteredBoatSize < 0) {
+			displayInvalidInputError();
+			enteredBoatSize = displayBoatSizePrompt();
+		}
+		return enteredBoatSize;
+	}
+
+	//------------------
+	// Input Prompts. Most of them are private methods made to avoid a small bit of code duplication
+	//----------------
+	public int displayMemberIdPrompt() {
+		System.out.print("Enter member ID: ");
+		return getInputInt();
+	}
+
 	private String displayNamePrompt() {
 		System.out.print("Enter new name: ");
 		return getInput();
@@ -292,33 +295,6 @@ public class EngConsole implements ViewInterface {
 	private String displayPNrPrompt() {
 		System.out.print("Enter new personal code number (YYMMDD-XXXX): ");
 		return getInput();
-	}
-
-	/*private BoatType promptForBoatType() {
-		int chosenOption = displayBoatTypePrompt();
-		BoatType[] availableBoatTypes = BoatType.values();
-		// if(!isValidMenuChoice(chosenOption, availableBoatTypes.length)) {
-		while(!isValidMenuChoice(chosenOption, availableBoatTypes.length)) {
-			System.out.println("opt: " + chosenOption); // delete this -------------------------------------------------------------------------------------------------
-			displayInvalidMenuChoiceError();
-			// displayRegisterBoat(); // could be this that is causing problems -----------------------------------------------
-			// displayMenuOptions(menuOptions);
-			chosenOption = displayBoatTypePrompt();
-		}
-		if(chosenOption == 0) {
-			return null;
-		}
-		BoatType chosenBoatType = availableBoatTypes[(chosenOption - 1)];
-		return chosenBoatType;
-	}*/
-
-	private double promptForValidBoatSize() {
-		double enteredBoatSize = displayBoatSizePrompt();
-		while (enteredBoatSize < 0) {
-			displayInvalidInputError();
-			enteredBoatSize = displayBoatSizePrompt();
-		}
-		return enteredBoatSize;
 	}
 
 	public int displayBoatSelectionPrompt(ArrayList<Boat> availableBoats) {
@@ -343,10 +319,10 @@ public class EngConsole implements ViewInterface {
 		return getInputInt();
 	}
 	
-	private int displayBoatTypePrompt() {
-		System.out.print("Choose new boat type: ");
-		return getInputInt();
-	}
+	// private int displayBoatTypePrompt() {
+	// 	System.out.print("Choose new boat type: ");
+	// 	return getInputInt();
+	// }
 
 	private double displayBoatSizePrompt() {
 		System.out.print("Enter new boat size (in meters): ");
@@ -493,17 +469,6 @@ public class EngConsole implements ViewInterface {
 	// Messages
 	//----------
 	
-	/**
-	 * Dicates how messages should be displayed
-	 * @param msg
-	 */
-	private void displayMsg(String msg) {
-		printSeparation();
-		System.out.println(msg);
-		pause(MEDIUM_PAUSE);
-	}
-
-
 	public void displayWelcomeMsg() {
 		printSeparation();
 		
@@ -513,11 +478,22 @@ public class EngConsole implements ViewInterface {
 		System.out.println();
 		System.out.println("###############################################################");
 		System.out.println("");
-		pause(LONG_PAUSE);
+		displayWait();
 	}
 
 	public void displayExitMsg() {
 		System.out.println("-- Ending session! --");
+	}
+
+
+	/**
+	 * Dicates how messages should be displayed
+	 * @param msg
+	 */
+	private void displayMsg(String msg) {
+		printSeparation();
+		System.out.println(msg);
+		pause(MEDIUM_PAUSE);
 	}
 
 	public void displayMemberCreatedConfirmation() {
@@ -560,9 +536,9 @@ public class EngConsole implements ViewInterface {
 		displayMsg("Boat has been deleted!");
 	}
 
-	public void displayNoChangesMadeMsg() { // not sure if need --------------------------------------------------------
-		displayMsg("No changes was made");
-	}
+	// public void displayNoChangesMadeMsg() {
+	// 	displayMsg("No changes was made");
+	// }
 	 
 	//----------
 	// Errors

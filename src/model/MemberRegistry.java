@@ -11,20 +11,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MemberRegistry {
 	private ArrayList<Member> members = new ArrayList<>();
-
+		
+	private int nextId;
+	
 	public MemberRegistry() {
 		try {
 			members = readMemberDB();
 			if (members.size() > 0) {
 				Member lastMember = members.get(members.size() - 1);
-				lastMember.setNextId(lastMember.getId() + 1);
+				nextId = lastMember.getId() + 1;
 			}
 		} catch (Exception e) {
 		}
 	}
 
 	public void addMember(Member m) {
-		members.add(m);
+		members.add(new Member(m, nextId));
+		nextId ++;
 		saveDB();
 	}
 

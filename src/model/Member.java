@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 public class Member {
-	private static int nextId = 1; // will be set to last id found in the text file
-
 	private String name;
 	private String pnr;
 	private ArrayList<Boat> boats = new ArrayList<>();
@@ -15,9 +13,15 @@ public class Member {
 	}
 
 	public Member(String newName, String newPNr) {
-		id = nextId++;
+		id = -1;
 		name = newName;
 		pnr = newPNr;
+	}
+
+	public Member(Member member, int newId) { // used by MemberRegistry since its handling the id
+		id = newId;
+		name = member.name;
+		pnr = member.pnr;
 	}
 
 	public void editName(String newName) {
@@ -67,19 +71,13 @@ public class Member {
 		return id + ". " + name + " - " + pnr;
 	}
 
-	void setNextId(int newId) {
-		nextId = newId;
-	}
-
-
-	// These validity check methods could be placed somewhere else to avoid dependencies, though it makes the most sense for them to be here
 	public static boolean isValidName(String input) {
 		String str = input.replaceAll("[0-9]", "");
 
 		return (input.trim().length() >= 2 && input.equals(str)); // input has >= 2 characters and contains no digits
 	}
 
-	public static boolean isValidPNr(String input) { // Add more PNr checks here ------------------------------------------
+	public static boolean isValidPNr(String input) {
 		if(input.length() != 11) {
 			return false;
 		}

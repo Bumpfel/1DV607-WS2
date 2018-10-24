@@ -23,7 +23,7 @@ public class Admin {
 	}
 
 	public void startApplication() {
-		// view.displayWelcomeMsg(); //---------------------------------------------------------temp removed
+		view.displayWelcomeMsg();
 		decideAction();
 	}
 
@@ -178,28 +178,26 @@ public class Admin {
 				currentMember = null;
 				decideAction();
 			}
-			else {
-				if(setCurrentBoat(memberBoats)) { // Boat selection
-					Boat newBoat = view.displayEditBoat(currentBoat);
-					if(newBoat == null) { // Aborted input
-						currentBoat = null;
-						decideAction();
-						return;
-					}
-					BoatType newType = newBoat.getType();
-					double newSize = newBoat.getSize();
-					
-					if(!newType.equals(currentBoat.getType())) {
-						currentBoat.editType(newType);
-						view.displayBoatTypeEditedConfirmation();
-					}
-					if(newSize != currentBoat.getSize()) {
-						currentBoat.editSize(newSize);
-						view.displayBoatSizeEditedConfirmation();
-					}
-					memberRegistry.saveDB();
+			else if(setCurrentBoat(memberBoats)) { // Boat selection
+				Boat newBoat = view.displayEditBoat(currentBoat);
+				if(newBoat == null) { // Aborted inputs
+					currentBoat = null;
 					decideAction();
+					return;
 				}
+				BoatType newType = newBoat.getType();
+				double newSize = newBoat.getSize();
+				
+				if(!newType.equals(currentBoat.getType())) {
+					currentBoat.editType(newType);
+					view.displayBoatTypeEditedConfirmation();
+				}
+				if(newSize != currentBoat.getSize()) {
+					currentBoat.editSize(newSize);
+					view.displayBoatSizeEditedConfirmation();
+				}
+				memberRegistry.saveDB();
+				decideAction();
 			}
 		}
 	}
@@ -231,7 +229,6 @@ public class Admin {
 	
 
 	private void exit() {
-		// System.exit(-1);
 		view.displayExitMsg();
 	}
 
@@ -244,7 +241,7 @@ public class Admin {
 	private boolean setCurrentMember() {
 		if(currentMember == null) {
 			int memberId = view.displayMemberIdPrompt();
-			if(memberId == 0) { // is this a hidden dependency? ================================================
+			if(memberId == 0) {
 				currentAction = null;
 				decideAction();
 				return false;
@@ -268,7 +265,7 @@ public class Admin {
 	private boolean setCurrentBoat(ArrayList<Boat> memberBoats) {
 		if(currentBoat == null) {
 			int boatIndex = view.displayBoatSelectionPrompt(memberBoats);
-			if(boatIndex == 0) { // is this a hidden dependency? ===========================================
+			if(boatIndex == 0) {
 				currentAction = null;
 				currentMember = null;
 				decideAction();
