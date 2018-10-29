@@ -240,21 +240,14 @@ public class Admin {
 	 */
 	private boolean setCurrentMember() {
 		if(currentMember == null) {
-			int memberId = view.displayMemberIdPrompt();
-			if(memberId == 0) {
+			Member selectedMember = view.displayMemberSelection(memberRegistry);
+			if(selectedMember == null) {
 				currentAction = null;
 				decideAction();
 				return false;
 			}
-			
-			if(memberRegistry.memberExists(memberId)) {
-				currentMember = memberRegistry.getMember(memberId);
-			}
-			else {
-				view.displayMemberDoesNotExistError();
-				decideAction();
-				return false;
-			}
+			else 
+				currentMember = selectedMember;
 		}
 		return true;
 	}
@@ -264,15 +257,16 @@ public class Admin {
 	 */
 	private boolean setCurrentBoat(ArrayList<Boat> memberBoats) {
 		if(currentBoat == null) {
-			int boatIndex = view.displayBoatSelectionPrompt(memberBoats);
-			if(boatIndex == 0) {
+			Boat selectedboat = view.displayBoatSelection(memberBoats);
+			if(selectedboat == null) {
 				currentAction = null;
 				currentMember = null;
 				decideAction();
 				return false;
 			}
-
-			currentBoat = memberBoats.get(boatIndex - 1);
+			else {
+				currentBoat = selectedboat;
+			}
 		}
 		return true;
 	}

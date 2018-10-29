@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import model.Boat;
 import model.Member;
+import model.MemberRegistry;
 import model.Boat.BoatType;
 
 public class EngConsole implements ViewInterface {
@@ -202,7 +203,7 @@ public class EngConsole implements ViewInterface {
 		String[] menuOptions = { "Edit Type", "Edit Size", "Back" };
 		displayMenuOptions(menuOptions);
 
-		int chosenOption = promptForValidMenuInput("Chosen boat type", menuOptions.length - 1);
+		int chosenOption = promptForValidMenuInput("", menuOptions.length - 1);
 		Boat tempBoat = new Boat(currentBoat.getType(), currentBoat.getSize());
 
 		if(chosenOption == 1) {
@@ -282,9 +283,17 @@ public class EngConsole implements ViewInterface {
 	//------------------
 	// Input Prompts. Most of them are private methods made to avoid a small bit of code duplication
 	//----------------
-	public int displayMemberIdPrompt() {
+	public Member displayMemberSelection(MemberRegistry memReg) {
 		System.out.print("Enter member ID: ");
-		return getInputInt();
+		int input = getInputInt();
+		if(input == 0)
+			return null;
+		while(!memReg.memberExists(input)) {
+			displayMemberDoesNotExistError();
+			System.out.print("Enter member ID: ");
+			input = getInputInt();
+		}
+		return memReg.getMember(input);
 	}
 
 	private String displayNamePrompt() {
@@ -297,7 +306,7 @@ public class EngConsole implements ViewInterface {
 		return getInput();
 	}
 
-	public int displayBoatSelectionPrompt(ArrayList<Boat> availableBoats) {
+	public Boat displayBoatSelection(ArrayList<Boat> availableBoats) {
 		printSeparation();
 		displayTitle("Select boat to edit");
 
@@ -306,12 +315,14 @@ public class EngConsole implements ViewInterface {
 		displayMenuOptions(menuOptions.toArray());
 		
 		int chosenOption = displayBoatChoicePrompt();
+		if(chosenOption == 0)
+			return null;
 		while(!isValidMenuChoice(chosenOption, availableBoats.size())) {
 			displayInvalidMenuChoiceError();
 			displayMenuOptions(menuOptions.toArray());
 			chosenOption = displayBoatChoicePrompt();
 		}
-		return chosenOption;
+		return availableBoats.get(chosenOption - 1);
 	}
 
 	private int displayBoatChoicePrompt() {

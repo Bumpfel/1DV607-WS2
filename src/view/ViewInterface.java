@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import model.Boat;
 import model.Member;
+import model.MemberRegistry;
 
 public interface ViewInterface {
-	public int displayMemberIdPrompt();
+
+	public Member displayMemberSelection(MemberRegistry memReg); // public int displayMemberIdPrompt(); 
 
 	public MainAction displayMainMenu();
 
@@ -27,7 +29,7 @@ public interface ViewInterface {
 	public void displayMemberInfo(Member member);
 	public boolean displayMembersList(ArrayList<Member> memberList);
 	
-	public int displayBoatSelectionPrompt(ArrayList<Boat> availableBoats);
+	public Boat displayBoatSelection(ArrayList<Boat> availableBoats);
 	public Boat displayRegisterBoat();
 	public Boat displayEditBoat(Boat boat);
 	
