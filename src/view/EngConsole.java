@@ -570,7 +570,7 @@ public class EngConsole implements ViewInterface {
 	}
 
 	public void displayInvalidPNrError() {
-		displayErrorMsg("Personal code number must be on the form YYMMDD-XXXX");
+		displayErrorMsg("Personal code number must be valid and on the form YYMMDD-XXXX");
 	}
 
 }
