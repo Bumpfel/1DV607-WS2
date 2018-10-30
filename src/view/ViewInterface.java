@@ -8,14 +8,14 @@ import model.MemberRegistry;
 
 public interface ViewInterface {
 
-	public Member displayMemberSelection(MemberRegistry memReg); // public int displayMemberIdPrompt(); 
+	public Member displayMemberSelection(MemberRegistry memReg);
+	public Boat displayBoatSelection(ArrayList<Boat> availableBoats);
 
 	public MainAction displayMainMenu();
 
 	public void displayWelcomeMsg();
 	public void displayExitMsg();
 
-	// public void displayAddMemberTitle();
 	public void displayEditMemberTitle();
 	public void displayViewMemberTitle();
 	public void displayRegisterBoatTitle();
@@ -29,7 +29,6 @@ public interface ViewInterface {
 	public void displayMemberInfo(Member member);
 	public boolean displayMembersList(ArrayList<Member> memberList);
 	
-	public Boat displayBoatSelection(ArrayList<Boat> availableBoats);
 	public Boat displayRegisterBoat();
 	public Boat displayEditBoat(Boat boat);
 	

@@ -3,9 +3,9 @@ package controller;
 import java.util.ArrayList;
 
 import model.Boat;
+import model.Boat.BoatType;
 import model.Member;
 import model.MemberRegistry;
-import model.Boat.BoatType;
 import view.ViewInterface;
 import view.ViewInterface.MainAction;
 
@@ -15,6 +15,7 @@ public class Admin {
 	private MemberRegistry memberRegistry;
 	private Member currentMember;
 	private Boat currentBoat;
+
 	private MainAction currentAction;
 	
 	public Admin(MemberRegistry memberReg, ViewInterface inView) {
@@ -69,44 +70,36 @@ public class Admin {
 	
 	private void addMember() {
 		Member newMember = view.displayAddMember();
-		if(newMember == null) {
-			currentMember = null;
-			currentAction = null;
-			decideAction();
-			return;
+		if(newMember != null) {
+			memberRegistry.addMember(newMember);
+			view.displayMemberCreatedConfirmation();
 		}
-
-		memberRegistry.addMember(newMember);
-		view.displayMemberCreatedConfirmation();
-		currentAction = null;
-		decideAction();
+		resetMenu();
 	}
 
 	private void editMember() {
 		view.displayEditMemberTitle();
 		
 		if(setCurrentMember()) {
-			Member newMember = view.displayEditMember(currentMember);
-			if(newMember == null) {
-				currentMember = null;
-				currentAction = null;
+			Member tempMember = view.displayEditMember(currentMember);
+			if(tempMember == null) {
+				resetMenu();
+			}
+			else {
+				String newName = tempMember.getName();
+				String newPNr = tempMember.getPNr();
+				
+				if(!newName.equals(currentMember.getName())) {
+					currentMember.editName(newName);
+					view.displayNameChangedConfirmation();
+				}
+				if(!newPNr.equals(currentMember.getPNr())) {
+					currentMember.editPNr(newPNr);
+					view.displayPNrChangedConfirmation();
+				}
+				memberRegistry.saveDB();
 				decideAction();
-				return;
 			}
-			
-			String newName = newMember.getName();
-			String newPNr = newMember.getPNr();
-			
-			if(!newName.equals(currentMember.getName())) {
-				currentMember.editName(newName);
-				view.displayNameChangedConfirmation();
-			}
-			if(!newPNr.equals(currentMember.getPNr())) {
-				currentMember.editPNr(newPNr);
-				view.displayPNrChangedConfirmation();
-			}
-			memberRegistry.saveDB();
-			decideAction();
 		}
 	}
 	
@@ -116,9 +109,7 @@ public class Admin {
 
 		if(setCurrentMember()) {
 			view.displayMemberInfo(currentMember); 
-			currentMember = null;
-			currentAction = null;
-			decideAction();
+			resetMenu();
 		}
 	}
 	
@@ -129,9 +120,8 @@ public class Admin {
 		if(setCurrentMember()) {
 			memberRegistry.deleteMember(currentMember);
 			view.displayMemberDeletedConfirmation();
-			currentAction = null;
-			currentMember = null;
-			decideAction();
+
+			resetMenu();
 		}
 	}
 
@@ -149,18 +139,12 @@ public class Admin {
 
 		if(setCurrentMember()) {
 			Boat newBoat = view.displayRegisterBoat();
-			if(newBoat == null) {
-				currentAction = null;
-				currentMember = null;
-				decideAction();
-				return;
+			if(newBoat != null) {
+				currentMember.addBoat(newBoat);
+				view.displayBoatRegisteredConfirmation();
+				memberRegistry.saveDB();
 			}
-			currentMember.addBoat(newBoat);
-			view.displayBoatRegisteredConfirmation();
-			memberRegistry.saveDB();
-			currentAction = null;
-			currentMember = null;
-			decideAction();
+			resetMenu();
 		}
 	}
 
@@ -174,30 +158,37 @@ public class Admin {
 
 			if (memberBoats.size() == 0) {
 				view.displayMemberHasNoBoatsMsg();
-				currentAction = null;
-				currentMember = null;
-				decideAction();
+				resetMenu();
 			}
+			/*else {
+				Boat selectedBoat = view.displayBoatSelection(memberBoats);
+				if(selectedBoat != null) {
+					Boat tempBoat = view.displayEditBoat(selectedBoat);
+
+
+				}
+			}*/
 			else if(setCurrentBoat(memberBoats)) { // Boat selection
 				Boat newBoat = view.displayEditBoat(currentBoat);
 				if(newBoat == null) { // Aborted inputs
 					currentBoat = null;
 					decideAction();
-					return;
 				}
-				BoatType newType = newBoat.getType();
-				double newSize = newBoat.getSize();
-				
-				if(!newType.equals(currentBoat.getType())) {
-					currentBoat.editType(newType);
-					view.displayBoatTypeEditedConfirmation();
+				else {
+					BoatType newType = newBoat.getType();
+					double newSize = newBoat.getSize();
+					
+					if(!newType.equals(currentBoat.getType())) {
+						currentBoat.editType(newType);
+						view.displayBoatTypeEditedConfirmation();
+					}
+					if(newSize != currentBoat.getSize()) {
+						currentBoat.editSize(newSize);
+						view.displayBoatSizeEditedConfirmation();
+					}
+					memberRegistry.saveDB();
+					decideAction();
 				}
-				if(newSize != currentBoat.getSize()) {
-					currentBoat.editSize(newSize);
-					view.displayBoatSizeEditedConfirmation();
-				}
-				memberRegistry.saveDB();
-				decideAction();
 			}
 		}
 	}
@@ -219,10 +210,8 @@ public class Admin {
 				currentMember.removeBoat(currentBoat);
 				view.displayBoatDeletedConfirmation();
 				memberRegistry.saveDB();
-				currentBoat = null;
-				currentAction = null;
-				currentMember = null;
-				decideAction();
+
+				resetMenu();
 			}
 		}
 	}
@@ -233,7 +222,12 @@ public class Admin {
 	}
 
 
-
+	private void resetMenu() {
+		currentMember = null;
+		currentBoat = null;
+		currentAction = null;
+		decideAction();
+	}
 
 	/**
 	 * Used for navigation convenience. Controller can return to a submenu without having to type in the user id again. Sets currentMember if unset
