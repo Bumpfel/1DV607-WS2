@@ -6,8 +6,18 @@ import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
 import model.MemberRegistry;
+import model.search.Search;
+import model.search.SearchCriteria;
+import model.search.SearchCriteriaComposite;
+import model.search.strategies.BornInMonth;
+import model.search.strategies.ISearchStrategy;
+import model.search.strategies.IsBelowAge;
+import model.search.strategies.IsOverAge;
+import model.search.strategies.NameStartsWith;
+import model.search.strategies.OwnsBoatOfType;
 import view.ViewInterface;
 import view.ViewInterface.MainAction;
+import view.ViewInterface.SearchAction;
 
 public class Admin {
 
@@ -60,13 +70,81 @@ public class Admin {
 			case EXIT: 
 				exit();
 				break;
+			case SIMPLE_SEARCH:
+				simpleMemberSearch();
+				break;
+			case COMPLEX_SEARCH:
+				complexMemberSearch();
+				break;
 			case INVALID_CHOICE:
-				currentAction = null;
-				decideAction(); // recursive call
+				resetMenu();
 				break;
 		}
 	}
 
+	private void simpleMemberSearch() {
+		SearchAction choice = view.displaySimpleSearch();
+		
+		ISearchStrategy strategy;
+		switch (choice) {
+			case BORN_IN_MONTH:
+				strategy = new BornInMonth();
+				break;
+			case IS_BELOW_AGE:
+				strategy = new IsBelowAge();
+				break;
+			case IS_OVER_AGE:
+				strategy = new IsOverAge();
+				break;
+			case NAME_STARTS_WITH:
+				strategy = new NameStartsWith();
+				break;
+			case OWNS_BOAT_TYPE:
+				strategy = new OwnsBoatOfType();
+				break;
+			case INVALID_CHOICE:
+				view.displayInvalidMenuChoiceError();
+				decideAction();
+				return;
+			default:
+				resetMenu();
+				return;
+		}
+
+		//TODO Data validation for search strings. Would differ depending on strategy 
+
+		String searchString = view.getSearchString();
+		SearchCriteria criteria = new SearchCriteria(strategy, searchString);
+		
+		ArrayList<Member> members = memberRegistry.getAllMembers();
+		
+		SearchCriteriaComposite composite = new SearchCriteriaComposite();
+		composite.add(criteria);
+		ArrayList<Member> searchResult = new Search().complexSearch(members, composite);
+		
+		view.displaySearchResults(searchResult, composite);
+		decideAction();
+	}
+
+	private void complexMemberSearch() {
+		Search search = new Search();
+		ArrayList<Member> members = memberRegistry.getAllMembers();
+
+		// Below age 50 and Born in January
+		SearchCriteriaComposite composite = new SearchCriteriaComposite();
+		composite.add(new SearchCriteria(new IsBelowAge(), "50"));
+		composite.add(new SearchCriteria(new BornInMonth(), "01"));
+		view.displaySearchResults(new ArrayList<Member>(search.complexSearch(members, composite)), composite);
+
+		// Age => 60 && owns boat of type Sailboat && name starts with 'mo'
+		SearchCriteriaComposite composite2 = new SearchCriteriaComposite();
+		composite2.add(new SearchCriteria(new IsOverAge(), "60"));
+		composite2.add(new SearchCriteria(new OwnsBoatOfType(), "Sailboat"));
+		composite2.add(new SearchCriteria(new NameStartsWith(), "mo"));
+		view.displaySearchResults(new ArrayList<Member>(search.complexSearch(members, composite2)), composite2);
+		
+		resetMenu();
+	}
 	
 	private void addMember() {
 		Member newMember = view.displayAddMember();
@@ -89,15 +167,23 @@ public class Admin {
 				String newName = tempMember.getName();
 				String newPNr = tempMember.getPNr();
 				
-				if(!newName.equals(currentMember.getName())) {
-					currentMember.editName(newName);
-					view.displayNameChangedConfirmation();
+				if(!newName.equals(currentMember.getName()) || !newPNr.equals(currentMember.getPNr())) {
+					if(!newName.equals(currentMember.getName())) {
+						currentMember.editName(newName);
+						view.displayNameChangedConfirmation();
+					}
+					// if(!newPNr.equals(currentMember.getPNr())) {
+					else {
+						currentMember.editPNr(newPNr);
+						view.displayPNrChangedConfirmation();
+					}
+					memberRegistry.saveDB();
 				}
-				if(!newPNr.equals(currentMember.getPNr())) {
-					currentMember.editPNr(newPNr);
-					view.displayPNrChangedConfirmation();
+				else {
+					//TODO temp
+					view.displayNoChangesMadeMsg();
+
 				}
-				memberRegistry.saveDB();
 				decideAction();
 			}
 		}
@@ -160,14 +246,6 @@ public class Admin {
 				view.displayMemberHasNoBoatsMsg();
 				resetMenu();
 			}
-			/*else {
-				Boat selectedBoat = view.displayBoatSelection(memberBoats);
-				if(selectedBoat != null) {
-					Boat tempBoat = view.displayEditBoat(selectedBoat);
-
-
-				}
-			}*/
 			else if(setCurrentBoat(memberBoats)) { // Boat selection
 				Boat newBoat = view.displayEditBoat(currentBoat);
 				if(newBoat == null) { // Aborted inputs
@@ -236,8 +314,9 @@ public class Admin {
 		if(currentMember == null) {
 			Member selectedMember = view.displayMemberSelection(memberRegistry);
 			if(selectedMember == null) {
-				currentAction = null;
-				decideAction();
+				// currentAction = null;
+				// decideAction();
+				resetMenu();
 				return false;
 			}
 			else 
@@ -253,9 +332,7 @@ public class Admin {
 		if(currentBoat == null) {
 			Boat selectedboat = view.displayBoatSelection(memberBoats);
 			if(selectedboat == null) {
-				currentAction = null;
-				currentMember = null;
-				decideAction();
+				resetMenu();
 				return false;
 			}
 			else {

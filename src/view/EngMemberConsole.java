@@ -123,7 +123,7 @@ public class EngMemberConsole {
 		}
 	}
 	
-	private void displayMembersCompact(ArrayList<Member> list) {
+	public void displayMembersCompact(ArrayList<Member> list) {
 		System.out.format("%-12s %-26s %-16s \n", "MemberID", "Name", "Number of boats");
 		System.out.println("----------------------------------------------------------");
 		for (Member member : list) {

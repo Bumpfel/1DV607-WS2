@@ -8,8 +8,25 @@ import java.util.ArrayList;
 import model.Boat;
 import model.Member;
 import model.MemberRegistry;
+import model.search.SearchCriteriaComposite;
 
 public class EngConsole implements ViewInterface {
+	//---------------
+	// Search
+	//---------------
+	public String[] displaySearch(String[] options) {		
+		String[] searchVariables = new String[2];
+		
+		displayMenuOptions(options);
+		int chosenOption = getMenuInput();
+		//System.out.println(chosenOption);
+		searchVariables[0] = String.valueOf(chosenOption);
+		
+		System.out.print("Enter search parameter: ");
+		searchVariables[1] = getInput();
+		
+		return searchVariables;
+	}
 
 	private final int SHORT_PAUSE = 750;
 	private final int MEDIUM_PAUSE = 1250;
@@ -84,17 +101,18 @@ public class EngConsole implements ViewInterface {
 							 "View member",
 							 "Delete member",
 							 "List members",
-							 "Register Boat",
+							 "Register boat",
 							 "Edit boat",
 							 "Remove boat",
+							 "Member search",
+							 "Complex member search (example)",
 							 "Exit",
 							};
 		
 		displayMenuOptions(options);
-
 		MainAction[] mainActions = MainAction.values();
 		int choice = getMenuInput();
-		if(!isValidMenuChoice(choice, mainActions.length - 2)) {
+		if(!isValidMenuChoice(choice, options.length - 1)) {
 			displayInvalidMenuChoiceError();
 			return MainAction.INVALID_CHOICE;
 		}
@@ -130,6 +148,15 @@ public class EngConsole implements ViewInterface {
 		return boatConsole.displayEditBoat(this, boat);
 	}
 
+	public void displaySearchResults(ArrayList<Member> list, SearchCriteriaComposite composite) {
+		printSeparation();
+		displayTitle("Search results");
+		System.out.println("Search criterias");
+		System.out.println(composite.toString());
+
+		memberConsole.displayMembersCompact(list);
+		displayWait();
+	}
 
 	public Member displayMemberSelection(MemberRegistry memReg) {
 		return memberConsole.displayMemberSelection(this, memReg);
@@ -137,6 +164,31 @@ public class EngConsole implements ViewInterface {
 
 	public Boat displayBoatSelection(ArrayList<Boat> availableBoats) {
 		return boatConsole.displayBoatSelection(this, availableBoats);
+	}
+
+	public SearchAction displaySimpleSearch() {
+		printSeparation();
+		displayTitle("Member search");
+
+		String[] options = {
+			"Born in month",
+			"Is below age",
+			"Is over age", 
+			"Name starts with",
+			"Owns boat of type",
+			"Back",
+		};
+		
+		displayMenuOptions(options);
+		SearchAction[] searchActions = SearchAction.values();
+		
+		int choice = promptForValidMenuInput("", options.length);
+		return searchActions[choice];
+	}
+
+	public String getSearchString() {
+		System.out.print("Enter search string: ");
+		return getInput();
 	}
 
 	int promptForValidMenuInput(String txt, int maxOption) {
@@ -153,7 +205,7 @@ public class EngConsole implements ViewInterface {
 	//---------------------
 	// Get input methods
 	//-------------------
-	String getInput() {
+	public String getInput() {
 		InputStreamReader reader = new InputStreamReader(System.in);
 		BufferedReader in = new BufferedReader(reader);
 		String input = new String();

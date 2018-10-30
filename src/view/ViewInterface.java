@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import model.Boat;
 import model.Member;
 import model.MemberRegistry;
+import model.search.SearchCriteriaComposite;
 
 public interface ViewInterface {
 
 	public Member displayMemberSelection(MemberRegistry memReg);
 	public Boat displayBoatSelection(ArrayList<Boat> availableBoats);
+	public String getInput();
 
 	public MainAction displayMainMenu();
 
@@ -31,6 +33,10 @@ public interface ViewInterface {
 	
 	public Boat displayRegisterBoat();
 	public Boat displayEditBoat(Boat boat);
+
+	public SearchAction displaySimpleSearch();
+	public void displaySearchResults(ArrayList<Member> memberList, SearchCriteriaComposite composite);
+	public String getSearchString();
 	
 	public void displayMemberCreatedConfirmation();
 	public void displayNameChangedConfirmation();
@@ -44,6 +50,7 @@ public interface ViewInterface {
 	public void displayBoatDeletedConfirmation();
 
 	public void displayMemberDoesNotExistError();
+	public void displayInvalidMenuChoiceError();
 
 	public enum MainAction { EXIT,
 							ADD_MEMBER, 
@@ -54,6 +61,18 @@ public interface ViewInterface {
 							REGISTER_BOAT, 
 							EDIT_BOAT, 
 							REMOVE_BOAT,
-							INVALID_CHOICE, 
-	};
+							SIMPLE_SEARCH,
+							COMPLEX_SEARCH,
+							INVALID_CHOICE,
+	}
+
+	public enum SearchAction { BACK,
+							   BORN_IN_MONTH,
+							   IS_BELOW_AGE,
+							   IS_OVER_AGE,
+							   NAME_STARTS_WITH,
+							   OWNS_BOAT_TYPE,
+							   INVALID_CHOICE,
+
+	}
 }
