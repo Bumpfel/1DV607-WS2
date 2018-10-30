@@ -280,30 +280,17 @@ public class EngConsole implements ViewInterface {
 		return enteredBoatSize;
 	}
 
-	//------------------
-	// Input Prompts. Most of them are private methods made to avoid a small bit of code duplication
-	//----------------
 	public Member displayMemberSelection(MemberRegistry memReg) {
 		System.out.print("Enter member ID: ");
 		int input = getInputInt();
-		if(input == 0)
-			return null;
 		while(!memReg.memberExists(input)) {
+			if(input == 0)
+				return null;
 			displayMemberDoesNotExistError();
 			System.out.print("Enter member ID: ");
 			input = getInputInt();
 		}
 		return memReg.getMember(input);
-	}
-
-	private String displayNamePrompt() {
-		System.out.print("Enter new name: ");
-		return getInput();
-	}
-	
-	private String displayPNrPrompt() {
-		System.out.print("Enter new personal code number (YYMMDD-XXXX): ");
-		return getInput();
 	}
 
 	public Boat displayBoatSelection(ArrayList<Boat> availableBoats) {
@@ -315,14 +302,27 @@ public class EngConsole implements ViewInterface {
 		displayMenuOptions(menuOptions.toArray());
 		
 		int chosenOption = displayBoatChoicePrompt();
-		if(chosenOption == 0)
-			return null;
 		while(!isValidMenuChoice(chosenOption, availableBoats.size())) {
+			if(chosenOption == 0)
+				return null;
 			displayInvalidMenuChoiceError();
 			displayMenuOptions(menuOptions.toArray());
 			chosenOption = displayBoatChoicePrompt();
 		}
 		return availableBoats.get(chosenOption - 1);
+	}
+
+	//------------------
+	// Input Prompts. Most of them are private methods made to avoid a small bit of code duplication
+	//----------------
+	private String displayNamePrompt() {
+		System.out.print("Enter new name: ");
+		return getInput();
+	}
+	
+	private String displayPNrPrompt() {
+		System.out.print("Enter new personal code number (YYMMDD-XXXX): ");
+		return getInput();
 	}
 
 	private int displayBoatChoicePrompt() {
