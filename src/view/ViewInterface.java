@@ -45,6 +45,7 @@ public interface ViewInterface {
 	public void displayInvalidNameError();
 	public void displayInvalidPNrError();
 	public void displayInvalidPasswordError();
+	public void displayCorrectPaswordPrompt();
 
 	// public void displayError(String e);
 	

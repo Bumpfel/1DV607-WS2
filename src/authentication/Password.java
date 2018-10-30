@@ -1,4 +1,4 @@
-package Utils;
+package authentication;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,14 +15,13 @@ public class Password {
 	public Password() {
 		File pwFile = new File("pw.txt");
 		hash = readFile(pwFile);
-		}
+	}
 	
 	//Creates hash from string
 	public Password(String password) {
 			hash = digest(password);
 	}
 	
-	//Less safe
 	public boolean isEqual(String input) {
 		byte[] passwordDigest = digest(input);
 
@@ -66,7 +65,7 @@ public class Password {
 		}
 	}
 	
-	//Writes bytes to output file, can be used to implement change password in the future
+	//Writes bytes to output file, can be used to implement a change password feature in the future
 	/*private void writeFile(File f,byte[] output) throws IllegalStateException  {
 		FileOutputStream stream;
 		try {

@@ -2,7 +2,6 @@ package controller;
 
 import java.util.ArrayList;
 
-import Utils.Password;
 import model.Member;
 import model.MemberRegistry;
 import view.ViewInterface;
@@ -45,24 +44,17 @@ public class User {
 	}
 	
     private void logIn() {
-    	//Reads password from pw.txt file
-		Password pw = new Password();
-		
-		//Reads user input password
-		Password inputPw = new Password(view.displayPasswordPrompt());
-		
-		if (pw.isEqual(inputPw)) {
-	    	Admin admin = new Admin(memberRegistry,view);
-			admin.mainMenu();
+    	
+		if (authentication.Authentication.adminAuthenticate(view.displayPasswordPrompt())) {
+			view.displayCorrectPaswordPrompt();
+			authentication.Authentication.runAdmin(memberRegistry,view);
 			exit();
 		}
-				
+
 		else {
 			view.displayInvalidPasswordError();
 			mainMenu();
 		}
-
-
 	}
 
     protected void viewMember() {
@@ -85,7 +77,6 @@ public class User {
 		mainMenu();
 	}
     
-
     protected void exit() {
 		view.displayExitMsg();
 	}

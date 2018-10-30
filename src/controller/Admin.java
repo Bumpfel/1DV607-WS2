@@ -14,6 +14,11 @@ public class Admin extends User {
     public Admin(MemberRegistry memberReg, ViewInterface inView) {
 		super(memberReg, inView);
 	}
+    
+    @Override
+    public void startApplication() {
+		mainMenu();
+    }
 
 	@Override
 	protected void mainMenu() {

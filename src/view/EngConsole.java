@@ -452,12 +452,12 @@ public class EngConsole implements ViewInterface {
 	
 	public void displayInvalidPasswordError() {
 		System.out.println("-- Password is not correct --");
-		shortPause();
+		pause();
 	}
 	
 	public void displayCorrectPaswordPrompt() {
 		System.out.println("-- Password is correct! Logging in... --");
-		shortPause();
+		pause();
 	}
 
 
