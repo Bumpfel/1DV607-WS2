@@ -81,6 +81,7 @@ public class EngConsole implements ViewInterface {
 							 "Edit boat",
 							 "Remove boat",
 							 "Search for member",
+							 "Complex search example",
 							 "Exit",
 							};
 		

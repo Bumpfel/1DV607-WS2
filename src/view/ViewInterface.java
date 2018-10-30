@@ -59,7 +59,8 @@ public interface ViewInterface {
 						REGISTER_BOAT("Register Boat"),
 						EDIT_BOAT("Edit Boat"),
 						REMOVE_BOAT("Remove Boat"),
-						SEARCH_MEMBER("Search for member")
+						SEARCH_MEMBER("Search for member"),
+						COMPLEX_SEARCH_EXAMPLE("Complex Search Example")
 						;
 		String titleMsg;
 

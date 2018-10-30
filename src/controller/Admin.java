@@ -1,7 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.List;
+import model.search.strategies.*;
 
 import model.search.*;
 import model.Boat;
@@ -57,7 +57,10 @@ public class Admin {
 			case 9: view.displayTitle(Title.SEARCH_MEMBER);
 					searchMember();
 					break;
-			case 10: exit();
+			case 10: view.displayTitle(Title.COMPLEX_SEARCH_EXAMPLE);
+					complexSearch();
+					break;
+			case 11: exit();
 					break;
 			default: {
 				view.displayInvalidMenuChoiceError();
@@ -78,35 +81,46 @@ public class Admin {
 			 
 		String[] searchArguments = view.displaySearch(options);		
 		
-		ArrayList<ISearchStrategy> searchStrategy = new ArrayList<>();
+		SearchCriteriaComposite searchComposite = new SearchCriteriaComposite();
 		switch (Integer.parseInt(searchArguments[0])) {
-			case 1: searchStrategy.add(new BornInMonth());
+			case 1: searchComposite.add(new SearchCriteria(new BornInMonth(), searchArguments[1]));
 					break;
-			case 2: searchStrategy.add(new IsBelowAge());
+			case 2: searchComposite.add(new SearchCriteria(new IsBelowAge(), searchArguments[1]));
 					break;
-			case 3: searchStrategy.add(new IsOverAge());
+			case 3: searchComposite.add(new SearchCriteria(new IsOverAge(), searchArguments[1]));
 					break;
-			case 4: searchStrategy.add(new NameStartsWith());
+			case 4: searchComposite.add(new SearchCriteria(new NameStartsWith(), searchArguments[1]));
 					break;
-			case 5: searchStrategy.add(new OwnsBoatOfType());
+			case 5: searchComposite.add(new SearchCriteria(new OwnsBoatOfType(), searchArguments[1]));
 					break;
 		}
 
-		List<String> searchParameters = java.util.Arrays.asList(searchArguments[1]);
+		
 		ArrayList<Member> members = memberRegistry.getAllMembers();
 
-		ArrayList<Member> searchResult = search.search(members, searchStrategy, searchParameters);
+		ArrayList<Member> searchResult = search.search(members, searchComposite);
 		
-		view.displayMembersCompact(searchResult);
-		//TODO ta bort detta!
-		System.out.println("SOME HARDCODED SHIT FOR TESTING!");
-		ArrayList<ISearchStrategy> blehe = new ArrayList<>();
-		blehe.add(new IsBelowAge());
-		blehe.add(new OwnsBoatOfType());
-		ArrayList<String> blaha = new ArrayList<>();
-		blaha.add("60");
-		blaha.add("Sailboat");
-		view.displayMembersCompact(searchResult = search.search(members, blehe, blaha));
+		view.displayMembersCompact(searchResult);		
+		mainMenu();
+	}
+
+	private void complexSearch() {
+		Search search = new Search();
+		ArrayList<Member> members = memberRegistry.getAllMembers();
+
+		System.out.println("Below age 50 and Born in month 01:");
+		SearchCriteriaComposite composite = new SearchCriteriaComposite();
+		composite.add(new SearchCriteria(new IsBelowAge(), "50"));
+		composite.add(new SearchCriteria(new BornInMonth(), "01"));
+		view.displayMembersCompact(new ArrayList<Member>(search.search(members, composite)));
+
+		System.out.println("Age => 60 && owns boat of type Sailboat && name starts with \"mo\"");
+		SearchCriteriaComposite composite2 = new SearchCriteriaComposite();
+		composite2.add(new SearchCriteria(new IsOverAge(), "60"));
+		composite2.add(new SearchCriteria(new OwnsBoatOfType(), "Sailboat"));
+		composite2.add(new SearchCriteria(new NameStartsWith(), "mo"));
+		view.displayMembersCompact(new ArrayList<Member>(search.search(members, composite2)));
+		
 		mainMenu();
 	}
 	

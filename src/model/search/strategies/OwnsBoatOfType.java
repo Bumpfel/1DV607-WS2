@@ -1,4 +1,4 @@
-package model.search;
+package model.search.strategies;
 
 import java.util.ArrayList;
 import model.Boat;
@@ -14,6 +14,7 @@ public class OwnsBoatOfType implements ISearchStrategy {
                 for (Boat boat : member.getBoats()) {                    
                     if (boat.getType().toString().equalsIgnoreCase(searchParameter)) {
                         filteredList.add(member);
+                        break;
                     }
                 }
             }

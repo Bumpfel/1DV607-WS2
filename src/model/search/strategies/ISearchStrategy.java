@@ -1,4 +1,4 @@
-package model.search;
+package model.search.strategies;
 
 import java.util.ArrayList;
 import model.Member;
