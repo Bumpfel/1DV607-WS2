@@ -2,6 +2,8 @@ package model.search;
 
 import java.util.ArrayList;
 
+import model.search.strategies.ISearchStrategy;
+
 public class SearchCriteriaComposite {
     private ArrayList<SearchCriteria> criterias = new ArrayList<>();
 
@@ -15,6 +17,33 @@ public class SearchCriteriaComposite {
 
     public boolean isEmpty() {
         return criterias.size() == 0;
+    }
+
+    public boolean contains(ISearchStrategy strategy) {
+        for(SearchCriteria criteria : criterias) {
+            if(criteria.strategy.getClass() == strategy.getClass()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsIdenticalCriteria(SearchCriteria newCriteria) {
+        for(SearchCriteria criteria : criterias) {
+            if(criteria.strategy.getClass() == newCriteria.strategy.getClass() && criteria.parameter.equalsIgnoreCase(newCriteria.parameter)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeDuplicate(ISearchStrategy strategy) {
+        for(SearchCriteria criteria : criterias) {
+            if(criteria.strategy.getClass() == strategy.getClass()) {
+                criterias.remove(criteria);
+                break;
+            }
+        }
     }
     
     public String toString() {

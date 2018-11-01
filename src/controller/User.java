@@ -103,11 +103,9 @@ public class User {
 			simpleMemberSearch();
 		}
 		else {
-			//TODO Data validation for search strings. Would differ depending on strategy. Do the check in SearchCriteria constructor?
-			
 			ArrayList<Member> members = memberRegistry.getAllMembers();
 			
-			ArrayList<Member> searchResult = new Search().complexSearch(members, tempComposite);
+			ArrayList<Member> searchResult = new Search().doSearch(members, tempComposite);
 			view.displaySearchResults(searchResult, tempComposite);
 			simpleMemberSearch();
 		}
@@ -123,7 +121,7 @@ public class User {
 				complexMemberSearch();
 				break;
 			case SEARCH:
-				ArrayList<Member> searchResult = new Search().complexSearch(members, complexComposite);
+				ArrayList<Member> searchResult = new Search().doSearch(members, complexComposite);
 				view.displaySearchResults(searchResult, complexComposite);
 				complexMemberSearch();
 				break;
@@ -174,8 +172,21 @@ public class User {
 		if(searchString.equals("")) {
 			return comp;
 		}
+		else if(!strategy.isValid(searchString)) {
+			view.displayInvalidSearchParameterError();
+			return comp;
+		}
+		else if(comp.contains(strategy) && !strategy.allowsDuplicate()) {
+			view.displayDuplicateSearchFilterReplacedMsg();
+			comp.removeDuplicate(strategy);
+		}
 
 		SearchCriteria criteria = new SearchCriteria(strategy, searchString);
+		if(comp.containsIdenticalCriteria(criteria)) {
+			view.displayContainsIdenticalCriteria();
+			return comp;
+		}
+
 		comp.add(criteria);
 		return comp;
 	}

@@ -24,7 +24,6 @@ public class EngSearchConsole {
 		};
 		int choice = console.createMenu("Complex member search", extraPrint, options);
 		
-		console.displayMenuOptions(options);
 		ComplexSearchAction[] actions = ComplexSearchAction.values();
 
 		if(!console.isValidMenuChoice(choice, options.length - 1)) {

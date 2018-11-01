@@ -25,6 +25,20 @@ public class BornInMonth implements ISearchStrategy {
 		return filteredList;
     }
 
+    public boolean isValid(String param) {
+        try {
+            int intParam = Integer.parseInt(param);
+            return intParam >= 1 && intParam <= 12;
+        }
+        catch(NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public boolean allowsDuplicate() {
+        return false;
+    }
+
     public String toString() {
         return "Born in Month";
     }

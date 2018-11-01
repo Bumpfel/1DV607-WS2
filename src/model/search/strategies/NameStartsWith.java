@@ -19,6 +19,16 @@ public class NameStartsWith implements ISearchStrategy {
 		return filteredList;
     }
     
+    public boolean isValid(String param) {
+        String str = param.replaceAll("[0-9]", "");
+
+        return param.equals(str); // contains no digits
+    }
+
+    public boolean allowsDuplicate() {
+        return false;
+    }
+
     public String toString() {
         return "Name starts with";
     }

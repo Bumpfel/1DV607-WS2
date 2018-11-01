@@ -101,21 +101,17 @@ public class Member {
 		
 			switch (month) {
 				case 2: // If february
-					if(year % 4 == 0) {
-						if (day > 29) // If leap year and day > 29
+					if(year % 4 == 0 && day > 29) // If leap year and day > 29
 							return false;
-					}
-					else if (day > 28) { // if not leap year, but day > 28
+					else if (day > 28) // if not leap year, but day > 28
 						return false;
-					}
 					break;
 				case 4:
 				case 6:
 				case 9:
 				case 11:
-					if (day > 30) { // If april, june, september, or november and day > 30
+					if (day > 30) // If april, june, september, or november and day > 30
 						return false; 
-					}
 					break;
 			}
 			

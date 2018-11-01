@@ -3,6 +3,7 @@ package model.search.strategies;
 import java.util.ArrayList;
 import model.Boat;
 import model.Member;
+import model.Boat.BoatType;
 
 public class OwnsBoatOfType implements ISearchStrategy {
     
@@ -23,7 +24,19 @@ public class OwnsBoatOfType implements ISearchStrategy {
         }
 
         return filteredList;
-	}
+    }
+    
+    public boolean isValid(String param) {
+        for(BoatType bType : BoatType.values()) {
+            if(bType.toString().equalsIgnoreCase(param))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean allowsDuplicate() {
+        return true;
+    }
 
     public String toString() {
         return "Owns Boat of Type";

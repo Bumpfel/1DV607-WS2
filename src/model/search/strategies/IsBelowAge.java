@@ -30,6 +30,20 @@ public class IsBelowAge implements ISearchStrategy {
         return membersFiltered;
     }
 
+    public boolean isValid(String param) {
+        try {
+            int intParam = Integer.parseInt(param);
+            return intParam > 0;
+        }
+        catch(NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public boolean allowsDuplicate() {
+        return false;
+    }
+
     public String toString() {
         return "Is Below Age";
     }

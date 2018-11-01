@@ -57,6 +57,10 @@ public interface ViewInterface {
 	public void displayMemberDoesNotExistError();
 	public void displayInvalidMenuChoiceError();
 	public void displayInvalidPasswordError();
+	
+	public void displayInvalidSearchParameterError();
+	public void displayDuplicateSearchFilterReplacedMsg();
+	public void displayContainsIdenticalCriteria();
 
 	public enum GuestAction { 
 		EXIT,

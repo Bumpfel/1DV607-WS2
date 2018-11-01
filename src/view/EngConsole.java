@@ -157,16 +157,16 @@ public class EngConsole implements ViewInterface {
 		return boatConsole.displayEditBoat(this, boat);
 	}
 
-	public void displaySearchResults(ArrayList<Member> list, SearchCriteriaComposite composite) {
-		searchConsole.displaySearchResults(list, composite, this, memberConsole);
-	}
-
 	public Member displayMemberSelection(MemberRegistry memReg) {
 		return memberConsole.displayMemberSelection(this, memReg);
 	}
 
 	public Boat displayBoatSelection(ArrayList<Boat> availableBoats) {
 		return boatConsole.displayBoatSelection(this, availableBoats);
+	}
+
+	public void displaySearchResults(ArrayList<Member> list, SearchCriteriaComposite composite) {
+		searchConsole.displaySearchResults(list, composite, this, memberConsole);
 	}
 
 	public SearchAction displaySearchFilters() {
@@ -375,7 +375,10 @@ public class EngConsole implements ViewInterface {
 	public void displayLogOutMsg() {
 		displayMsg("Logging out...");
 	}
-	 
+	
+	public void displayDuplicateSearchFilterReplacedMsg() {
+		displayMsg("A duplicate filter was found and replaced");
+	}
 
 	//----------
 	// Errors
@@ -413,4 +416,11 @@ public class EngConsole implements ViewInterface {
 		displayErrorMsg("Password is incorrect");
 	}
 
-}
+	public void displayInvalidSearchParameterError() {
+		displayErrorMsg("Cannot add filter. Invalid search parameter");
+	}
+	
+	public void displayContainsIdenticalCriteria() {
+		displayErrorMsg("Identical criteria found");
+	}
+}	
