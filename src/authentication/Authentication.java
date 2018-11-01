@@ -26,11 +26,18 @@ public final class Authentication {
 		
 		return false;
 	}
+
+	public static void adminLogOut(MemberRegistry memberRegistry, ViewInterface view) {
+		adminAuthenticated = false;
+
+		User guest = new UserFactory().createGuest(view, memberRegistry);
+		guest.startApplication(false);
+	}
 	
 	public static void runAdmin(MemberRegistry memberRegistry, ViewInterface view) {
 		if (adminAuthenticated) {
 			User admin = new UserFactory().createAdmin(view, memberRegistry);
-			admin.startApplication();
+			admin.startApplication(false);
 		}
 	}
 }

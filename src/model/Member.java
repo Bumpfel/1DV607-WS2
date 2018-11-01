@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 public class Member {
-	private static int nextId = 1; // should be set to last id found in the text file
-
 	private String name;
 	private String pnr;
 	private ArrayList<Boat> boats = new ArrayList<>();
@@ -15,9 +13,15 @@ public class Member {
 	}
 
 	public Member(String newName, String newPNr) {
-		id = nextId++;
+		id = -1;
 		name = newName;
 		pnr = newPNr;
+	}
+
+	public Member(Member member, int newId) { // used by MemberRegistry since its handling the id
+		id = newId;
+		name = member.name;
+		pnr = member.pnr;
 	}
 
 	public void editName(String newName) {
@@ -45,8 +49,8 @@ public class Member {
 		return pnr;
 	}
 
-	public void registerBoat(Boat.BoatType type, double size) {
-		boats.add(new Boat(type, size));
+	public void addBoat(Boat b) {
+		boats.add(b);
 	}
 
 	public void removeBoat(Boat boat) {
@@ -63,94 +67,88 @@ public class Member {
 		return new ArrayList<Boat>(boats);
 	}
 
-	// public String toString() {
-	// return id + ": " + name + ". Has " + boats.size() + " boats registered to the
-	// club";
-	// }
-
-	void setNextId(int newId) {
-		nextId = newId;
+	public String toString() {
+		return id + ". " + name + " - " + pnr;
 	}
 
-
-	// These validity check methods could be placed somewhere else to avoid dependencies, though it makes the most sense for them to be here
 	public static boolean isValidName(String input) {
 		String str = input.replaceAll("[0-9]", "");
 
 		return (input.trim().length() >= 2 && input.equals(str)); // input has >= 2 characters and contains no digits
 	}
 
-	public static boolean isValidPNr(String input) { // Add more PNr checks here ------------------------------------------
-		if(input.length() != 11) {
+	public static boolean isValidPNr(String nr) {
+		if(nr.length() != 11) {
 			return false;
 		}
 		try {
-			Integer.parseInt(input.substring(0, 6));
-			
-			if(input.charAt(6) != '-') 
-				return false;
+			int firstPart = Integer.parseInt(nr.substring(0, 6));
+			int secondPart = Integer.parseInt(nr.substring(7, 11));
+			String separator = nr.substring(6, 7);
 
-			Integer.parseInt(input.substring(7));
+			int year = firstPart / 10000;
+			int month = firstPart % 10000 / 100;
+			int day = firstPart % 100;
+
+
+			// Basic date checks
+			if (month < 1 || month > 12) {
+				return false;
+			}
+			if (day < 1 || day > 31) {
+				return false;
+			}	
+		
+			switch (month) {
+				case 2: // If february
+					if(year % 4 == 0 && day > 29) // If leap year and day > 29
+							return false;
+					else if (day > 28) // if not leap year, but day > 28
+						return false;
+					break;
+				case 4:
+				case 6:
+				case 9:
+				case 11:
+					if (day > 30) // If april, june, september, or november and day > 30
+						return false; 
+					break;
+			}
+			
+			if(!separator.equals("-")) {
+				return false;
+			}
+
+		// Calculates and compares the control nr
+			int first = firstPart;
+			int last = secondPart / 10;
+			int sum = 0;
+
+			// Birth date
+			for (int i = 0; i < 6; i++) {
+				int digit = first % 10; // Picks last digit
+				first /= 10;
+				if (i % 2 != 0) // Multiply digit with 2 if it's on an even position
+					digit *= 2;
+				sum += digit % 10 + digit / 10; // Divide two digit numbers and add them individually
+			}
+
+			// Four last
+			for (int i = 0; i < 4; i++) {
+				int digit = last % 10;
+				last /= 10;
+				if (i % 2 == 0)
+					digit *= 2;
+				sum += digit % 10 + digit / 10;
+			}
+			int control = (10 - (sum % 10)) % 10; // Calculate control nr base on the sum above
+			if (control != secondPart % 10) {// Compare the calculated control nr with the control nr in the personal code nr
+				return false;
+			}
 			return true;
 		}
 		catch(NumberFormatException e) {
 			return false;
 		}
 	}
-
-	// TODO implementera i senare skede?
-	/*private boolean pnrIsCorrect(String nr) {
-		int firstPart = Integer.parseInt(nr.substring(0, 6));
-		int secondPart = Integer.parseInt(nr.substring(6, 10));
-
-		int month = firstPart % 10000 / 100;
-		int day = secondPart % 100;
-
-		// Kontrollera att födelsedatumet är rimligt
-		if (month < 1 || month > 12)
-			return false;
-		if (day < 1 || day > 31)
-			return false;
-
-		switch (month) {
-		case 2:
-			if (day > 28)
-				return false; // Om dag är över 28 i kombination med månad 2
-			break;
-		case 4:
-		case 6:
-		case 9:
-		case 11:
-			if (day > 30)
-				return false; // Om dag är över 30 i kombination med månad 4,6,9,11
-			break;
-		}
-
-		// Beräkna och jämför kontrollsiffra
-		int first = firstPart;
-		int last = secondPart / 10;
-		int sum = 0;
-
-		// Födelsedatum
-		for (int i = 0; i < 6; i++) {
-			int digit = first % 10; // Plocka ut en siffra
-			first /= 10;
-			if (i % 2 != 0) // Kontrollera om siffran ska multipliceras med 2
-				digit *= 2;
-			sum += digit % 10 + digit / 10; // Tvåsiffriga tal delas upp innan de adderas till summan
-
-			// Fyra sista
-		}
-		for (int i = 0; i < 4; i++) {
-			int digit = last % 10;
-			last /= 10;
-			if (i % 2 == 0)
-				digit *= 2;
-			sum += digit % 10 + digit / 10;
-		}
-		int control = (10 - (sum % 10)) % 10; // Räkna ut kontrollsiffra baserad på ovanstående summa
-		if (control != secondPart % 10) // Jämför kontrollsiffra med angivet personnummer
-			return false;
-		return true;
-	}*/
 }

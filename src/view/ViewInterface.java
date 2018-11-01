@@ -2,81 +2,107 @@ package view;
 
 import java.util.ArrayList;
 
+import model.Boat;
 import model.Member;
+import model.MemberRegistry;
+import model.search.SearchCriteriaComposite;
 
 public interface ViewInterface {
-	public int displayMemberIdPrompt();
-	public String displayPasswordPrompt();
 
-	public int displayGuestMainMenu();
-	public int displayAdminMainMenu();
+	public Member displayMemberSelection(MemberRegistry memberRegistry);
+	public Boat displayBoatSelection(ArrayList<Boat> availableBoats);
+	public String getInput();
+
+	public String displayPasswordPrompt();
+	public GuestAction displayGuestMainMenu();
+	public AdminAction displayAdminMainMenu();
 
 	public void displayWelcomeMsg();
 	public void displayExitMsg();
+
+	public void displayEditMemberTitle();
+	public void displayViewMemberTitle();
+	public void displayRegisterBoatTitle();
+	public void displayEditBoatTitle();
+	public void displayRemoveBoatTitle();
 	
-	public String[] displayAddMember();
-	public String[] displayEditMember();
+	public Member displayAddMember();
+	public Member displayEditMember(Member member);
+	public void displayDeleteMember(ArrayList<Member> membersList);
 	
 	public void displayMemberInfo(Member member);
-	public void displayMembersList(ArrayList<Member> list);
+	public boolean displayMembersList(ArrayList<Member> memberList);
 	
-	public int displayBoatSelection(Object[] availableBoats);
-	public Object[] displayRegisterBoat(Object[] availableBoatTypes);
-	public Object[] displayEditBoat(Object[] availableBoatTypes);
-	// public Boat.BoatType displayEnterBoatType();
-	// public double displayEnterBoatSize();
+	public Boat displayRegisterBoat();
+	public Boat displayEditBoat(Boat boat);
+
+	public ComplexSearchAction complexSearch(String activeFilters);
+	public SearchAction displaySearchFilters();
+	public void displaySearchResults(ArrayList<Member> memberList, SearchCriteriaComposite composite);
+	public String getSearchString();
 	
 	public void displayMemberCreatedConfirmation();
-	public void displayMemberEditedConfirmation();
-	// public void displayNameChangedConfirm();
-	// public void displayPNrChangedConfirm();
+	public void displayNameChangedConfirmation();
+	public void displayPNrChangedConfirmation();
 	public void displayMemberDeletedConfirmation();
 
 	public void displayMemberHasNoBoatsMsg();
 	public void displayBoatRegisteredConfirmation();
-	public void displayBoatEditedConfirmation();
-	// public void displayEditBoatSizeConfirm();
-	// public void displayEditBoatTypeConfirm();
-	public void displayBoatDeletedConfirmation();
+	public void displayBoatTypeEditedConfirmation();
+	public void displayBoatSizeEditedConfirmation();
+	public void displayBoatRemovedConfirmation();
+	public void displayLogInMsg();
+	public void displayLogOutMsg();
 
-	public void displayInvalidMenuChoiceError();
-	public void displayInvalidInputError();
 	public void displayMemberDoesNotExistError();
-	public void displayInvalidNameError();
-	public void displayInvalidPNrError();
+	public void displayInvalidMenuChoiceError();
 	public void displayInvalidPasswordError();
-	public void displayCorrectPaswordPrompt();
-
-	// public void displayError(String e);
 	
-	public void displayTitle(Title action);
+	public void displayInvalidSearchParameterError();
+	public void displayDuplicateSearchFilterReplacedMsg();
+	public void displayContainsIdenticalCriteria();
 
-	public enum Title { ADD_MEMBER("Add Member"),
-						EDIT_MEMBER("Edit Member"),
-						VIEW_MEMBER("View Member"), 
-						DELETE_MEMBER("Delete Member"), 
-						LIST_MEMBERS("List Members"), 
-						REGISTER_BOAT("Register Boat"),
-						EDIT_BOAT("Edit Boat"),
-						REMOVE_BOAT("Remove Boat"),
-						LOG_IN("Log in")
-						;
-		String titleMsg;
-
-		private Title(String action) {
-			titleMsg = action;
-		}
-
-		public String getMsg() {
-			int cols = titleMsg.length() + 8;
-			StringBuffer lines = new StringBuffer();
-			for(int i = 0; i < cols; i ++) {
-				lines.append("-");
-			}
-			return lines + "\n" 
-				   + " -- " + titleMsg + " -- \n"
-				   + lines;
-		}
+	public enum GuestAction { 
+		EXIT,
+		ADMIN_LOGIN,
+		VIEW_MEMBER, 
+		LIST_MEMBERS, 
+		SIMPLE_SEARCH,
+		COMPLEX_SEARCH,
+		INVALID_CHOICE,
 	}
 
+	public enum AdminAction { 
+		EXIT,
+		ADMIN_LOGOUT,
+		ADD_MEMBER, 
+		EDIT_MEMBER, 
+		VIEW_MEMBER, 
+		DELETE_MEMBER, 
+		LIST_MEMBERS, 
+		REGISTER_BOAT, 
+		EDIT_BOAT, 
+		REMOVE_BOAT,
+		SIMPLE_SEARCH,
+		COMPLEX_SEARCH,
+		INVALID_CHOICE,
+	}
+
+	public enum SearchAction {
+		BACK,
+		BORN_IN_MONTH,
+		IS_BELOW_AGE,
+		IS_OVER_AGE,
+		NAME_STARTS_WITH,
+		OWNS_BOAT_TYPE,
+		INVALID_CHOICE,
+	}
+
+	public enum ComplexSearchAction {
+		BACK,
+		ADD,
+		SEARCH,
+		RESET,
+		INVALID_CHOICE,
+	}
 }

@@ -37,13 +37,8 @@ public class Boat {
 		type = newType;
 	}
 
-	public void editSize(double newSize) throws IllegalArgumentException {
-		if (newSize <= 0) {
-			throw new IllegalArgumentException("Size cannot be 0 or negative!");
-		}
-
+	public void editSize(double newSize) {
 		size = newSize;
-
 	}
 
 	public String toString() {
