@@ -2,47 +2,28 @@ package controller;
 
 import java.util.ArrayList;
 
+import authentication.Authentication;
 import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
 import model.MemberRegistry;
-import model.search.Search;
-import model.search.SearchCriteria;
-import model.search.SearchCriteriaComposite;
-import model.search.strategies.BornInMonth;
-import model.search.strategies.ISearchStrategy;
-import model.search.strategies.IsBelowAge;
-import model.search.strategies.IsOverAge;
-import model.search.strategies.NameStartsWith;
-import model.search.strategies.OwnsBoatOfType;
 import view.ViewInterface;
-import view.ViewInterface.MainAction;
-import view.ViewInterface.SearchAction;
+import view.ViewInterface.AdminAction;
 
-public class Admin {
+public class Admin extends User {
 
-	private ViewInterface view;
-	private MemberRegistry memberRegistry;
-	private Member currentMember;
-	private Boat currentBoat;
-
-	private MainAction currentAction;
-	
 	public Admin(MemberRegistry memberReg, ViewInterface inView) {
-		view = inView;
-		memberRegistry = memberReg;
+		super(memberReg, inView);
 	}
 
-	public void startApplication() {
-		view.displayWelcomeMsg();
-		decideAction();
-	}
-
-	private void decideAction() {
-		if(currentAction == null)
-			currentAction = view.displayMainMenu();
+	@Override
+	protected void mainMenu() {
+		AdminAction action = view.displayAdminMainMenu(); // view.displayAdminMainMenu()
 		
-		switch(currentAction) {
+		switch(action) {
+			case ADMIN_LOGOUT:
+				logOut();
+				break;
 			case ADD_MEMBER: 
 				addMember();
 				break;
@@ -67,83 +48,24 @@ public class Admin {
 			case REMOVE_BOAT: 
 				removeBoat();
 				break;
-			case EXIT: 
-				exit();
-				break;
 			case SIMPLE_SEARCH:
 				simpleMemberSearch();
 				break;
 			case COMPLEX_SEARCH:
 				complexMemberSearch();
 				break;
+			case EXIT: 
+				exit();
+				break;
 			case INVALID_CHOICE:
 				resetMenu();
 				break;
 		}
 	}
 
-	private void simpleMemberSearch() {
-		SearchAction choice = view.displaySimpleSearch();
-		
-		ISearchStrategy strategy;
-		switch (choice) {
-			case BORN_IN_MONTH:
-				strategy = new BornInMonth();
-				break;
-			case IS_BELOW_AGE:
-				strategy = new IsBelowAge();
-				break;
-			case IS_OVER_AGE:
-				strategy = new IsOverAge();
-				break;
-			case NAME_STARTS_WITH:
-				strategy = new NameStartsWith();
-				break;
-			case OWNS_BOAT_TYPE:
-				strategy = new OwnsBoatOfType();
-				break;
-			case INVALID_CHOICE:
-				view.displayInvalidMenuChoiceError();
-				decideAction();
-				return;
-			default:
-				resetMenu();
-				return;
-		}
-
-		//TODO Data validation for search strings. Would differ depending on strategy 
-
-		String searchString = view.getSearchString();
-		SearchCriteria criteria = new SearchCriteria(strategy, searchString);
-		
-		ArrayList<Member> members = memberRegistry.getAllMembers();
-		
-		SearchCriteriaComposite composite = new SearchCriteriaComposite();
-		composite.add(criteria);
-		ArrayList<Member> searchResult = new Search().complexSearch(members, composite);
-		
-		view.displaySearchResults(searchResult, composite);
-		decideAction();
-	}
-
-	private void complexMemberSearch() {
-		Search search = new Search();
-		ArrayList<Member> members = memberRegistry.getAllMembers();
-
-		// Below age 50 and Born in January
-		SearchCriteriaComposite composite = new SearchCriteriaComposite();
-		composite.add(new SearchCriteria(new IsBelowAge(), "50"));
-		composite.add(new SearchCriteria(new BornInMonth(), "01"));
-		view.displaySearchResults(new ArrayList<Member>(search.complexSearch(members, composite)), composite);
-
-		// Age => 60 && owns boat of type Sailboat && name starts with 'mo'
-		SearchCriteriaComposite composite2 = new SearchCriteriaComposite();
-		composite2.add(new SearchCriteria(new IsOverAge(), "60"));
-		composite2.add(new SearchCriteria(new OwnsBoatOfType(), "Sailboat"));
-		composite2.add(new SearchCriteria(new NameStartsWith(), "mo"));
-		view.displaySearchResults(new ArrayList<Member>(search.complexSearch(members, composite2)), composite2);
-		
-		resetMenu();
+	private void logOut() {
+		view.displayLogOutMsg();
+		Authentication.adminLogOut(memberRegistry, view);
 	}
 	
 	private void addMember() {
@@ -154,6 +76,7 @@ public class Admin {
 		}
 		resetMenu();
 	}
+
 
 	private void editMember() {
 		view.displayEditMemberTitle();
@@ -167,36 +90,21 @@ public class Admin {
 				String newName = tempMember.getName();
 				String newPNr = tempMember.getPNr();
 				
-				if(!newName.equals(currentMember.getName()) || !newPNr.equals(currentMember.getPNr())) {
-					if(!newName.equals(currentMember.getName())) {
-						currentMember.editName(newName);
-						view.displayNameChangedConfirmation();
-					}
-					// if(!newPNr.equals(currentMember.getPNr())) {
-					else {
-						currentMember.editPNr(newPNr);
-						view.displayPNrChangedConfirmation();
-					}
+				if(!newName.equals(currentMember.getName())) {
+					currentMember.editName(newName);
+					view.displayNameChangedConfirmation();
 					memberRegistry.saveDB();
 				}
-				else {
-					//TODO temp
-					view.displayNoChangesMadeMsg();
-
+				if(!newPNr.equals(currentMember.getPNr())) {
+					currentMember.editPNr(newPNr);
+					view.displayPNrChangedConfirmation();
+					memberRegistry.saveDB();
 				}
-				decideAction();
+				editMember();
 			}
 		}
-	}
-	
-
-	private void viewMember() {
-		view.displayViewMemberTitle();
-
-		if(setCurrentMember()) {
-			view.displayMemberInfo(currentMember); 
+		else
 			resetMenu();
-		}
 	}
 	
 
@@ -207,19 +115,14 @@ public class Admin {
 			memberRegistry.deleteMember(currentMember);
 			view.displayMemberDeletedConfirmation();
 
-			resetMenu();
+			currentMember = null;
+			deleteMember();
 		}
+		else
+			resetMenu();
 	}
 
 
-	private void listMembers() {
-		ArrayList<Member> membersList = memberRegistry.getAllMembers();
-		if(!view.displayMembersList(membersList))
-			currentAction = null;
-		decideAction();
-	}
-
-	
 	private void registerBoat() {
 		view.displayRegisterBoatTitle();
 
@@ -229,16 +132,21 @@ public class Admin {
 				currentMember.addBoat(newBoat);
 				view.displayBoatRegisteredConfirmation();
 				memberRegistry.saveDB();
+				registerBoat();
 			}
-			resetMenu();
+			else {
+				resetMenu();
+			}
 		}
+		else
+			resetMenu();
 	}
 
 
 	private void editBoat() {
 		if(currentMember == null)
 			view.displayEditBoatTitle();
-
+		
 		if(setCurrentMember()) { // Member selection
 			ArrayList<Boat> memberBoats = currentMember.getBoats();
 
@@ -250,7 +158,7 @@ public class Admin {
 				Boat newBoat = view.displayEditBoat(currentBoat);
 				if(newBoat == null) { // Aborted inputs
 					currentBoat = null;
-					decideAction();
+					editBoat();
 				}
 				else {
 					BoatType newType = newBoat.getType();
@@ -265,80 +173,48 @@ public class Admin {
 						view.displayBoatSizeEditedConfirmation();
 					}
 					memberRegistry.saveDB();
-					decideAction();
+					editBoat();
 				}
 			}
+			else
+				resetMenu();
 		}
+		else
+			resetMenu();
 	}
 
 
 	private void removeBoat() {
-		view.displayRemoveBoatTitle();
+		if(currentMember == null)
+			view.displayRemoveBoatTitle();
 		
 		if(setCurrentMember()) {
 			ArrayList<Boat> memberBoats = currentMember.getBoats();
 
 			if (memberBoats.size() == 0) {
 				view.displayMemberHasNoBoatsMsg();
-				currentAction = null;
-				currentMember = null;
-				decideAction();
+				resetMenu();
 			}
-			else if(setCurrentBoat(memberBoats)) {
+			if(setCurrentBoat(memberBoats)) {
 				currentMember.removeBoat(currentBoat);
-				view.displayBoatDeletedConfirmation();
+				currentBoat = null;
+				view.displayBoatRemovedConfirmation();
 				memberRegistry.saveDB();
 
-				resetMenu();
+				removeBoat();
 			}
+			else
+				resetMenu();
 		}
-	}
-	
-
-	private void exit() {
-		view.displayExitMsg();
+		else
+			resetMenu();
 	}
 
-
-	private void resetMenu() {
+	@Override
+	protected void resetMenu() {
 		currentMember = null;
 		currentBoat = null;
-		currentAction = null;
-		decideAction();
+		mainMenu();
 	}
 
-	/**
-	 * Used for navigation convenience. Controller can return to a submenu without having to type in the user id again. Sets currentMember if unset
-	 */
-	private boolean setCurrentMember() {
-		if(currentMember == null) {
-			Member selectedMember = view.displayMemberSelection(memberRegistry);
-			if(selectedMember == null) {
-				// currentAction = null;
-				// decideAction();
-				resetMenu();
-				return false;
-			}
-			else 
-				currentMember = selectedMember;
-		}
-		return true;
-	}
-
-	/**
-	 * Used for navigation convenience. Controller can return to a submenu without having to type in the boat id again. Sets currentBoat if unset
-	 */
-	private boolean setCurrentBoat(ArrayList<Boat> memberBoats) {
-		if(currentBoat == null) {
-			Boat selectedboat = view.displayBoatSelection(memberBoats);
-			if(selectedboat == null) {
-				resetMenu();
-				return false;
-			}
-			else {
-				currentBoat = selectedboat;
-			}
-		}
-		return true;
-	}
 }

@@ -1,13 +1,10 @@
-import controller.Admin;
+import authentication.UserFactory;
 
 public class Program {
 
 	public static void main(String[] args) {
 		model.MemberRegistry regM = new model.MemberRegistry();
-		view.ViewInterface view = new view.EngConsole(); 
-		controller.Admin controller = new Admin(regM, view);
-		
-		controller.startApplication();
-
+		view.ViewInterface view = new view.EngConsole();
+		new UserFactory().createGuest(view, regM).startApplication(true);
 	}
 }

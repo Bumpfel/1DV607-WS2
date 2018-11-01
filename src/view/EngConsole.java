@@ -11,33 +11,16 @@ import model.MemberRegistry;
 import model.search.SearchCriteriaComposite;
 
 public class EngConsole implements ViewInterface {
-	//---------------
-	// Search
-	//---------------
-	public String[] displaySearch(String[] options) {		
-		String[] searchVariables = new String[2];
-		
-		displayMenuOptions(options);
-		int chosenOption = getMenuInput();
-		//System.out.println(chosenOption);
-		searchVariables[0] = String.valueOf(chosenOption);
-		
-		System.out.print("Enter search parameter: ");
-		searchVariables[1] = getInput();
-		
-		return searchVariables;
-	}
 
 	private final int SHORT_PAUSE = 750;
 	private final int MEDIUM_PAUSE = 1250;
 
-	private EngMemberConsole memberConsole;
-	private EngBoatConsole boatConsole;
+	private EngMemberConsole memberConsole = new EngMemberConsole();;
+	private EngBoatConsole boatConsole = new EngBoatConsole();;
+	private EngSearchConsole searchConsole = new EngSearchConsole();;
 
-	public EngConsole() {
-		memberConsole = new EngMemberConsole();
-		boatConsole = new EngBoatConsole();
-	}
+	public final String GO_BACK_INPUT = "";
+	public final int GO_BACK_INPUT_INT = -1;
 
 	// ---------------
 	// Misc methods
@@ -92,29 +75,55 @@ public class EngConsole implements ViewInterface {
 		System.out.println("0. " + options[options.length - 1]);
 	}
 
-	public MainAction displayMainMenu() {
+	int createMenu(String title, String extraPrint, String[] options) {
 		printSeparation();
+		displayTitle(title);
+		System.out.print(extraPrint);
 
-		displayTitle("Main menu");
-		String[] options = { "Add member",
-							 "Edit member",
-							 "View member",
-							 "Delete member",
-							 "List members",
-							 "Register boat",
-							 "Edit boat",
-							 "Remove boat",
-							 "Member search",
-							 "Complex member search (example)",
-							 "Exit",
-							};
-		
 		displayMenuOptions(options);
-		MainAction[] mainActions = MainAction.values();
-		int choice = getMenuInput();
+		return getMenuInput();
+	}
+	public GuestAction displayGuestMainMenu() {
+		String[] options = { 
+			"Admin log in",
+			"View member",
+			"List members",
+			"Simple member search",
+			"Complex member search",
+			"Exit",
+		};
+		int choice = createMenu("Main menu", "", options);
+
+		GuestAction[] mainActions = GuestAction.values();
 		if(!isValidMenuChoice(choice, options.length - 1)) {
 			displayInvalidMenuChoiceError();
-			return MainAction.INVALID_CHOICE;
+			return GuestAction.INVALID_CHOICE;
+		}
+		return mainActions[choice];
+	}
+
+	public AdminAction displayAdminMainMenu() {
+		String[] options = { 
+			"Admin log out", 
+			"Add member",
+			"Edit member",
+			"View member",
+			"Delete member",
+			"List members",
+			"Register boat",
+			"Edit boat",
+			"Remove boat",
+			"Simple member search",
+			"Complex member search",
+			"Exit",
+		};
+
+		int choice = createMenu("Main menu (Admin)", "", options);
+
+		AdminAction[] mainActions = AdminAction.values();
+		if(!isValidMenuChoice(choice, options.length - 1)) {
+			displayInvalidMenuChoiceError();
+			return AdminAction.INVALID_CHOICE;
 		}
 		return mainActions[choice];
 	}
@@ -149,13 +158,7 @@ public class EngConsole implements ViewInterface {
 	}
 
 	public void displaySearchResults(ArrayList<Member> list, SearchCriteriaComposite composite) {
-		printSeparation();
-		displayTitle("Search results");
-		System.out.println("Search criterias");
-		System.out.println(composite.toString());
-
-		memberConsole.displayMembersCompact(list);
-		displayWait();
+		searchConsole.displaySearchResults(list, composite, this, memberConsole);
 	}
 
 	public Member displayMemberSelection(MemberRegistry memReg) {
@@ -166,25 +169,14 @@ public class EngConsole implements ViewInterface {
 		return boatConsole.displayBoatSelection(this, availableBoats);
 	}
 
-	public SearchAction displaySimpleSearch() {
-		printSeparation();
-		displayTitle("Member search");
-
-		String[] options = {
-			"Born in month",
-			"Is below age",
-			"Is over age", 
-			"Name starts with",
-			"Owns boat of type",
-			"Back",
-		};
-		
-		displayMenuOptions(options);
-		SearchAction[] searchActions = SearchAction.values();
-		
-		int choice = promptForValidMenuInput("", options.length);
-		return searchActions[choice];
+	public SearchAction displaySearchFilters() {
+		return searchConsole.displaySearchFilters(this);
 	}
+
+	public ComplexSearchAction complexSearch(String activeFilters) {
+		return searchConsole.complexSearch(activeFilters, this);
+	}
+
 
 	public String getSearchString() {
 		System.out.print("Enter search string: ");
@@ -220,7 +212,7 @@ public class EngConsole implements ViewInterface {
 	}
 	
 	int getInputInt() {
-		int input = -1;
+		int input = GO_BACK_INPUT_INT;
 		try {
 			input = Integer.parseInt(getInput());
 		}
@@ -235,7 +227,7 @@ public class EngConsole implements ViewInterface {
 	}
 
 	double getInputDouble() {
-		double input = -1;
+		double input = GO_BACK_INPUT_INT;
 		try {
 			input = Double.parseDouble(getInput());
 		}
@@ -243,6 +235,20 @@ public class EngConsole implements ViewInterface {
 		}
 		return input; 
 	}
+	
+	// public int displayMemberIdPrompt() {
+	// 	System.out.print("Enter member ID: ");
+	// 	return getInputInt();
+	// }
+	
+	public String displayPasswordPrompt() {
+		System.out.print("Enter password: ");
+		String input = getInput();
+		if(input.equals(GO_BACK_INPUT))
+			return null;
+		return input;
+	}
+
 
 
 	//---------------------------
@@ -358,14 +364,19 @@ public class EngConsole implements ViewInterface {
 		displayMsg("Boat size has been changed!");
 	}
 
-	public void displayBoatDeletedConfirmation() {
-		displayMsg("Boat has been deleted!");
+	public void displayBoatRemovedConfirmation() {
+		displayMsg("Boat has been removed!");
 	}
 
-	// public void displayNoChangesMadeMsg() {
-	// 	displayMsg("No changes was made");
-	// }
+	public void displayLogInMsg() {
+		displayMsg("Logging in...");
+	}
+
+	public void displayLogOutMsg() {
+		displayMsg("Logging out...");
+	}
 	 
+
 	//----------
 	// Errors
 	//--------
@@ -396,6 +407,10 @@ public class EngConsole implements ViewInterface {
 
 	public void displayInvalidPNrError() {
 		displayErrorMsg("Personal code number must be valid and on the form YYMMDD-XXXX");
+	}
+	
+	public void displayInvalidPasswordError() {
+		displayErrorMsg("Password is incorrect");
 	}
 
 }

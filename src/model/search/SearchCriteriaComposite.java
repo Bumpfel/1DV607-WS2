@@ -13,6 +13,10 @@ public class SearchCriteriaComposite {
         return new ArrayList<SearchCriteria>(criterias);
     }
 
+    public boolean isEmpty() {
+        return criterias.size() == 0;
+    }
+    
     public String toString() {
         StringBuffer str = new StringBuffer();
         for(SearchCriteria criteria : criterias) {

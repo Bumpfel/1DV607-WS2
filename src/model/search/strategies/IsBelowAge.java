@@ -6,6 +6,7 @@ import java.util.Calendar;
 
 public class IsBelowAge implements ISearchStrategy {
 
+    //TODO duplicated code in IsOverAge
     public ArrayList<Member> returnFiltered(ArrayList<Member> members, String searchParameter) {
         ArrayList<Member> membersFiltered = new ArrayList<Member>();
         Calendar cal = Calendar.getInstance();

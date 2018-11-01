@@ -8,6 +8,10 @@ import model.MemberRegistry;
 
 public class EngMemberConsole {
 
+	//-----------
+	// MainMenu Actions
+	//--------
+
     public Member displayAddMember(EngConsole console) {
 		console.printSeparation();
 		console.displayTitle("Add Member");
@@ -24,32 +28,36 @@ public class EngMemberConsole {
 		return new Member(newName, newPNr);
 	}
 
+	//TODO old menu standard
 	public Member displayEditMember(EngConsole console, Member m) {
 		console.printSeparation();
 
 		console.displayTitle("Edit \'" + m + "\'");
 
 		Member tempMember = new Member(m.getName(), m.getPNr());
-		String[] options = { "Edit name", "Edit personal code", "Back" };
+		String[] options = { 
+			"Edit name",
+			"Edit personal code",
+			"Back"
+		};
 
 		console.displayMenuOptions(options);
 		
 		int chosenOption = console.promptForValidMenuInput("", options.length - 1);
 
-		switch(chosenOption) {
-			case 1: 
-				String name = promptForValidMemberName(console);
-				if(name != null)
-					tempMember.editName(name.trim());
-				break;
-			case 2:
-				String pNr = promptForValidMemberPNr(console);
-				if(pNr != null)
-					tempMember.editPNr(pNr);
-				break;
-			case 0:
-				return null;
+		if(chosenOption == 1) {
+			String name = promptForValidMemberName(console);
+			if(name != null)
+				tempMember.editName(name.trim());
 		}
+		else if(chosenOption == 2) {
+			String pNr = promptForValidMemberPNr(console);
+			if(pNr != null)
+				tempMember.editPNr(pNr);
+		}
+		else if(chosenOption == 0)
+			return null;
+		
 		return tempMember;
 	}
 
@@ -59,35 +67,38 @@ public class EngMemberConsole {
 	}
 
 	public boolean displayMembersList(EngConsole console, ArrayList<Member> membersList) {
-		console.printSeparation();
-		console.displayTitle("List Members");
+		String[] options = { 
+			"View compact list",
+			"View verbose list",
+			"Back"
+		};
 		
-		String[] options = { "View compact list", "View verbose list", "Back" };
-		
-		console.displayMenuOptions(options);
-		int chosenOption = console.getMenuInput();
+		int choice = console.createMenu("List Members", "", options);
 
-		switch(chosenOption) {
-			case 1:
-                console.printSeparation();
-                console.displayTitle("List Members - Verbose");
-				displayMembersCompact(membersList);
-				console.displayWait();
-				break;
-			case 2: 
-                console.printSeparation();
-				console.displayTitle("List Members - Verbose");
-				displayMembersVerbose(membersList);
-				console.displayWait();
-				break;
-			case 0:
-				return false;
-			default:
-                console.displayInvalidMenuChoiceError();
+		if(choice == 1) {
+			console.printSeparation();
+			console.displayTitle("List Members - Verbose");
+			displayMembersCompact(membersList);
+			console.displayWait();
 		}
+		else if(choice == 2) { 
+			console.printSeparation();
+			console.displayTitle("List Members - Verbose");
+			displayMembersVerbose(membersList);
+			console.displayWait();
+		}
+		else if(choice == 0)
+			return false;
+		else
+			console.displayInvalidMenuChoiceError();
+
 		return true;
-    }
-    
+	}
+	
+
+	//----------------
+	// Used locally or by EngConsole
+	//------------
 
     private void displayMemberFullInformation(Member member) {
 		System.out.format("%-12s %-26s %-16s \n", member.getId(), member.getName(), member.getPNr());
@@ -102,10 +113,11 @@ public class EngMemberConsole {
 		else {
 			System.out.println(" Member has no registered boats");
 		}
-		System.out.println("  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .");
+		System.out.println("  -   -   -");
+		// System.out.println("  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .");
 	}
 
-	public void displayMemberInfo(EngConsole console, Member member) {
+	void displayMemberInfo(EngConsole console, Member member) {
 		console.printSeparation();
 
 		console.displayTitle("View Member");
@@ -123,7 +135,7 @@ public class EngMemberConsole {
 		}
 	}
 	
-	public void displayMembersCompact(ArrayList<Member> list) {
+	void displayMembersCompact(ArrayList<Member> list) {
 		System.out.format("%-12s %-26s %-16s \n", "MemberID", "Name", "Number of boats");
 		System.out.println("----------------------------------------------------------");
 		for (Member member : list) {
@@ -135,7 +147,7 @@ public class EngMemberConsole {
 	private String promptForValidMemberName(EngConsole console) { // Used by add and edit member
 		String newName = displayNamePrompt(console);
 		while(!Member.isValidName(newName)) {
-			if(newName.equals("0"))
+			if(newName.equals(console.GO_BACK_INPUT))
 				return null;
             console.displayInvalidNameError();
 			newName = displayNamePrompt(console);
@@ -146,7 +158,7 @@ public class EngMemberConsole {
 	private String promptForValidMemberPNr(EngConsole console) { // Used by add and edit member
 		String newPNr = displayPNrPrompt(console);
 		while(!Member.isValidPNr(newPNr)) {
-			if(newPNr.equals("0"))
+			if(newPNr.equals(console.GO_BACK_INPUT))
 				return null;
             console.displayInvalidPNrError();
 			newPNr = displayPNrPrompt(console);
@@ -155,18 +167,21 @@ public class EngMemberConsole {
     }
     
 
-    public Member displayMemberSelection(EngConsole console, MemberRegistry memReg) {
-		System.out.print("Enter member ID: ");
-		int input = console.getInputInt();
+    Member displayMemberSelection(EngConsole console, MemberRegistry memReg) {
+		int input = displayIdPrompt(console);
 		while(!memReg.memberExists(input)) {
-			if(input == 0)
+			if(input == console.GO_BACK_INPUT_INT)
 				return null;
             console.displayMemberDoesNotExistError();
-			System.out.print("Enter member ID: ");
-			input = console.getInputInt();
+			input = displayIdPrompt(console);
 		}
         return memReg.getMember(input);
-    }
+	}
+	
+	private int displayIdPrompt(EngConsole console) {
+		System.out.print("Enter member ID: ");
+		return console.getInputInt();
+	}
         
     private String displayNamePrompt(EngConsole console) {
         System.out.print("Enter new name: ");

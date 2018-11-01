@@ -8,6 +8,8 @@ import model.Boat.BoatType;
 
 public class EngBoatConsole {
 
+	//TODO old menu standard
+	//TODO only accepts 0 as "go back" during input
     public Boat displayRegisterBoat(EngConsole console) {
 		console.printSeparation();
 		console.displayTitle("Register Boat");
@@ -31,11 +33,16 @@ public class EngBoatConsole {
 		return new Boat(chosenBoatType, enteredBoatSize);
 	}
 
+	//TODO old menu standard. bad double menu
 	public Boat displayEditBoat(EngConsole console, Boat currentBoat) {
 		console.printSeparation();
 		console.displayTitle("Edit \'" + currentBoat + "\'");
 
-		String[] menuOptions = { "Edit Type", "Edit Size", "Back" };
+		String[] menuOptions = { 
+			"Edit Type",
+			"Edit Size",
+			"Back"
+		};
 		console.displayMenuOptions(menuOptions);
 
 		int chosenOption = console.promptForValidMenuInput("", menuOptions.length - 1);
@@ -71,22 +78,26 @@ public class EngBoatConsole {
 		return tempBoat;
 	}
 
+	//TODO old menu standard
     public Boat displayBoatSelection(EngConsole console, ArrayList<Boat> availableBoats) {
 		console.printSeparation();
-		console.displayTitle("Select boat to edit");
+		console.displayTitle("Select boat");
 
-		ArrayList<Object> menuOptions = new ArrayList<>(availableBoats);
-		menuOptions.add("Cancel");
-		console.displayMenuOptions(menuOptions.toArray());
-		
-		int chosenOption = displayBoatChoicePrompt(console);
-		while(!console.isValidMenuChoice(chosenOption, availableBoats.size())) {
-			if(chosenOption == 0)
-				return null;
-            console.displayInvalidMenuChoiceError();
-            console.displayMenuOptions(menuOptions.toArray());
-			chosenOption = displayBoatChoicePrompt(console);
+		String[] options = new String[availableBoats.size() + 1];
+		for(int i = 0; i < availableBoats.size(); i ++) {
+			options[i] = availableBoats.get(i).toString();
 		}
+		options[availableBoats.size()] = "Cancel";
+		int chosenOption = console.createMenu("Select boat", "", options);
+
+		while(!console.isValidMenuChoice(chosenOption, availableBoats.size())) {
+            console.displayInvalidMenuChoiceError();
+            // console.displayMenuOptions(menuOptions.toArray());
+			// chosenOption = displayBoatChoicePrompt(console);
+			chosenOption = console.getMenuInput();
+		}
+		if(chosenOption == 0)
+			return null;
 		return availableBoats.get(chosenOption - 1);
     }
     
@@ -99,11 +110,6 @@ public class EngBoatConsole {
 		return enteredBoatSize;
     }
     
-    private int displayBoatChoicePrompt(EngConsole console) {
-		System.out.print("Choose boat: ");
-		return console.getInputInt();
-	}
-
 	private double displayBoatSizePrompt(EngConsole console) {
 		System.out.print("Enter new boat size (in meters): ");
 		return console.getInputDouble();
