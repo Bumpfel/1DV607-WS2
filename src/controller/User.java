@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import model.Boat;
@@ -18,7 +19,6 @@ public class User {
 
 	protected Member currentMember;
 	protected Boat currentBoat;
-	// private GuestAction currentAction;
 
 	protected SearchCriteriaComposite complexComposite = new SearchCriteriaComposite();
 
@@ -63,9 +63,20 @@ public class User {
 	
     private void logIn() {
 		String input = view.displayPasswordPrompt();
+		Boolean adminAuth = false;
+		
+		try {
+			adminAuth = authentication.Authentication.adminAuthenticate(input);
+		}
+		catch (IOException e) {
+			view.displayNoPasswordFileError();
+			resetMenu();
+			return;
+		}
+		
 		if(input == null)
 			resetMenu();
-		else if (authentication.Authentication.adminAuthenticate(input)) {
+		else if (adminAuth) {
 			view.displayLogInMsg();
 			authentication.Authentication.runAdmin(memberRegistry,view);
 			return;

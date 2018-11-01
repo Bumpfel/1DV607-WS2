@@ -423,4 +423,8 @@ public class EngConsole implements ViewInterface {
 	public void displayContainsIdenticalCriteria() {
 		displayErrorMsg("Identical criteria found");
 	}
+	
+	public void displayNoPasswordFileError() {
+		displayErrorMsg("Cannot find password file");
+	}
 }	

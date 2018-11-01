@@ -12,7 +12,7 @@ public class Password {
 	private byte[] hash;
 	
 	//Reads password from file
-	public Password() {
+	public Password() throws IOException {
 		File pwFile = new File("pw.txt");
 		hash = readFile(pwFile);
 	}
@@ -49,8 +49,7 @@ public class Password {
 	}
 
 	//Reads bytes from the input file
-	private byte[] readFile(File f) throws IllegalStateException {
-		try {
+	private byte[] readFile(File f) throws IOException {
 			FileInputStream stream;
 			stream = new FileInputStream(f);
 
@@ -59,10 +58,6 @@ public class Password {
 			stream.close();
 
 			return byteArray;
-		}
-		catch (IOException e) {
-			throw new IllegalStateException("Error: File not found!");
-		}
 	}
 	
 	//Writes bytes to output file, can be used to implement a change password feature in the future

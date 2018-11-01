@@ -1,5 +1,7 @@
 package authentication;
 
+import java.io.IOException;
+
 import controller.User;
 import model.MemberRegistry;
 import view.ViewInterface;
@@ -12,7 +14,7 @@ public final class Authentication {
 		
 	}
 	
-	public static boolean adminAuthenticate(String inputPw) {
+	public static boolean adminAuthenticate(String inputPw) throws IOException {
     	//Reads password from pw.txt file
 		Password adminPw = new Password();
 		

@@ -57,6 +57,7 @@ public interface ViewInterface {
 	public void displayMemberDoesNotExistError();
 	public void displayInvalidMenuChoiceError();
 	public void displayInvalidPasswordError();
+	public void displayNoPasswordFileError();
 	
 	public void displayInvalidSearchParameterError();
 	public void displayDuplicateSearchFilterReplacedMsg();
